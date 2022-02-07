@@ -1,8 +1,6 @@
 name: CI for build & test
 
 on:
-  push:
-    branches: [ ci/github-actions ]
   pull_request:
     branches: [ develop ]
 
@@ -28,5 +26,5 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
+      - name: Build with Gradle in parallel
         run: ./gradlew build --parallel
