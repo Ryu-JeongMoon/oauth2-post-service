@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.service;
 
+import com.support.oauth2postservice.core.security.service.CustomUserDetailsService;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.domain.post.repository.PostRepository;
 import com.support.oauth2postservice.service.member.MemberService;
@@ -24,13 +25,16 @@ public class ServiceTest {
     @Mock
     protected PostRepository postRepository;
 
-    @InjectMocks
-    protected PostService postService;
-
     @Mock
     protected MemberRepository memberRepository;
 
     @InjectMocks
+    protected PostService postService;
+
+    @InjectMocks
     protected MemberService memberService;
+
+    @InjectMocks
+    protected CustomUserDetailsService customUserDetailsService;
 
 }

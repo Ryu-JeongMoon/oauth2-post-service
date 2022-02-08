@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.config.querydsl;
+package com.support.oauth2postservice.config.jpa;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

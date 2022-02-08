@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.core.security;
+package com.support.oauth2postservice.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
