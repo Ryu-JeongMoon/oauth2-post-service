@@ -2,6 +2,7 @@ package com.support.oauth2postservice.domain.member.repository;
 
 import com.support.oauth2postservice.config.JpaTest;
 import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.helper.MemberTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +17,8 @@ class MemberRepositoryTest extends JpaTest {
 
     @BeforeEach
     void setUp() {
-        Member member = Member.builder()
-                .name("panda")
-                .email("bear")
-                .password("1234")
-                .build();
-        MEMBER_ID = memberRepository.save(member).getId();
+        Member member = MemberTestHelper.createUser();
+        USER_ID = memberRepository.save(member).getId();
     }
 
     @Test
@@ -41,7 +38,7 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("활성 상태 회원 조회")
     void findActiveMember() {
-        Member member = memberRepository.findActiveMember(MEMBER_ID)
+        Member member = memberRepository.findActiveMember(USER_ID)
                 .orElseGet(() -> null);
 
         assertThat(member).isNotNull();
@@ -50,7 +47,7 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("비활성 상태 회원 조회")
     void findInactiveMember() {
-        Member member = memberRepository.findActiveMember(MEMBER_ID).get();
+        Member member = memberRepository.findActiveMember(USER_ID).get();
         member.leave();
 
         Member findResult = memberRepository.findActiveMember(member.getId())

@@ -4,6 +4,7 @@ import com.support.oauth2postservice.core.constant.RegexpConstants;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,14 @@ public class MemberSignupRequest {
     private String password;
 
     private LoginType loginType;
+
+    @Builder
+    public MemberSignupRequest(String name, String email, String password, LoginType loginType) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.loginType = loginType;
+    }
 
     public Member toEntity() {
         return Member.builder()

@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
@@ -52,12 +53,12 @@ public class Member extends BaseEntity {
     private LocalDateTime leftAt;
 
     @Builder
-    public Member(String name, String email, String password, LoginType loginType) {
+    public Member(String name, String email, String password, Role role, LoginType loginType) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = Role.USER;
         this.status = Status.ACTIVE;
+        this.role = role != null ? role : Role.USER;
         this.loginType = loginType != null ? loginType : LoginType.LOCAL;
     }
 
@@ -69,10 +70,10 @@ public class Member extends BaseEntity {
         if (StringUtils.hasText(name) && !this.name.equals(name))
             this.name = name;
 
-        if (this.role != role && role != null)
-            this.role = role;
+        if (!this.role.equals(role) && role != null)
+            this.changeRole(role);
 
-        if (this.status != status && status != null)
+        if (!this.status.equals(status) && status != null)
             this.status = status;
     }
 
@@ -82,5 +83,12 @@ public class Member extends BaseEntity {
 
         this.leftAt = LocalDateTime.now();
         this.status = Status.INACTIVE;
+    }
+
+    public void changeRole(Role role) {
+        if (this.role.equals(Role.USER) || this.role.equals(Role.MANAGER) && role.equals(Role.ADMIN))
+            throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
+
+        this.role = role;
     }
 }
