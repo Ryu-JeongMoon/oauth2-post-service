@@ -22,7 +22,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberReadResponse findActiveMember(Long memberId) {
-        return memberRepository.findActiveMember(memberId)
+        return memberRepository.findActive(memberId)
                 .map(MemberReadResponse::from)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
     }
@@ -39,7 +39,7 @@ public class MemberService {
         if (memberEditRequest == null)
             return;
 
-        Member member = memberRepository.findActiveMember(memberId)
+        Member member = memberRepository.findActive(memberId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
 
         member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
@@ -48,7 +48,7 @@ public class MemberService {
 
     @Transactional
     public void leave(Long memberId) {
-        memberRepository.findActiveMember(memberId)
+        memberRepository.findActive(memberId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND))
                 .leave();
     }
