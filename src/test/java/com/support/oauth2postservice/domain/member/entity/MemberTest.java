@@ -67,7 +67,7 @@ class MemberTest {
     void editInfo() {
         user.editInfo("AAAA", null, null);
 
-        assertThat(user.getName()).isEqualTo("AAAA");
+        assertThat(user.getNickname()).isEqualTo("AAAA");
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.support.oauth2postservice.service.member;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.service.ServiceTest;
-import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,34 +40,34 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("회원 정보 수정")
     void edit() {
-        when(memberRepository.findActiveMember(any())).thenReturn(Optional.ofNullable(user));
+        when(memberRepository.findActive(any())).thenReturn(Optional.ofNullable(user));
 
         memberService.edit(USER_ID, MemberTestHelper.createEditRequest());
 
-        verify(memberRepository, times(1)).findActiveMember(USER_ID);
+        verify(memberRepository, times(1)).findActive(USER_ID);
     }
 
     @Test
     @DisplayName("회원 조회 - 활성 상태")
     void findActiveMember() {
-        when(memberRepository.findActiveMember(USER_ID)).thenReturn(Optional.of(user));
+        when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
 
         MemberReadResponse memberReadResponse = memberService.findActiveMember(USER_ID);
 
         assertThat(memberReadResponse.getEmail()).isEqualTo(user.getEmail());
 
-        verify(memberRepository, times(1)).findActiveMember(USER_ID);
+        verify(memberRepository, times(1)).findActive(USER_ID);
     }
 
     @Test
     @DisplayName("회원 탈퇴")
     void leave() {
-        when(memberRepository.findActiveMember(USER_ID)).thenReturn(Optional.of(user));
+        when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
 
         memberService.leave(USER_ID);
 
         assertThat(user.getLeftAt()).isNotNull();
 
-        verify(memberRepository, times(1)).findActiveMember(USER_ID);
+        verify(memberRepository, times(1)).findActive(USER_ID);
     }
 }
