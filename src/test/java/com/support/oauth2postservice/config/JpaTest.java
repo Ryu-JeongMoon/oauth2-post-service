@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Import;
 @Import(TestConfig.class)
 public class JpaTest {
 
-    protected static Long MEMBER_ID;
+    protected static Long USER_ID;
+    protected static Long MANAGER_ID;
+    protected static Long ADMIN_ID;
 
     @Autowired
     protected MemberRepository memberRepository;
