@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.config;
+package com.support.oauth2postservice.config.jpa;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class JpaConfig {
+public class JpaAuditingConfig {
 
     @Bean
     public AuditorAware<String> auditorProvider() {

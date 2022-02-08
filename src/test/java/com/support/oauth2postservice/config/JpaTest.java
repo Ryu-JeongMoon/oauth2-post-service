@@ -13,7 +13,6 @@ public class JpaTest {
     protected static Long USER_ID;
     protected static Long MANAGER_ID;
     protected static Long ADMIN_ID;
-    protected static String USER_NICKNAME;
 
     protected static Long POST_ID;
     protected static String POST_TITLE;
