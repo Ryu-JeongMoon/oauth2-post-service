@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class MemberSignupRequest {
 
     @Size(min = 1, max = 20)
-    private String name;
+    private String nickname;
 
     @Size(min = 7, max = 320)
     @Email(regexp = RegexpConstants.EMAIL)
@@ -28,8 +28,8 @@ public class MemberSignupRequest {
     private LoginType loginType;
 
     @Builder
-    public MemberSignupRequest(String name, String email, String password, LoginType loginType) {
-        this.name = name;
+    public MemberSignupRequest(String nickname, String email, String password, LoginType loginType) {
+        this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.loginType = loginType;
@@ -37,7 +37,7 @@ public class MemberSignupRequest {
 
     public Member toEntity() {
         return Member.builder()
-                .name(this.name)
+                .nickname(this.nickname)
                 .email(this.email)
                 .password(this.password)
                 .loginType(this.loginType)

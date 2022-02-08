@@ -41,7 +41,7 @@ public class MemberReadResponse {
     public static MemberReadResponse from(Member member) {
         return MemberReadResponse.builder()
                 .id(member.getId())
-                .name(member.getName())
+                .name(member.getNickname())
                 .email(member.getEmail())
                 .role(member.getRole())
                 .status(member.getStatus())

@@ -17,7 +17,7 @@ public class MemberTestHelper {
 
     public static Member createUser() {
         return Member.builder()
-                .name(USER_NAME)
+                .nickname(USER_NAME)
                 .email(USER_EMAIL)
                 .password(PASSWORD)
                 .build();
@@ -25,7 +25,7 @@ public class MemberTestHelper {
 
     public static Member createManger() {
         return Member.builder()
-                .name(MANAGER_NAME)
+                .nickname(MANAGER_NAME)
                 .email(MANGER_EMAIL)
                 .password(PASSWORD)
                 .role(Role.MANAGER)
@@ -34,7 +34,7 @@ public class MemberTestHelper {
 
     public static Member createAdmin() {
         return Member.builder()
-                .name(ADMIN_NAME)
+                .nickname(ADMIN_NAME)
                 .email(ADMIN_EMAIL)
                 .password(PASSWORD)
                 .role(Role.ADMIN)
@@ -43,7 +43,7 @@ public class MemberTestHelper {
 
     public static MemberSignupRequest createUserRequest() {
         return MemberSignupRequest.builder()
-                .name(USER_NAME)
+                .nickname(USER_NAME)
                 .email(USER_EMAIL)
                 .password(PASSWORD)
                 .build();
@@ -51,7 +51,7 @@ public class MemberTestHelper {
 
     public static MemberSignupRequest createManagerRequest() {
         return MemberSignupRequest.builder()
-                .name(MANAGER_NAME)
+                .nickname(MANAGER_NAME)
                 .email(MANGER_EMAIL)
                 .password(PASSWORD)
                 .build();

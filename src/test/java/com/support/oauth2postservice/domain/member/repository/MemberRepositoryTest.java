@@ -6,14 +6,10 @@ import com.support.oauth2postservice.helper.MemberTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberRepositoryTest extends JpaTest {
-
-    @Autowired
-    MemberRepository memberRepository;
 
     @BeforeEach
     void setUp() {
@@ -24,21 +20,17 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("EntityListener 작동")
     void entityListener() {
-        Member member = Member.builder()
-                .name("panda")
-                .email("bear")
-                .password("1234")
-                .build();
-        Member savedMember = memberRepository.save(member);
+        Member member = memberRepository.findActive(USER_ID)
+                .orElseGet(() -> null);
 
-        assertThat(savedMember.getCreatedAt()).isNotNull();
-        assertThat(savedMember.getModifiedAt()).isNotNull();
+        assertThat(member.getCreatedAt()).isNotNull();
+        assertThat(member.getModifiedAt()).isNotNull();
     }
 
     @Test
     @DisplayName("활성 상태 회원 조회")
     void findActiveMember() {
-        Member member = memberRepository.findActiveMember(USER_ID)
+        Member member = memberRepository.findActive(USER_ID)
                 .orElseGet(() -> null);
 
         assertThat(member).isNotNull();
@@ -47,12 +39,19 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("비활성 상태 회원 조회")
     void findInactiveMember() {
-        Member member = memberRepository.findActiveMember(USER_ID).get();
+        Member member = memberRepository.findActive(USER_ID).get();
         member.leave();
 
-        Member findResult = memberRepository.findActiveMember(member.getId())
+        Member findResult = memberRepository.findActive(member.getId())
                 .orElseGet(() -> null);
 
         assertThat(findResult).isNull();
+    }
+
+    @Test
+    @DisplayName("")
+    void findActiveByNickname() {
+        memberRepository.findActiveByNickname(MemberTestHelper.USER_NAME)
+                .orElseThrow(RuntimeException::new);
     }
 }
