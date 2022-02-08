@@ -1,7 +1,9 @@
 package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
+import com.support.oauth2postservice.domain.post.repository.PostRepository;
 import com.support.oauth2postservice.service.member.MemberService;
+import com.support.oauth2postservice.service.post.PostService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,12 +18,19 @@ public class ServiceTest {
     protected static Long MANAGER_ID = 2L;
     protected static Long ADMIN_ID = 3L;
 
-    @InjectMocks
-    protected MemberService memberService;
-
     @Spy
     protected PasswordEncoder passwordEncoder;
 
     @Mock
+    protected PostRepository postRepository;
+
+    @InjectMocks
+    protected PostService postService;
+
+    @Mock
     protected MemberRepository memberRepository;
+
+    @InjectMocks
+    protected MemberService memberService;
+
 }
