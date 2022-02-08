@@ -20,7 +20,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(name = "uk_member_email", columnNames = {"email"})})
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_member_email", columnNames = "email"),
+        @UniqueConstraint(name = "uk_member_nickname", columnNames = "nickname")
+})
 public class Member extends BaseEntity {
 
     @Id
@@ -28,11 +31,11 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(length = 20, nullable = false)
-    private String name;
-
     @Column(nullable = false, length = 320)
     private String email;
+
+    @Column(length = 20, nullable = false)
+    private String nickname;
 
     @Size(min = 4, max = 255)
     @Column(nullable = false)
@@ -53,9 +56,9 @@ public class Member extends BaseEntity {
     private LocalDateTime leftAt;
 
     @Builder
-    public Member(String name, String email, String password, Role role, LoginType loginType) {
-        this.name = name;
+    public Member(String email, String nickname, String password, Role role, LoginType loginType) {
         this.email = email;
+        this.nickname = nickname;
         this.password = password;
         this.status = Status.ACTIVE;
         this.role = role != null ? role : Role.USER;
@@ -66,9 +69,9 @@ public class Member extends BaseEntity {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void editInfo(String name, Role role, Status status) {
-        if (StringUtils.hasText(name) && !this.name.equals(name))
-            this.name = name;
+    public void editInfo(String nickname, Role role, Status status) {
+        if (StringUtils.hasText(nickname) && !this.nickname.equals(nickname))
+            this.nickname = nickname;
 
         if (!this.role.equals(role) && role != null)
             this.changeRole(role);
