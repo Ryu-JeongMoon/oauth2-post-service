@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class MemberReadResponse {
 
     @NotNull
-    private Long id;
+    private String id;
 
     private String name;
 
@@ -29,7 +29,7 @@ public class MemberReadResponse {
     private LoginType loginType;
 
     @Builder
-    public MemberReadResponse(Long id, String name, String email, Role role, Status status, LoginType loginType) {
+    public MemberReadResponse(String id, String name, String email, Role role, Status status, LoginType loginType) {
         this.id = id;
         this.name = name;
         this.email = email;
