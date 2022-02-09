@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.service.member.dto.request;
 
-import com.support.oauth2postservice.core.constant.RegexpConstants;
+import com.support.oauth2postservice.util.constant.RegexpConstants;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import lombok.AccessLevel;

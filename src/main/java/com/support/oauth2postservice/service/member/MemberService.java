@@ -1,17 +1,15 @@
 package com.support.oauth2postservice.service.member;
 
-import com.support.oauth2postservice.core.exception.ExceptionMessages;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class MemberService {
     public MemberReadResponse findActiveMember(Long memberId) {
         return memberRepository.findActive(memberId)
                 .map(MemberReadResponse::from)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
     }
 
     @Transactional
@@ -40,7 +38,7 @@ public class MemberService {
             return;
 
         Member member = memberRepository.findActive(memberId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
 
         member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
         member.editInfo(memberEditRequest.getName(), memberEditRequest.getRole(), memberEditRequest.getStatus());
@@ -49,7 +47,7 @@ public class MemberService {
     @Transactional
     public void leave(Long memberId) {
         memberRepository.findActive(memberId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND))
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND))
                 .leave();
     }
 }

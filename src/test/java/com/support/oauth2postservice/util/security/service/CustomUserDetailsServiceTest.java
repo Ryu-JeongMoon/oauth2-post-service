@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.core.security.service;
+package com.support.oauth2postservice.util.security.service;
 
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;

@@ -1,6 +1,5 @@
 package com.support.oauth2postservice.service.post;
 
-import com.support.oauth2postservice.core.exception.ExceptionMessages;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.domain.post.entity.Post;
@@ -8,11 +7,10 @@ import com.support.oauth2postservice.domain.post.repository.PostRepository;
 import com.support.oauth2postservice.service.post.dto.request.PostCreateRequest;
 import com.support.oauth2postservice.service.post.dto.request.PostEditRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +22,13 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostReadResponse findActivePost(Long postId) {
         return postRepository.findActiveToResponse(postId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.POST_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
     }
 
     @Transactional
     public void write(PostCreateRequest postCreateRequest) {
         Member member = memberRepository.findActiveByNickname(postCreateRequest.getNickname())
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
 
         Post post = postCreateRequest.toEntity(member);
         postRepository.save(post);
@@ -42,7 +40,7 @@ public class PostService {
             return;
 
         Post post = postRepository.findActive(postId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.POST_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
 
         Post updateSource = postEditRequest.toEntity();
         post.editFrom(updateSource);
@@ -51,14 +49,14 @@ public class PostService {
     @Transactional
     public void delete(Long postId) {
         postRepository.findActive(postId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.POST_NOT_FOUND))
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
                 .delete();
     }
 
     @Transactional
     public void restore(Long postId) {
         postRepository.findActive(postId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.POST_NOT_FOUND))
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
                 .restore();
     }
 }

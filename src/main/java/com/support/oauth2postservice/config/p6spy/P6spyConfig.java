@@ -12,7 +12,8 @@ public class P6spyConfig {
 
     @PostConstruct
     public void setLogMessageFormat() {
-        P6SpyOptions.getActiveInstance()
+        P6SpyOptions
+                .getActiveInstance()
                 .setLogMessageFormat(P6spyPrettySqlFormatter.class.getName());
     }
 }

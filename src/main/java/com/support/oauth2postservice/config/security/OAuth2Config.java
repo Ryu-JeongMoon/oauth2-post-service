@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.config.security;
 
-import com.support.oauth2postservice.core.security.oauth2.CustomOAuth2Provider;
+import com.support.oauth2postservice.security.oauth2.CustomOAuth2Provider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class OAuth2Config {
 

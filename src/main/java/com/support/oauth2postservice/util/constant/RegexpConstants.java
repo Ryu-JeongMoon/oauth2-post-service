@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.core.constant;
+package com.support.oauth2postservice.util.constant;
 
 public class RegexpConstants {
 

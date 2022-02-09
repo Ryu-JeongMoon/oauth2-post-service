@@ -8,10 +8,13 @@ import com.support.oauth2postservice.service.member.dto.response.MemberReadRespo
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class MemberServiceTest extends ServiceTest {
@@ -55,6 +58,16 @@ class MemberServiceTest extends ServiceTest {
         MemberReadResponse memberReadResponse = memberService.findActiveMember(USER_ID);
 
         assertThat(memberReadResponse.getEmail()).isEqualTo(user.getEmail());
+
+        verify(memberRepository, times(1)).findActive(USER_ID);
+    }
+
+    @Test
+    @DisplayName("회원 조회 실패 - 존재하지 않는 회원")
+    void failFindActiveMember() {
+        when(memberRepository.findActive(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
+
+        assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMember(USER_ID));
 
         verify(memberRepository, times(1)).findActive(USER_ID);
     }

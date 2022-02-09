@@ -21,37 +21,41 @@ class MemberRepositoryTest extends JpaTest {
     @DisplayName("EntityListener 작동")
     void entityListener() {
         Member member = memberRepository.findActive(USER_ID)
-                .orElseGet(() -> null);
+                .orElseGet(() -> Member.builder().build());
 
         assertThat(member.getCreatedAt()).isNotNull();
         assertThat(member.getModifiedAt()).isNotNull();
     }
 
     @Test
-    @DisplayName("활성 상태 회원 조회")
+    @DisplayName("활성 상태 회원 조회 - PK")
     void findActiveMember() {
-        Member member = memberRepository.findActive(USER_ID)
-                .orElseGet(() -> null);
-
-        assertThat(member).isNotNull();
+        assertThat(memberRepository.findActive(USER_ID).isPresent()).isTrue();
     }
 
     @Test
     @DisplayName("비활성 상태 회원 조회")
     void findInactiveMember() {
-        Member member = memberRepository.findActive(USER_ID).get();
+        Member member = memberRepository.findActive(USER_ID)
+                .orElseGet(() -> Member.builder().build());
+
         member.leave();
 
-        Member findResult = memberRepository.findActive(member.getId())
-                .orElseGet(() -> null);
-
-        assertThat(findResult).isNull();
+        boolean isMemberPresent = memberRepository.findActive(member.getId()).isPresent();
+        assertThat(isMemberPresent).isFalse();
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("활성 상태 회원 조회 - 닉네임")
     void findActiveByNickname() {
-        memberRepository.findActiveByNickname(MemberTestHelper.USER_NAME)
-                .orElseThrow(RuntimeException::new);
+        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.USER_NAME).isPresent();
+        assertThat(isMemberPresent).isTrue();
+    }
+
+    @Test
+    @DisplayName("활성 상태 회원 조회 실패 - 닉네임")
+    void failFindActiveByNickname() {
+        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.ADMIN_NAME).isPresent();
+        assertThat(isMemberPresent).isFalse();
     }
 }
