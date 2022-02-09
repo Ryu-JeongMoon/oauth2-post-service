@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEditRequest {
 
-    private String name;
+    private String nickname;
 
     private String password;
 
@@ -20,8 +20,8 @@ public class MemberEditRequest {
     private Status status;
 
     @Builder
-    public MemberEditRequest(String name, String password, Role role, Status status) {
-        this.name = name;
+    public MemberEditRequest(String nickname, String password, Role role, Status status) {
+        this.nickname = nickname;
         this.password = password;
         this.role = role;
         this.status = status;

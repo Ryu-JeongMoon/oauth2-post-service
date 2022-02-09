@@ -1,9 +1,9 @@
 package com.support.oauth2postservice.domain.post.entity;
 
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = @Index(name = "ix_title", columnList = "title"))
 public class Post extends BaseEntity {
 
     @Id
@@ -25,10 +26,9 @@ public class Post extends BaseEntity {
     private Long id;
 
     @JoinColumn(name = "member_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Member member;
 
-    @Size(min = 1)
     @Column(nullable = false)
     private String title;
 
@@ -58,11 +58,11 @@ public class Post extends BaseEntity {
         this.closedAt = closedAt;
     }
 
-    public void delete() {
+    public void close() {
         changeStatus(Status.INACTIVE);
     }
 
-    public void restore() {
+    public void reopen() {
         changeStatus(Status.ACTIVE);
     }
 
@@ -88,5 +88,22 @@ public class Post extends BaseEntity {
 
         if (source.getClosedAt() != null)
             this.closedAt = source.getClosedAt();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Post))
+            return false;
+
+        Post post = (Post) o;
+        return getId().equals(post.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

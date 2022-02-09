@@ -41,7 +41,7 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
 
         member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
-        member.editInfo(memberEditRequest.getName(), memberEditRequest.getRole(), memberEditRequest.getStatus());
+        member.editInfo(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
     }
 
     @Transactional

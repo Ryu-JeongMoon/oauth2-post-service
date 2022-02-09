@@ -59,7 +59,7 @@ public class MemberTestHelper {
 
     public static MemberEditRequest createEditRequest() {
         return MemberEditRequest.builder()
-                .name(ADMIN_NAME)
+                .nickname(ADMIN_NAME)
                 .password(PASSWORD + PASSWORD)
                 .build();
     }
