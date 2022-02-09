@@ -1,7 +1,7 @@
-package com.support.oauth2postservice.core.security.service;
+package com.support.oauth2postservice.security.service;
 
-import com.support.oauth2postservice.core.exception.ExceptionMessages;
-import com.support.oauth2postservice.core.security.dto.UserPrincipal;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

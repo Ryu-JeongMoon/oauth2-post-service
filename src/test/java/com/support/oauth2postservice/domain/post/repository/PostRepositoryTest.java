@@ -5,7 +5,6 @@ import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.post.entity.Post;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
-import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class PostRepositoryTest extends JpaTest {
     @DisplayName("EntityListener 작동")
     void entityListener() {
         Post post = postRepository.findActive(POST_ID)
-                .orElseGet(() -> null);
+                .orElseGet(() -> Post.builder().build());
 
         assertThat(post.getCreatedAt()).isNotNull();
         assertThat(post.getModifiedAt()).isNotNull();
@@ -36,9 +35,8 @@ class PostRepositoryTest extends JpaTest {
     @Test
     @DisplayName("ReadResponse 형태 직접 조회")
     void findActiveToResponse() {
-        PostReadResponse postReadResponse = postRepository.findActiveToResponse(POST_ID)
-                .orElseGet(() -> null);
+        boolean isPostPresent = postRepository.findActiveToResponse(POST_ID).isPresent();
 
-        assertThat(postReadResponse).isNotNull();
+        assertThat(isPostPresent).isTrue();
     }
 }

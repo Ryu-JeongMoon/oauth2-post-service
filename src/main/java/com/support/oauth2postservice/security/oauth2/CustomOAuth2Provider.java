@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.core.security.oauth2;
+package com.support.oauth2postservice.security.oauth2;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration.Builder;
@@ -20,34 +20,6 @@ public enum CustomOAuth2Provider {
             builder.userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo");
             builder.userNameAttributeName(IdTokenClaimNames.SUB);
             builder.clientName("Google");
-            return builder;
-        }
-    },
-
-    GITHUB {
-        @Override
-        public Builder getBuilder(String registrationId) {
-            ClientRegistration.Builder builder = getBuilder(registrationId, ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
-            builder.scope("read:user", "user:email");
-            builder.authorizationUri("https://github.com/login/oauth/authorize");
-            builder.tokenUri("https://github.com/login/oauth/access_token");
-            builder.userInfoUri("https://api.github.com/user");
-            builder.userNameAttributeName("id");
-            builder.clientName("GitHub");
-            return builder;
-        }
-    },
-
-    FACEBOOK {
-        @Override
-        public Builder getBuilder(String registrationId) {
-            ClientRegistration.Builder builder = getBuilder(registrationId, ClientAuthenticationMethod.CLIENT_SECRET_POST);
-            builder.scope("public_profile", "email");
-            builder.authorizationUri("https://www.facebook.com/v2.8/dialog/oauth");
-            builder.tokenUri("https://graph.facebook.com/v2.8/oauth/access_token");
-            builder.userInfoUri("https://graph.facebook.com/me?fields=id,name,email");
-            builder.userNameAttributeName("id");
-            builder.clientName("Facebook");
             return builder;
         }
     },

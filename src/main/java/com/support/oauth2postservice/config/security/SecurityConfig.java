@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.config.security;
 
-import com.support.oauth2postservice.core.security.service.CustomUserDetailsService;
+import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

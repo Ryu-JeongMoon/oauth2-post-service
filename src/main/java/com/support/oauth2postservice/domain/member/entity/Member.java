@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.domain.member.entity;
 
-import com.support.oauth2postservice.core.exception.ExceptionMessages;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.enumeration.Role;
