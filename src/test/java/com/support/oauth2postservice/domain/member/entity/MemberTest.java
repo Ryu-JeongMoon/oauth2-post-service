@@ -41,18 +41,6 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("권한 변경 시 일반 회원으로 시도 - 권한 부족")
-    void failChangeRoleByUser() {
-        assertThrows(AccessDeniedException.class, () -> user.changeRole(Role.ADMIN));
-    }
-
-    @Test
-    @DisplayName("권한 변경 시 매니저로 관리자 권한 변경 시도 - 권한 부족")
-    void failChangeRoleByManager() {
-        assertThrows(AccessDeniedException.class, () -> manager.changeRole(Role.ADMIN));
-    }
-
-    @Test
     @DisplayName("비밀번호 암호화 성공")
     void encodePassword() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -71,12 +59,11 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("개인정보 수정 실패 - 권한 부족")
-    void failEditInfoByRole() {
+    @DisplayName("개인정보 수정 실패 - 권한 변경 실패")
+    void editInfoFailByAuthority() {
         assertThrows(AccessDeniedException.class,
                 () -> user.editInfo("AAAA", Role.MANAGER, null));
     }
-
 
     @Test
     @DisplayName("탈퇴 성공")
@@ -88,7 +75,7 @@ class MemberTest {
 
     @Test
     @DisplayName("탈퇴 실패 - 중복 탈퇴 불가")
-    void failLeave() {
+    void leaveFailByDuplication() {
         user.leave();
 
         assertThrows(IllegalStateException.class, () -> user.leave());
@@ -100,5 +87,17 @@ class MemberTest {
         manager.changeRole(Role.USER);
 
         assertThat(manager.getRole()).isEqualTo(Role.USER);
+    }
+
+    @Test
+    @DisplayName("권한 변경 시 일반 회원으로 시도 - 권한 부족")
+    void changeRoleFailByUser() {
+        assertThrows(AccessDeniedException.class, () -> user.changeRole(Role.ADMIN));
+    }
+
+    @Test
+    @DisplayName("권한 변경 시 매니저로 관리자 권한 변경 시도 - 권한 부족")
+    void changeRoleFailByManager() {
+        assertThrows(AccessDeniedException.class, () -> manager.changeRole(Role.ADMIN));
     }
 }

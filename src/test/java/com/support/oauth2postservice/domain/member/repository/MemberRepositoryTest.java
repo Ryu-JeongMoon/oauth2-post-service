@@ -18,7 +18,22 @@ class MemberRepositoryTest extends JpaTest {
     }
 
     @Test
-    @DisplayName("EntityListener 작동")
+    @DisplayName("UUID2 36 Byte 문자열 생성 확인")
+    void validateGeneratedValueLength() {
+        assertThat(USER_ID.length()).isEqualTo(36);
+    }
+
+    @Test
+    @DisplayName("자동 생성 UUID2 기반 아이디 확인")
+    void validateGeneratedValue() {
+        Member member = MemberTestHelper.createUser();
+        final String USER_ID_2 = memberRepository.save(member).getId();
+
+        assertThat(USER_ID).isNotEqualTo(USER_ID_2);
+    }
+
+    @Test
+    @DisplayName("EntityListener 작동 확인")
     void entityListener() {
         Member member = memberRepository.findActive(USER_ID)
                 .orElseGet(() -> Member.builder().build());
@@ -38,7 +53,6 @@ class MemberRepositoryTest extends JpaTest {
     void findInactiveMember() {
         Member member = memberRepository.findActive(USER_ID)
                 .orElseGet(() -> Member.builder().build());
-
         member.leave();
 
         boolean isMemberPresent = memberRepository.findActive(member.getId()).isPresent();

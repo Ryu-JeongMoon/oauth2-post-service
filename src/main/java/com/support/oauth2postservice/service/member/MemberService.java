@@ -19,7 +19,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public MemberReadResponse findActiveMember(Long memberId) {
+    public MemberReadResponse findActiveMember(String memberId) {
         return memberRepository.findActive(memberId)
                 .map(MemberReadResponse::from)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
@@ -33,7 +33,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void edit(Long memberId, MemberEditRequest memberEditRequest) {
+    public void edit(String memberId, MemberEditRequest memberEditRequest) {
         if (memberEditRequest == null)
             return;
 
@@ -45,7 +45,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void leave(Long memberId) {
+    public void leave(String memberId) {
         memberRepository.findActive(memberId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND))
                 .leave();

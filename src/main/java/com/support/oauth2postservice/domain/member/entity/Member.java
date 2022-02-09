@@ -4,11 +4,13 @@ import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -28,9 +30,10 @@ import java.util.Objects;
 public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = JpaConstants.UUID2)
+    @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
     @Column(name = "member_id")
-    private Long id;
+    private String id;
 
     @Column(nullable = false, length = 320)
     private String email;
@@ -105,11 +108,11 @@ public class Member extends BaseEntity {
             return false;
 
         Member member = (Member) o;
-        return getEmail().equals(member.getEmail()) && getNickname().equals(member.getNickname());
+        return getId().equals(member.getId()) && getEmail().equals(member.getEmail()) && getNickname().equals(member.getNickname());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEmail(), getNickname());
+        return Objects.hash(getId(), getEmail(), getNickname());
     }
 }
