@@ -47,16 +47,16 @@ public class PostService {
     }
 
     @Transactional
-    public void delete(Long postId) {
+    public void close(Long postId) {
         postRepository.findActive(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
-                .delete();
+                .close();
     }
 
     @Transactional
-    public void restore(Long postId) {
+    public void reopen(Long postId) {
         postRepository.findActive(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
-                .restore();
+                .reopen();
     }
 }

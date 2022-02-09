@@ -1,10 +1,10 @@
 package com.support.oauth2postservice.domain.member.entity;
 
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -34,7 +35,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 320)
     private String email;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false, length = 20)
     private String nickname;
 
     @Size(min = 4, max = 255)
@@ -49,7 +50,7 @@ public class Member extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @Column(length = 10, nullable = false, name = "login_type")
+    @Column(name = "login_type", nullable = false, length = 10)
     @Enumerated(value = EnumType.STRING)
     private LoginType loginType;
 
@@ -93,5 +94,22 @@ public class Member extends BaseEntity {
             throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
 
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Member))
+            return false;
+
+        Member member = (Member) o;
+        return getEmail().equals(member.getEmail()) && getNickname().equals(member.getNickname());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEmail(), getNickname());
     }
 }

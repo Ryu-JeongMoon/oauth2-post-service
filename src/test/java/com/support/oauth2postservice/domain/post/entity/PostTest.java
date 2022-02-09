@@ -23,23 +23,25 @@ class PostTest {
     @Test
     @DisplayName("시작 시간이 종료 시간보다 늦을 수 없다")
     void openCloseComparison() {
-        assertThrows(IllegalArgumentException.class, () -> Post.builder()
-                .openedAt(LocalDateTime.MAX)
-                .closedAt(LocalDateTime.MIN)
-                .build());
+        assertThrows(IllegalArgumentException.class,
+                () -> Post.builder()
+                        .openedAt(LocalDateTime.MAX)
+                        .closedAt(LocalDateTime.MIN)
+                        .build()
+        );
     }
 
     @Test
     @DisplayName("게시글 삭제 시 상태 변경")
     void delete() {
-        post.delete();
+        post.close();
         assertThat(post.getStatus()).isEqualTo(Status.INACTIVE);
     }
 
     @Test
     @DisplayName("게시글 복구 시 상태 변경")
     void restore() {
-        post.restore();
+        post.reopen();
         assertThat(post.getStatus()).isEqualTo(Status.ACTIVE);
     }
 
