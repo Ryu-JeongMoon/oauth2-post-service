@@ -3,11 +3,13 @@ package com.support.oauth2postservice.domain.post.entity;
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -21,9 +23,10 @@ import java.util.Objects;
 public class Post extends BaseEntity {
 
     @Id
-    @GeneratedValue
     @Column(name = "post_id")
-    private Long id;
+    @GeneratedValue(generator = JpaConstants.UUID2)
+    @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
+    private String id;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

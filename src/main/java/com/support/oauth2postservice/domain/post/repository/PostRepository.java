@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
 
     @Query("select p from Post p where p.id = :id and p.status = 'ACTIVE'")
-    Optional<Post> findActive(Long id);
+    Optional<Post> findActive(String id);
 }

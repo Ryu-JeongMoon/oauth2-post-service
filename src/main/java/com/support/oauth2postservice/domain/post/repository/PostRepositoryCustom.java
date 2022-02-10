@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface PostRepositoryCustom {
 
-    Optional<PostReadResponse> findActiveToResponse(Long id);
+    Optional<PostReadResponse> findActiveToResponse(String id);
 }

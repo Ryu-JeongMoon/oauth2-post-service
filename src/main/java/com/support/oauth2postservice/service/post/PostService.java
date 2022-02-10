@@ -20,7 +20,7 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public PostReadResponse findActivePost(Long postId) {
+    public PostReadResponse findActivePost(String postId) {
         return postRepository.findActiveToResponse(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
     }
@@ -35,7 +35,7 @@ public class PostService {
     }
 
     @Transactional
-    public void edit(Long postId, PostEditRequest postEditRequest) {
+    public void edit(String postId, PostEditRequest postEditRequest) {
         if (postEditRequest == null)
             return;
 
@@ -47,14 +47,14 @@ public class PostService {
     }
 
     @Transactional
-    public void close(Long postId) {
+    public void close(String postId) {
         postRepository.findActive(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
                 .close();
     }
 
     @Transactional
-    public void reopen(Long postId) {
+    public void reopen(String postId) {
         postRepository.findActive(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
                 .reopen();

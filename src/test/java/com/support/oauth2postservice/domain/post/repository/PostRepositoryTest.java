@@ -13,13 +13,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class PostRepositoryTest extends JpaTest {
 
+    private Post post;
+    private Member member;
+
     @BeforeEach
     void setUp() {
-        Member member = MemberTestHelper.createUser();
+        member = MemberTestHelper.createUser();
         memberRepository.save(member);
 
-        Post post = PostTestHelper.createDefault(member);
+        post = PostTestHelper.createDefault(member);
         POST_ID = postRepository.save(post).getId();
+    }
+
+    @Test
+    @DisplayName("자동 생성 UUID 확인")
+    void checkGeneratedId() {
+        assertThat(POST_ID).isNotNull();
+
+        assertThat(POST_ID.length()).isEqualTo(36);
     }
 
     @Test
@@ -38,5 +49,22 @@ class PostRepositoryTest extends JpaTest {
         boolean isPostPresent = postRepository.findActiveToResponse(POST_ID).isPresent();
 
         assertThat(isPostPresent).isTrue();
+    }
+
+    @Test
+    @DisplayName("equals proxy 비교 성공")
+    void equals() {
+        Post postProxy = entityManager.getReference(Post.class, POST_ID);
+
+        assertThat(post.equals(postProxy)).isTrue();
+    }
+
+    @Test
+    @DisplayName("equals 비교 - 다른 아이디 비교 시 False")
+    void equalsFailByAnotherId() {
+        Post anotherPost = PostTestHelper.createDefault(member);
+        postRepository.save(anotherPost);
+
+        assertThat(post.equals(anotherPost)).isFalse();
     }
 }

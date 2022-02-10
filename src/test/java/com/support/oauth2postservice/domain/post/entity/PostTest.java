@@ -21,8 +21,19 @@ class PostTest {
     }
 
     @Test
-    @DisplayName("시작 시간이 종료 시간보다 늦을 수 없다")
-    void openCloseComparison() {
+    @DisplayName("Post 인스턴스 생성 확인")
+    void post() {
+        Post post = Post.builder()
+                .openedAt(LocalDateTime.MIN)
+                .closedAt(LocalDateTime.MAX)
+                .build();
+
+        assertThat(post).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Post 인스턴스 생성 실패 - 시작 시간이 종료 시간보다 늦을 수 없다")
+    void postFailByLocalDateTimeRule() {
         assertThrows(IllegalArgumentException.class,
                 () -> Post.builder()
                         .openedAt(LocalDateTime.MAX)
@@ -33,15 +44,17 @@ class PostTest {
 
     @Test
     @DisplayName("게시글 삭제 시 상태 변경")
-    void delete() {
+    void close() {
         post.close();
+
         assertThat(post.getStatus()).isEqualTo(Status.INACTIVE);
     }
 
     @Test
     @DisplayName("게시글 복구 시 상태 변경")
-    void restore() {
+    void reopen() {
         post.reopen();
+
         assertThat(post.getStatus()).isEqualTo(Status.ACTIVE);
     }
 

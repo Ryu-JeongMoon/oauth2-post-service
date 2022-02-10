@@ -18,12 +18,12 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<PostReadResponse> findActiveToResponse(Long id) {
+    public Optional<PostReadResponse> findActiveToResponse(String id) {
         return Optional.ofNullable(
                 queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.createdAt))
                         .from(post)
                         .join(post.member)
-                        .where(post.status.eq(Status.ACTIVE))
+                        .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
                         .fetchOne()
         );
     }
