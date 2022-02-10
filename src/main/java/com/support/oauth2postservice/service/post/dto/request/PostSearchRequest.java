@@ -1,7 +1,8 @@
-package com.support.oauth2postservice.service.post.dto.response;
+package com.support.oauth2postservice.service.post.dto.request;
 
-import com.querydsl.core.annotations.QueryProjection;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostReadResponse {
-
-    private String id;
+public class PostSearchRequest {
 
     private String nickname;
 
@@ -19,14 +18,16 @@ public class PostReadResponse {
 
     private String content;
 
+    private Status status;
+
     private LocalDateTime openedAt;
 
-    @QueryProjection
-    public PostReadResponse(String id, String nickname, String title, String content, LocalDateTime openedAt) {
-        this.id = id;
+    @Builder
+    public PostSearchRequest(String nickname, String title, String content, Status status, LocalDateTime openedAt) {
         this.nickname = nickname;
         this.title = title;
         this.content = content;
+        this.status = status;
         this.openedAt = openedAt;
     }
 }
