@@ -6,9 +6,12 @@ import com.support.oauth2postservice.domain.post.entity.Post;
 import com.support.oauth2postservice.domain.post.repository.PostRepository;
 import com.support.oauth2postservice.service.post.dto.request.PostCreateRequest;
 import com.support.oauth2postservice.service.post.dto.request.PostEditRequest;
+import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,11 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional(readOnly = true)
+    public Page<PostReadResponse> searchByCondition(PostSearchRequest condition, Pageable pageable) {
+        return postRepository.search(condition, pageable);
+    }
 
     @Transactional(readOnly = true)
     public PostReadResponse findActivePost(String postId) {

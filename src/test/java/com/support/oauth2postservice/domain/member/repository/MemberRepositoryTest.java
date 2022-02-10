@@ -64,7 +64,7 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("활성 상태 회원 조회 - 닉네임")
     void findActiveByNickname() {
-        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.USER_NAME).isPresent();
+        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.USER_NICKNAME).isPresent();
 
         assertThat(isMemberPresent).isTrue();
     }
@@ -72,7 +72,7 @@ class MemberRepositoryTest extends JpaTest {
     @Test
     @DisplayName("활성 상태 회원 조회 실패 - 닉네임")
     void failFindActiveByNickname() {
-        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.ADMIN_NAME).isPresent();
+        boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.ADMIN_NICKNAME).isPresent();
 
         assertThat(isMemberPresent).isFalse();
     }
