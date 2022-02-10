@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostReadResponse {
 
-    private Long id;
+    private String id;
 
     private String nickname;
 
@@ -22,7 +22,7 @@ public class PostReadResponse {
     private LocalDateTime createdAt;
 
     @QueryProjection
-    public PostReadResponse(Long id, String nickname, String title, String content, LocalDateTime createdAt) {
+    public PostReadResponse(String id, String nickname, String title, String content, LocalDateTime createdAt) {
         this.id = id;
         this.nickname = nickname;
         this.title = title;

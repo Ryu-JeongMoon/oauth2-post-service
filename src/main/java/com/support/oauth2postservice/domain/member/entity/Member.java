@@ -30,9 +30,9 @@ import java.util.Objects;
 public class Member extends BaseEntity {
 
     @Id
+    @Column(name = "member_id")
     @GeneratedValue(generator = JpaConstants.UUID2)
     @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
-    @Column(name = "member_id")
     private String id;
 
     @Column(nullable = false, length = 320)

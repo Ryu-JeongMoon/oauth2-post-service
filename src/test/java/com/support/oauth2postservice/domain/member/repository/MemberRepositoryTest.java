@@ -11,9 +11,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberRepositoryTest extends JpaTest {
 
+    private Member member;
+
     @BeforeEach
     void setUp() {
-        Member member = MemberTestHelper.createUser();
+        member = MemberTestHelper.createUser();
         USER_ID = memberRepository.save(member).getId();
     }
 
@@ -27,7 +29,7 @@ class MemberRepositoryTest extends JpaTest {
     @DisplayName("자동 생성 UUID2 기반 아이디 확인")
     void validateGeneratedValue() {
         Member member = MemberTestHelper.createUser();
-        final String USER_ID_2 = memberRepository.save(member).getId();
+        String USER_ID_2 = memberRepository.save(member).getId();
 
         assertThat(USER_ID).isNotEqualTo(USER_ID_2);
     }
@@ -63,6 +65,7 @@ class MemberRepositoryTest extends JpaTest {
     @DisplayName("활성 상태 회원 조회 - 닉네임")
     void findActiveByNickname() {
         boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.USER_NAME).isPresent();
+
         assertThat(isMemberPresent).isTrue();
     }
 
@@ -70,6 +73,24 @@ class MemberRepositoryTest extends JpaTest {
     @DisplayName("활성 상태 회원 조회 실패 - 닉네임")
     void failFindActiveByNickname() {
         boolean isMemberPresent = memberRepository.findActiveByNickname(MemberTestHelper.ADMIN_NAME).isPresent();
+
         assertThat(isMemberPresent).isFalse();
+    }
+
+    @Test
+    @DisplayName("equals proxy 비교 성공")
+    void equals() {
+        Member memberProxy = entityManager.getReference(Member.class, USER_ID);
+
+        assertThat(member.equals(memberProxy)).isTrue();
+    }
+
+    @Test
+    @DisplayName("equals 비교 - 다른 아이디 비교 시 False")
+    void equalsFailByAnotherId() {
+        Member admin = MemberTestHelper.createAdmin();
+        memberRepository.save(admin);
+
+        assertThat(member.equals(admin)).isFalse();
     }
 }
