@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.config.security;
+package com.support.oauth2postservice.security.config;
 
 import com.support.oauth2postservice.security.oauth2.CustomOAuth2Provider;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +14,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 public class OAuth2Config {
 
     private final static Collection<String> CLIENTS = Arrays.asList("google", "naver");
-    private final static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
+    private final static String CLIENT_PROPERTY_PREFIX = "spring.security.oauth2.client.registration.";
     private final Environment environment;
 
     @Bean
@@ -32,11 +32,10 @@ public class OAuth2Config {
     }
 
     private ClientRegistration getRegistration(String client) {
-        String clientId = environment.getProperty(CLIENT_PROPERTY_KEY + client + ".client-id");
-        String clientSecret = environment.getProperty(CLIENT_PROPERTY_KEY + client + ".client-secret");
+        String clientId = environment.getProperty(CLIENT_PROPERTY_PREFIX + client + ".client-id");
+        String clientSecret = environment.getProperty(CLIENT_PROPERTY_PREFIX + client + ".client-secret");
 
-        assert clientId != null;
-        return CustomOAuth2Provider.valueOf(clientId.toUpperCase())
+        return CustomOAuth2Provider.valueOf(client.toUpperCase())
                 .getBuilder(client)
                 .clientId(clientId)
                 .clientSecret(clientSecret)

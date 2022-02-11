@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: test
+    include: oauth2
+
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        ddl-auto: create-drop
+        dialect: org.hibernate.dialect.H2Dialect
