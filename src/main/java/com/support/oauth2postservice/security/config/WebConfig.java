@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.config.security;
+package com.support.oauth2postservice.security.config;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
