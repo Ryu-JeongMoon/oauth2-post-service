@@ -13,6 +13,9 @@ public class TestMemberRepository {
     private final EntityManager em;
 
     public void findOneMember() {
-        em.createQuery("select m from Member m where m.id = 0", Member.class).getSingleResult();
+        String memberId = "0";
+        em.createQuery("select m from Member m where m.id = :memberId", Member.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
     }
 }

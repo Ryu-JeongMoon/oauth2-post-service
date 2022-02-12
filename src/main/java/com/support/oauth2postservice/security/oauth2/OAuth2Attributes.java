@@ -27,7 +27,7 @@ public class OAuth2Attributes {
     private Member member;
 
     @Builder
-    private OAuth2Attributes(String email, String nickname, Map<String, Object> attributes, String nameAttributeKey) {
+    private OAuth2Attributes(String email, String nickname, Map<String, Object> attributes) {
         this.email = email;
         this.nickname = nickname;
         this.attributes = attributes;
