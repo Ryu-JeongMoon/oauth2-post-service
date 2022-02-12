@@ -58,15 +58,6 @@ class PostRepositoryTest extends JpaTest {
     }
 
     @Test
-    @DisplayName("equals 비교 - 다른 아이디 비교 시 False")
-    void equalsFailByAnotherId() {
-        Post anotherPost = PostTestHelper.createDefault(member);
-        postRepository.save(anotherPost);
-
-        assertThat(post.equals(anotherPost)).isFalse();
-    }
-
-    @Test
     @DisplayName("ReadResponse 형태 직접 조회")
     void findActiveToResponse() {
         boolean isPostPresent = postRepository.findActiveToResponse(POST_ID).isPresent();
@@ -97,6 +88,4 @@ class PostRepositoryTest extends JpaTest {
 
         assertThat(result.getTotalElements()).isEqualTo(1);
     }
-
-
 }

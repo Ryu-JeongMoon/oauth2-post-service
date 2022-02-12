@@ -6,10 +6,7 @@ import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +15,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -27,6 +23,7 @@ import java.util.Objects;
         @UniqueConstraint(name = "uk_member_email", columnNames = "email"),
         @UniqueConstraint(name = "uk_member_nickname", columnNames = "nickname")
 })
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Member extends BaseEntity {
 
     @Id
@@ -35,9 +32,11 @@ public class Member extends BaseEntity {
     @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
     private String id;
 
+    @EqualsAndHashCode.Include
     @Column(nullable = false, length = 320)
     private String email;
 
+    @EqualsAndHashCode.Include
     @Column(nullable = false, length = 20)
     private String nickname;
 
@@ -97,22 +96,5 @@ public class Member extends BaseEntity {
             throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
 
         this.role = role;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-
-        if (!(o instanceof Member))
-            return false;
-
-        Member member = (Member) o;
-        return getId().equals(member.getId()) && getEmail().equals(member.getEmail()) && getNickname().equals(member.getNickname());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getNickname());
     }
 }
