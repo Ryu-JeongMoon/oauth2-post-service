@@ -6,6 +6,7 @@ import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,11 +15,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityListeners;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@EntityListeners(value = AuditingEntityListener.class)
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
@@ -31,9 +34,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Attributes oAuth2Attributes = OAuth2Attributes.of(registrationId, attributes);
-        Member member = getMember(registrationId, oAuth2Attributes);
 
-        return UserPrincipal.from(member, attributes);
+        Member member = getMember(registrationId, oAuth2Attributes);
+        return UserPrincipal.from(member, oAuth2Attributes.getAttributes());
     }
 
     private Member getMember(String registrationId, OAuth2Attributes attributes) {
