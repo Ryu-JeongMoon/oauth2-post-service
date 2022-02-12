@@ -71,4 +71,14 @@ class PostTest {
         assertThat(post.getTitle()).isEqualTo(updateSource.getTitle());
         assertThat(post.getContent()).isEqualTo(updateSource.getContent());
     }
+
+    @Test
+    @DisplayName("equals 비교 - 다른 제목 비교 시 False")
+    void equalsFailByAnotherId() {
+        Post anotherPost = Post.builder()
+                .title(PostTestHelper.TITLE + 1)
+                .build();
+
+        assertThat(this.post.equals(anotherPost)).isFalse();
+    }
 }
