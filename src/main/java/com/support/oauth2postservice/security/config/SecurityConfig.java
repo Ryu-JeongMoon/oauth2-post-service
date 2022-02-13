@@ -71,8 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(customOAuth2UserService)
 
                 .and()
-                .failureHandler(oAuth2AuthenticationFailureHandler)
-                .redirectionEndpoint()
-                .baseUri("/hi");
+                .failureHandler(oAuth2AuthenticationFailureHandler);
     }
 }
