@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.service.post;
 
+import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.domain.post.entity.Post;
@@ -63,7 +64,7 @@ public class PostService {
 
     @Transactional
     public void reopen(String postId) {
-        postRepository.findActive(postId)
+        postRepository.findInactive(postId)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
                 .reopen();
     }
