@@ -6,20 +6,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSearchRequest {
 
+    @Size(max = 20)
     private String nickname;
 
+    @Size(max = 20)
     private String title;
 
+    @Size(max = 20)
     private String content;
 
     private Status status;
 
+    @PastOrPresent
     private LocalDateTime openedAt;
 
     @Builder

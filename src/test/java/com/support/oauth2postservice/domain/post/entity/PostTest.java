@@ -17,7 +17,7 @@ class PostTest {
 
     @BeforeEach
     void setUp() {
-        post = PostTestHelper.createDefault(null);
+        post = PostTestHelper.getDefault(null);
     }
 
     @Test

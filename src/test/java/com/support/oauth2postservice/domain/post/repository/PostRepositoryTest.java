@@ -27,7 +27,7 @@ class PostRepositoryTest extends JpaTest {
         member = MemberTestHelper.createUser();
         memberRepository.save(member);
 
-        post = PostTestHelper.createDefault(member);
+        post = PostTestHelper.getDefault(member);
         POST_ID = postRepository.save(post).getId();
     }
 
