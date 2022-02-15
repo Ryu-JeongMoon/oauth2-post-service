@@ -34,6 +34,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 
+	implementation 'com.google.crypto.tink:tink:1.6.1'
 	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
 	implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
