@@ -15,4 +15,3 @@ spring:
 logging:
   level:
     com.support.oauth2postservice: debug
-  config: classpath:log4j2/log4j2-test.xml
