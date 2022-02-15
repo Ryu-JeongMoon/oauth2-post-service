@@ -11,3 +11,8 @@ spring:
         format_sql: true
         ddl-auto: create-drop
         dialect: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    com.support.oauth2postservice: debug
+  config: classpath:log4j2/log4j2-test.xml
