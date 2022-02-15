@@ -22,21 +22,18 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.ECGenParameterSpec;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.UUID;
 
 class EllipticCurveKeyTest {
 
     @Test
     @DisplayName("ECC private / public key 테스트")
     void jwtTest() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, JOSEException {
-        // Given
         final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-        keyPairGenerator.initialize(new ECGenParameterSpec("secp256r1")); // == P256
+        keyPairGenerator.initialize(new ECGenParameterSpec("secp256r1"));
 
-        // When
         final KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        // Then
-        // Nothing Happen
         System.out.println("ecKey.publicKey: " + Base64.encodeBase64String(keyPair.getPublic().getEncoded()));
         System.out.println("ecKey.privateKey: " + Base64.encodeBase64String(keyPair.getPrivate().getEncoded()));
     }
@@ -58,7 +55,9 @@ class EllipticCurveKeyTest {
                 .expirationTime(new Date(new Date().getTime() + 60 * 1000))
                 .build();
 
-        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.EdDSA).keyID(jwk.getKeyID()).build();
+        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.EdDSA)
+                .keyID(jwk.getKeyID())
+                .build();
 
         SignedJWT signedJWT = new SignedJWT(jwsHeader, claimsSet);
 
@@ -72,5 +71,12 @@ class EllipticCurveKeyTest {
 
         Ed25519Verifier verifier = new Ed25519Verifier(publicJWK);
         System.out.println("isVerified = " + signedJWT.verify(verifier));
+    }
+
+    @Test
+    @DisplayName("token-secret 생성")
+    void createTokenSecret() {
+        UUID tokenSecret = UUID.randomUUID();
+        System.out.println("tokenSecret = " + tokenSecret);
     }
 }

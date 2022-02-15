@@ -8,4 +8,8 @@ public class ExceptionMessages {
 
     public static final String POST_NOT_FOUND = "존재하지 않는 게시글입니다";
     public static final String POST_INCORRECT_DATE = "시작 시간이 종료 시간보다 늦을 수 없습니다";
+
+    public static final String NOT_SIGNED_TOKEN = "토큰에 서명할 수 없습니다";
+    public static final String WRONG_FORMAT_TOKEN = "토큰의 형태가 올바르지 않습니다";
+    public static final String NOT_VERIFIED_TOKEN = "토큰의 데이터가 올바르지 않습니다";
 }
