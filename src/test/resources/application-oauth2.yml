@@ -7,24 +7,7 @@ spring:
             client-name: Google
             client-id: Google
             client-secret: Google
-            redirect-uri: Google
-            scope:
-              - Google
-              - Google
           naver:
             client-name: Naver
             client-id: Naver
             client-secret: Naver
-            authorization-grant-type: Naver
-            redirect-uri: Naver
-            scope:
-              - Naver
-              - Naver
-              - Naver
-
-        provider:
-          naver:
-            user_name_attribute: Naver
-            token_uri: Naver
-            user_info_uri: Naver
-            authorization_uri: Naver
