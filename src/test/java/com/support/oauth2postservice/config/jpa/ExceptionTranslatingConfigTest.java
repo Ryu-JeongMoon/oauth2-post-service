@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 class ExceptionTranslatingConfigTest {
 
-    @Autowired
-    TestMemberRepository testMemberRepository;
+  @Autowired
+  TestMemberRepository testMemberRepository;
 
-    @Test
-    @DisplayName("NoResultException -> EmptyResultDataAccessException")
-    void translateException() {
-        assertThrows(EmptyResultDataAccessException.class, () -> testMemberRepository.findOneMember());
-    }
+  @Test
+  @DisplayName("NoResultException -> EmptyResultDataAccessException")
+  void translateException() {
+    assertThrows(EmptyResultDataAccessException.class, () -> testMemberRepository.findOneMember());
+  }
 }

@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class TestController {
 
-    @GetMapping("/hi")
-    @ResponseBody
-    @PreAuthorize(value = "hasAnyRole('ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN')")
-    public String hi(OAuth2AuthenticationToken token) {
-        return token.toString();
-    }
+  @GetMapping("/hi")
+  @ResponseBody
+  @PreAuthorize(value = "hasAnyRole('ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN')")
+  public String hi(OAuth2AuthenticationToken token) {
+    return token.toString();
+  }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";
-    }
+  @GetMapping("/login")
+  public String loginPage() {
+    return "login";
+  }
 
-    @GetMapping
-    public String home() {
-        return "home";
-    }
+  @GetMapping
+  public String home() {
+    return "home";
+  }
 }

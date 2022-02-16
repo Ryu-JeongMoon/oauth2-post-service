@@ -15,25 +15,25 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 public class EllipticCurveVerifier implements TokenVerifier {
 
-    private final Ed25519Verifier ed25519Verifier;
+  private final Ed25519Verifier ed25519Verifier;
 
-    @Override
-    public boolean isValid(String token) {
-        SignedJWT signedJWT = parse(token);
-        try {
-            return signedJWT.verify(ed25519Verifier);
-        } catch (JOSEException e) {
-            log.info("JWT VERIFYING ERROR => {}", e.getMessage());
-            throw new TokenException(ExceptionMessages.NOT_VERIFIED_TOKEN);
-        }
+  @Override
+  public boolean isValid(String token) {
+    SignedJWT signedJWT = parse(token);
+    try {
+      return signedJWT.verify(ed25519Verifier);
+    } catch (JOSEException e) {
+      log.info("JWT VERIFYING ERROR => {}", e.getMessage());
+      throw new TokenException(ExceptionMessages.NOT_VERIFIED_TOKEN);
     }
+  }
 
-    private SignedJWT parse(String token) {
-        try {
-            return SignedJWT.parse(token);
-        } catch (ParseException e) {
-            log.info("JWT PARSING ERROR => {}", e.getMessage());
-            throw new TokenException(ExceptionMessages.WRONG_FORMAT_TOKEN);
-        }
+  private SignedJWT parse(String token) {
+    try {
+      return SignedJWT.parse(token);
+    } catch (ParseException e) {
+      log.info("JWT PARSING ERROR => {}", e.getMessage());
+      throw new TokenException(ExceptionMessages.WRONG_FORMAT_TOKEN);
     }
+  }
 }

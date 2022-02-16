@@ -17,69 +17,69 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails, OAuth2User {
 
-    private final String email;
-    private final String password;
-    private final Status status;
-    private final Map<String, Object> attributes;
-    private final Collection<? extends GrantedAuthority> authorities;
+  private final String email;
+  private final String password;
+  private final Status status;
+  private final Map<String, Object> attributes;
+  private final Collection<? extends GrantedAuthority> authorities;
 
-    public static UserPrincipal from(Member member) {
-        return UserPrincipal.from(member, new ConcurrentHashMap<>());
-    }
+  public static UserPrincipal from(Member member) {
+    return UserPrincipal.from(member, new ConcurrentHashMap<>());
+  }
 
-    public static UserPrincipal from(Member member, Map<String, Object> attributes) {
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().toString()));
+  public static UserPrincipal from(Member member, Map<String, Object> attributes) {
+    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().toString()));
 
-        return new UserPrincipal(
-                member.getEmail(),
-                member.getPassword(),
-                member.getStatus(),
-                attributes,
-                authorities);
-    }
+    return new UserPrincipal(
+        member.getEmail(),
+        member.getPassword(),
+        member.getStatus(),
+        attributes,
+        authorities);
+  }
 
-    @Override
-    public String getName() {
-        return email;
-    }
+  @Override
+  public String getName() {
+    return email;
+  }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
+  @Override
+  public Map<String, Object> getAttributes() {
+    return attributes;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorities;
+  }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+  @Override
+  public String getPassword() {
+    return password;
+  }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+  @Override
+  public String getUsername() {
+    return email;
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return status.equals(Status.ACTIVE);
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return status.equals(Status.ACTIVE);
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return status.equals(Status.ACTIVE);
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return status.equals(Status.ACTIVE);
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return status.equals(Status.ACTIVE);
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return status.equals(Status.ACTIVE);
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return status.equals(Status.ACTIVE);
-    }
+  @Override
+  public boolean isEnabled() {
+    return status.equals(Status.ACTIVE);
+  }
 }

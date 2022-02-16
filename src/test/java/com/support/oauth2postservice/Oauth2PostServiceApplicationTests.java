@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 class Oauth2PostServiceApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+  @Test
+  void contextLoads() {
+  }
 
 }

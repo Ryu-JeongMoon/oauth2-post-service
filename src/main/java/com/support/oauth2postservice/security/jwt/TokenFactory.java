@@ -4,17 +4,17 @@ import org.springframework.security.core.Authentication;
 
 public abstract class TokenFactory {
 
-    public TokenResponse create(Authentication authentication) {
-        String accessToken = createAccessToken(authentication);
-        String refreshToken = createRefreshToken(authentication);
+  public TokenResponse create(Authentication authentication) {
+    String accessToken = createAccessToken(authentication);
+    String refreshToken = createRefreshToken(authentication);
 
-        return TokenResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
+    return TokenResponse.builder()
+        .accessToken(accessToken)
+        .refreshToken(refreshToken)
+        .build();
+  }
 
-    protected abstract String createAccessToken(Authentication authentication);
+  protected abstract String createAccessToken(Authentication authentication);
 
-    protected abstract String createRefreshToken(Authentication authentication);
+  protected abstract String createRefreshToken(Authentication authentication);
 }

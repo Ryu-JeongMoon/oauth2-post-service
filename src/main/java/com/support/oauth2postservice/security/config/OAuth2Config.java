@@ -17,27 +17,27 @@ import java.util.stream.Collectors;
 @EnableConfigurationProperties(value = OAuth2Properties.class)
 public class OAuth2Config {
 
-    private final OAuth2Properties oAuth2Properties;
+  private final OAuth2Properties oAuth2Properties;
 
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        List<ClientRegistration> registrations = oAuth2Properties.getRegistration()
-                .keySet()
-                .stream()
-                .map(this::getRegistration)
-                .collect(Collectors.toList());
+  @Bean
+  public ClientRegistrationRepository clientRegistrationRepository() {
+    List<ClientRegistration> registrations = oAuth2Properties.getRegistration()
+        .keySet()
+        .stream()
+        .map(this::getRegistration)
+        .collect(Collectors.toList());
 
-        return new InMemoryClientRegistrationRepository(registrations);
-    }
+    return new InMemoryClientRegistrationRepository(registrations);
+  }
 
-    private ClientRegistration getRegistration(OAuth2Properties.Client client) {
-        OAuth2Properties.Resource resource = oAuth2Properties.getRegistration().get(client);
-        String clientName = resource.getClientName();
+  private ClientRegistration getRegistration(OAuth2Properties.Client client) {
+    OAuth2Properties.Resource resource = oAuth2Properties.getRegistration().get(client);
+    String clientName = resource.getClientName();
 
-        return CustomOAuth2Provider.valueOf(clientName.toUpperCase())
-                .getBuilder(clientName)
-                .clientId(resource.getClientId())
-                .clientSecret(resource.getClientSecret())
-                .build();
-    }
+    return CustomOAuth2Provider.valueOf(clientName.toUpperCase())
+        .getBuilder(clientName)
+        .clientId(resource.getClientId())
+        .clientSecret(resource.getClientSecret())
+        .build();
+  }
 }

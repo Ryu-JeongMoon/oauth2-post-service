@@ -17,32 +17,32 @@ import static org.mockito.Mockito.*;
 
 class CustomUserDetailsServiceTest extends ServiceTest {
 
-    private Member member;
+  private Member member;
 
-    @BeforeEach
-    void setUp() {
-        member = MemberTestHelper.createUser();
-    }
+  @BeforeEach
+  void setUp() {
+    member = MemberTestHelper.createUser();
+  }
 
-    @Test
-    @DisplayName("Security - loadUserByUsername 호출")
-    void loadUserByUsername() {
-        when(memberRepository.findActiveByEmail(any())).thenReturn(Optional.of(member));
+  @Test
+  @DisplayName("Security - loadUserByUsername 호출")
+  void loadUserByUsername() {
+    when(memberRepository.findActiveByEmail(any())).thenReturn(Optional.of(member));
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(MemberTestHelper.USER_EMAIL);
+    UserDetails userDetails = customUserDetailsService.loadUserByUsername(MemberTestHelper.USER_EMAIL);
 
-        assertThat(userDetails.getUsername()).isEqualTo(MemberTestHelper.USER_EMAIL);
-        verify(memberRepository, times(1)).findActiveByEmail(MemberTestHelper.USER_EMAIL);
-    }
+    assertThat(userDetails.getUsername()).isEqualTo(MemberTestHelper.USER_EMAIL);
+    verify(memberRepository, times(1)).findActiveByEmail(MemberTestHelper.USER_EMAIL);
+  }
 
-    @Test
-    @DisplayName("Security - loadUserByUsername 호출 시 예외 발생")
-    void failLoadUserByUsername() {
-        when(memberRepository.findActiveByEmail(any())).thenThrow(RuntimeException.class);
+  @Test
+  @DisplayName("Security - loadUserByUsername 호출 시 예외 발생")
+  void failLoadUserByUsername() {
+    when(memberRepository.findActiveByEmail(any())).thenThrow(RuntimeException.class);
 
-        assertThrows(RuntimeException.class,
-                () -> customUserDetailsService.loadUserByUsername(MemberTestHelper.ADMIN_EMAIL));
+    assertThrows(RuntimeException.class,
+        () -> customUserDetailsService.loadUserByUsername(MemberTestHelper.ADMIN_EMAIL));
 
-        verify(memberRepository, times(1)).findActiveByEmail(any());
-    }
+    verify(memberRepository, times(1)).findActiveByEmail(any());
+  }
 }

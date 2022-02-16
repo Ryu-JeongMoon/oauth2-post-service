@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum Role {
 
-    USER("ROLE_USER"),
-    MANAGER("ROLE_MANAGER"),
-    ADMIN("ROLE_ADMIN");
+  USER("ROLE_USER"),
+  MANAGER("ROLE_MANAGER"),
+  ADMIN("ROLE_ADMIN");
 
-    private final String key;
+  private final String key;
 }

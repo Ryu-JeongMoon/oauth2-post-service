@@ -14,26 +14,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSearchRequest {
 
-    @Size(max = 20)
-    private String nickname;
+  @Size(max = 20)
+  private String nickname;
 
-    @Size(max = 20)
-    private String title;
+  @Size(max = 20)
+  private String title;
 
-    @Size(max = 20)
-    private String content;
+  @Size(max = 20)
+  private String content;
 
-    private Status status;
+  private Status status;
 
-    @PastOrPresent
-    private LocalDateTime openedAt;
+  @PastOrPresent
+  private LocalDateTime openedAt;
 
-    @Builder
-    public PostSearchRequest(String nickname, String title, String content, Status status, LocalDateTime openedAt) {
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.status = status;
-        this.openedAt = openedAt;
-    }
+  @Builder
+  public PostSearchRequest(String nickname, String title, String content, Status status, LocalDateTime openedAt) {
+    this.nickname = nickname;
+    this.title = title;
+    this.content = content;
+    this.status = status;
+    this.openedAt = openedAt;
+  }
 }
