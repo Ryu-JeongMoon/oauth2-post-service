@@ -19,10 +19,6 @@ public class EllipticCurveVerifier implements TokenVerifier {
 
     @Override
     public boolean isValid(String token) {
-        return verify(token);
-    }
-
-    private boolean verify(String token) {
         SignedJWT signedJWT = parse(token);
         try {
             return signedJWT.verify(ed25519Verifier);
