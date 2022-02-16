@@ -13,36 +13,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberReadResponse {
 
-    private String id;
+  private String id;
 
-    private String name;
+  private String name;
 
-    private String email;
+  private String email;
 
-    private Role role;
+  private Role role;
 
-    private Status status;
+  private Status status;
 
-    private LoginType loginType;
+  private LoginType loginType;
 
-    @Builder
-    public MemberReadResponse(String id, String name, String email, Role role, Status status, LoginType loginType) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        this.status = status;
-        this.loginType = loginType;
-    }
+  @Builder
+  public MemberReadResponse(String id, String name, String email, Role role, Status status, LoginType loginType) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.role = role;
+    this.status = status;
+    this.loginType = loginType;
+  }
 
-    public static MemberReadResponse from(Member member) {
-        return MemberReadResponse.builder()
-                .id(member.getId())
-                .name(member.getNickname())
-                .email(member.getEmail())
-                .role(member.getRole())
-                .status(member.getStatus())
-                .loginType(member.getLoginType())
-                .build();
-    }
+  public static MemberReadResponse from(Member member) {
+    return MemberReadResponse.builder()
+        .id(member.getId())
+        .name(member.getNickname())
+        .email(member.getEmail())
+        .role(member.getRole())
+        .status(member.getStatus())
+        .loginType(member.getLoginType())
+        .build();
+  }
 }

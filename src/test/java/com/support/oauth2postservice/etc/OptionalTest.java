@@ -12,29 +12,29 @@ import java.util.Random;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OptionalTest {
 
-    private final List<String> names = Arrays.asList("panda", "bear", "tiger", "lion", "chicken");
+  private final List<String> names = Arrays.asList("panda", "bear", "tiger", "lion", "chicken");
 
-    @Test
-    @DisplayName("orElse - 무조건 평가")
-    void orElseTest() {
-        String name = Optional.of("orElse be evaluated when Optional is not empty")
-                .orElse(getRandomName());
-    }
+  @Test
+  @DisplayName("orElse - 무조건 평가")
+  void orElseTest() {
+    String name = Optional.of("orElse be evaluated when Optional is not empty")
+        .orElse(getRandomName());
+  }
 
-    @Test
-    @DisplayName("orElseGet - Optional 빈 값일 때만 평가")
-    void orElseGetTest() {
-        String name = Optional.of("orElse be evaluated when Optional is not empty")
-                .orElseGet(this::getRandomName);
-    }
+  @Test
+  @DisplayName("orElseGet - Optional 빈 값일 때만 평가")
+  void orElseGetTest() {
+    String name = Optional.of("orElse be evaluated when Optional is not empty")
+        .orElseGet(this::getRandomName);
+  }
 
-    private String getRandomName() {
-        System.out.println("getRandomName() method - start");
+  private String getRandomName() {
+    System.out.println("getRandomName() method - start");
 
-        Random random = new Random();
-        int index = random.nextInt(5);
+    Random random = new Random();
+    int index = random.nextInt(5);
 
-        System.out.println("getRandomName() method - end");
-        return names.get(index);
-    }
+    System.out.println("getRandomName() method - end");
+    return names.get(index);
+  }
 }

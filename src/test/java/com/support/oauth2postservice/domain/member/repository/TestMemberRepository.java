@@ -10,12 +10,12 @@ import javax.persistence.EntityManager;
 @RequiredArgsConstructor
 public class TestMemberRepository {
 
-    private final EntityManager em;
+  private final EntityManager em;
 
-    public void findOneMember() {
-        String memberId = "0";
-        em.createQuery("select m from Member m where m.id = :memberId", Member.class)
-                .setParameter("memberId", memberId)
-                .getSingleResult();
-    }
+  public void findOneMember() {
+    String memberId = "0";
+    em.createQuery("select m from Member m where m.id = :memberId", Member.class)
+        .setParameter("memberId", memberId)
+        .getSingleResult();
+  }
 }

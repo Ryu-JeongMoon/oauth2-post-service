@@ -30,89 +30,89 @@ import java.util.UUID;
 @DisplayName("타원 곡선 알고리즘 테스트")
 class EllipticCurveKeyTest {
 
-    private OctetKeyPair publicJWK;
-    private OctetKeyPair privateJWK;
-    private SignedJWT signedJWT;
-    private Ed25519Verifier verifier;
-    private String serializedToken;
+  private OctetKeyPair publicJWK;
+  private OctetKeyPair privateJWK;
+  private SignedJWT signedJWT;
+  private Ed25519Verifier verifier;
+  private String serializedToken;
 
-    @BeforeEach
-    @DisplayName("private & public key 생성")
-    void setUp() throws JOSEException {
-        privateJWK = new OctetKeyPairGenerator(Curve.Ed25519)
-                .keyUse(KeyUse.SIGNATURE)
-                .keyID(UUID.randomUUID().toString())
-                .generate();
+  @BeforeEach
+  @DisplayName("private & public key 생성")
+  void setUp() throws JOSEException {
+    privateJWK = new OctetKeyPairGenerator(Curve.Ed25519)
+        .keyUse(KeyUse.SIGNATURE)
+        .keyID(UUID.randomUUID().toString())
+        .generate();
 
-        Ed25519Signer signer = new Ed25519Signer(privateJWK);
-        publicJWK = privateJWK.toPublicJWK();
+    Ed25519Signer signer = new Ed25519Signer(privateJWK);
+    publicJWK = privateJWK.toPublicJWK();
 
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject("pandabear")
-                .issuer("https://panda.com")
-                .expirationTime(new Date(new Date().getTime() + 60 * 1000))
-                .build();
+    JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+        .subject("pandabear")
+        .issuer("https://panda.com")
+        .expirationTime(new Date(new Date().getTime() + 60 * 1000))
+        .build();
 
-        JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.EdDSA)
-                .keyID(privateJWK.getKeyID())
-                .build();
+    JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.EdDSA)
+        .keyID(privateJWK.getKeyID())
+        .build();
 
-        signedJWT = new SignedJWT(jwsHeader, claimsSet);
-        signedJWT.sign(signer);
-        verifier = new Ed25519Verifier(publicJWK);
+    signedJWT = new SignedJWT(jwsHeader, claimsSet);
+    signedJWT.sign(signer);
+    verifier = new Ed25519Verifier(publicJWK);
+  }
+
+  @Test
+  @DisplayName("비밀키에 'd' parameter (token-secret) 존재해야 한다")
+  void privateJWK() {
+    Assertions.assertThat(privateJWK.getD()).isNotNull();
+  }
+
+  @Test
+  @DisplayName("공개키에 'd' parameter 존재하지 않아야 한다")
+  void publicJWK() {
+    Assertions.assertThat(publicJWK.getD()).isNull();
+  }
+
+  @Test
+  @DisplayName("서명된 토큰 직렬화")
+  void tokenSerialization() {
+    serializedToken = signedJWT.serialize();
+    Assertions.assertThat(serializedToken).isNotBlank();
+  }
+
+  @Test
+  @DisplayName("서명된 토큰 역직렬화 후 검증")
+  void ed25519Test() throws ParseException, JOSEException {
+    serializedToken = signedJWT.serialize();
+    signedJWT = SignedJWT.parse(serializedToken);
+
+    boolean isVerified = signedJWT.verify(verifier);
+    Assertions.assertThat(isVerified).isTrue();
+  }
+
+  @Nested
+  @DisplayName("ECC secret & key 생성")
+  class OtherWayTest {
+
+    @Test
+    @DisplayName("token-secret 36 bytes 랜덤 생성")
+    void createTokenSecret() {
+      UUID tokenSecret = UUID.randomUUID();
+      Assertions.assertThat(tokenSecret.toString().length()).isEqualTo(36);
     }
 
     @Test
-    @DisplayName("비밀키에 'd' parameter (token-secret) 존재해야 한다")
-    void privateJWK() {
-        Assertions.assertThat(privateJWK.getD()).isNotNull();
+    @DisplayName("KeyPairGenerator.getInstance() 생성 테스트")
+    void usingKeyPairGeneratorGetInstance() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+      keyPairGenerator.initialize(new ECGenParameterSpec("secp256r1"));
+      KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+      System.out.println("ecKey.publicKey     => " + Base64.encodeBase64String(keyPair.getPublic().getEncoded()));
+      System.out.println("ecKey.privateKey    => " + Base64.encodeBase64String(keyPair.getPrivate().getEncoded()));
     }
-
-    @Test
-    @DisplayName("공개키에 'd' parameter 존재하지 않아야 한다")
-    void publicJWK() {
-        Assertions.assertThat(publicJWK.getD()).isNull();
-    }
-
-    @Test
-    @DisplayName("서명된 토큰 직렬화")
-    void tokenSerialization() {
-        serializedToken = signedJWT.serialize();
-        Assertions.assertThat(serializedToken).isNotBlank();
-    }
-
-    @Test
-    @DisplayName("서명된 토큰 역직렬화 후 검증")
-    void ed25519Test() throws ParseException, JOSEException {
-        serializedToken = signedJWT.serialize();
-        signedJWT = SignedJWT.parse(serializedToken);
-
-        boolean isVerified = signedJWT.verify(verifier);
-        Assertions.assertThat(isVerified).isTrue();
-    }
-
-    @Nested
-    @DisplayName("ECC secret & key 생성")
-    class OtherWayTest {
-
-        @Test
-        @DisplayName("token-secret 36 bytes 랜덤 생성")
-        void createTokenSecret() {
-            UUID tokenSecret = UUID.randomUUID();
-            Assertions.assertThat(tokenSecret.toString().length()).isEqualTo(36);
-        }
-
-        @Test
-        @DisplayName("KeyPairGenerator.getInstance() 생성 테스트")
-        void usingKeyPairGeneratorGetInstance() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-            keyPairGenerator.initialize(new ECGenParameterSpec("secp256r1"));
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-            System.out.println("ecKey.publicKey     => " + Base64.encodeBase64String(keyPair.getPublic().getEncoded()));
-            System.out.println("ecKey.privateKey    => " + Base64.encodeBase64String(keyPair.getPrivate().getEncoded()));
-        }
-    }
+  }
 }
 
 /*

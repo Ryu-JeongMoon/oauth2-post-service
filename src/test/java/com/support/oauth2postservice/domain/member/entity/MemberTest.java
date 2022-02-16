@@ -16,88 +16,88 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberTest {
 
-    Member user;
-    Member manager;
-    Member admin;
+  Member user;
+  Member manager;
+  Member admin;
 
-    @BeforeEach
-    void setUp() {
-        user = MemberTestHelper.createUser();
-        manager = MemberTestHelper.createManger();
-        admin = MemberTestHelper.createAdmin();
-    }
+  @BeforeEach
+  void setUp() {
+    user = MemberTestHelper.createUser();
+    manager = MemberTestHelper.createManger();
+    admin = MemberTestHelper.createAdmin();
+  }
 
-    @Test
-    @DisplayName("LoginType 기본 값 확인")
-    void defaultLoginType() {
-        assertThat(user.getLoginType()).isEqualTo(LoginType.LOCAL);
-    }
+  @Test
+  @DisplayName("LoginType 기본 값 확인")
+  void defaultLoginType() {
+    assertThat(user.getLoginType()).isEqualTo(LoginType.LOCAL);
+  }
 
-    @Test
-    @DisplayName("Role & Status 기본 값 확인")
-    void roleAndStatus() {
-        assertThat(user.getRole()).isEqualTo(Role.USER);
-        assertThat(user.getStatus()).isEqualTo(Status.ACTIVE);
-    }
+  @Test
+  @DisplayName("Role & Status 기본 값 확인")
+  void roleAndStatus() {
+    assertThat(user.getRole()).isEqualTo(Role.USER);
+    assertThat(user.getStatus()).isEqualTo(Status.ACTIVE);
+  }
 
-    @Test
-    @DisplayName("비밀번호 암호화 성공")
-    void encodePassword() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.encodePassword(passwordEncoder, "1234");
+  @Test
+  @DisplayName("비밀번호 암호화 성공")
+  void encodePassword() {
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    user.encodePassword(passwordEncoder, "1234");
 
-        boolean isMatched = passwordEncoder.matches("1234", user.getPassword());
-        assertThat(isMatched).isEqualTo(true);
-    }
+    boolean isMatched = passwordEncoder.matches("1234", user.getPassword());
+    assertThat(isMatched).isEqualTo(true);
+  }
 
-    @Test
-    @DisplayName("개인정보 수정 성공")
-    void editInfo() {
-        user.editInfo("AAAA", null, null);
+  @Test
+  @DisplayName("개인정보 수정 성공")
+  void editInfo() {
+    user.editInfo("AAAA", null, null);
 
-        assertThat(user.getNickname()).isEqualTo("AAAA");
-    }
+    assertThat(user.getNickname()).isEqualTo("AAAA");
+  }
 
-    @Test
-    @DisplayName("개인정보 수정 실패 - 권한 변경 실패")
-    void editInfoFailByAuthority() {
-        assertThrows(AccessDeniedException.class,
-                () -> user.editInfo("AAAA", Role.MANAGER, null));
-    }
+  @Test
+  @DisplayName("개인정보 수정 실패 - 권한 변경 실패")
+  void editInfoFailByAuthority() {
+    assertThrows(AccessDeniedException.class,
+        () -> user.editInfo("AAAA", Role.MANAGER, null));
+  }
 
-    @Test
-    @DisplayName("탈퇴 성공")
-    void leave() {
-        user.leave();
+  @Test
+  @DisplayName("탈퇴 성공")
+  void leave() {
+    user.leave();
 
-        assertThat(user.getLeftAt()).isNotNull();
-    }
+    assertThat(user.getLeftAt()).isNotNull();
+  }
 
-    @Test
-    @DisplayName("탈퇴 실패 - 중복 탈퇴 불가")
-    void leaveFailByDuplication() {
-        user.leave();
+  @Test
+  @DisplayName("탈퇴 실패 - 중복 탈퇴 불가")
+  void leaveFailByDuplication() {
+    user.leave();
 
-        assertThrows(IllegalStateException.class, () -> user.leave());
-    }
+    assertThrows(IllegalStateException.class, () -> user.leave());
+  }
 
-    @Test
-    @DisplayName("권한 변경 성공")
-    void changeRole() {
-        manager.changeRole(Role.USER);
+  @Test
+  @DisplayName("권한 변경 성공")
+  void changeRole() {
+    manager.changeRole(Role.USER);
 
-        assertThat(manager.getRole()).isEqualTo(Role.USER);
-    }
+    assertThat(manager.getRole()).isEqualTo(Role.USER);
+  }
 
-    @Test
-    @DisplayName("권한 변경 시 일반 회원으로 시도 - 권한 부족")
-    void changeRoleFailByUser() {
-        assertThrows(AccessDeniedException.class, () -> user.changeRole(Role.ADMIN));
-    }
+  @Test
+  @DisplayName("권한 변경 시 일반 회원으로 시도 - 권한 부족")
+  void changeRoleFailByUser() {
+    assertThrows(AccessDeniedException.class, () -> user.changeRole(Role.ADMIN));
+  }
 
-    @Test
-    @DisplayName("권한 변경 시 매니저로 관리자 권한 변경 시도 - 권한 부족")
-    void changeRoleFailByManager() {
-        assertThrows(AccessDeniedException.class, () -> manager.changeRole(Role.ADMIN));
-    }
+  @Test
+  @DisplayName("권한 변경 시 매니저로 관리자 권한 변경 시도 - 권한 부족")
+  void changeRoleFailByManager() {
+    assertThrows(AccessDeniedException.class, () -> manager.changeRole(Role.ADMIN));
+  }
 }

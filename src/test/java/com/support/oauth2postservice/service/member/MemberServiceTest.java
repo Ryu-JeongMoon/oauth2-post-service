@@ -19,68 +19,68 @@ import static org.mockito.Mockito.*;
 
 class MemberServiceTest extends ServiceTest {
 
-    private Member user;
-    private MemberSignupRequest userRequest;
+  private Member user;
+  private MemberSignupRequest userRequest;
 
-    @BeforeEach
-    void setUp() {
-        memberService = new MemberService(memberRepository, passwordEncoder);
+  @BeforeEach
+  void setUp() {
+    memberService = new MemberService(memberRepository, passwordEncoder);
 
-        user = MemberTestHelper.createUser();
-        userRequest = MemberTestHelper.createUserRequest();
-    }
+    user = MemberTestHelper.createUser();
+    userRequest = MemberTestHelper.createUserRequest();
+  }
 
-    @Test
-    @DisplayName("회원 가입")
-    void join() {
-        when(memberRepository.save(any())).thenReturn(any(Member.class));
+  @Test
+  @DisplayName("회원 가입")
+  void join() {
+    when(memberRepository.save(any())).thenReturn(any(Member.class));
 
-        memberService.join(userRequest);
+    memberService.join(userRequest);
 
-        verify(memberRepository, times(1)).save(any(Member.class));
-    }
+    verify(memberRepository, times(1)).save(any(Member.class));
+  }
 
-    @Test
-    @DisplayName("회원 정보 수정")
-    void edit() {
-        when(memberRepository.findActive(any())).thenReturn(Optional.ofNullable(user));
+  @Test
+  @DisplayName("회원 정보 수정")
+  void edit() {
+    when(memberRepository.findActive(any())).thenReturn(Optional.ofNullable(user));
 
-        memberService.edit(USER_ID, MemberTestHelper.createEditRequest());
+    memberService.edit(USER_ID, MemberTestHelper.createEditRequest());
 
-        verify(memberRepository, times(1)).findActive(USER_ID);
-    }
+    verify(memberRepository, times(1)).findActive(USER_ID);
+  }
 
-    @Test
-    @DisplayName("회원 조회 - 활성 상태")
-    void findActiveMember() {
-        when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
+  @Test
+  @DisplayName("회원 조회 - 활성 상태")
+  void findActiveMember() {
+    when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
 
-        MemberReadResponse memberReadResponse = memberService.findActiveMember(USER_ID);
+    MemberReadResponse memberReadResponse = memberService.findActiveMember(USER_ID);
 
-        assertThat(memberReadResponse.getEmail()).isEqualTo(user.getEmail());
+    assertThat(memberReadResponse.getEmail()).isEqualTo(user.getEmail());
 
-        verify(memberRepository, times(1)).findActive(USER_ID);
-    }
+    verify(memberRepository, times(1)).findActive(USER_ID);
+  }
 
-    @Test
-    @DisplayName("회원 조회 실패 - 존재하지 않는 회원")
-    void failFindActiveMember() {
-        when(memberRepository.findActive(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
+  @Test
+  @DisplayName("회원 조회 실패 - 존재하지 않는 회원")
+  void failFindActiveMember() {
+    when(memberRepository.findActive(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
 
-        assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMember(USER_ID));
+    assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMember(USER_ID));
 
-        verify(memberRepository, times(1)).findActive(USER_ID);
-    }
+    verify(memberRepository, times(1)).findActive(USER_ID);
+  }
 
-    @Test
-    @DisplayName("회원 탈퇴")
-    void leave() {
-        when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
+  @Test
+  @DisplayName("회원 탈퇴")
+  void leave() {
+    when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
 
-        memberService.leave(USER_ID);
+    memberService.leave(USER_ID);
 
-        assertThat(user.getLeftAt()).isNotNull();
+    assertThat(user.getLeftAt()).isNotNull();
 
-        verify(memberRepository, times(1)).findActive(USER_ID);
-    }
+    verify(memberRepository, times(1)).findActive(USER_ID);
+  }
 }

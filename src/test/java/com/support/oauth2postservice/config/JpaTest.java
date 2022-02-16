@@ -12,20 +12,20 @@ import javax.persistence.EntityManager;
 @Import(TestConfig.class)
 public class JpaTest {
 
-    protected static String USER_ID;
-    protected static String MANAGER_ID;
-    protected static String ADMIN_ID;
+  protected static String USER_ID;
+  protected static String MANAGER_ID;
+  protected static String ADMIN_ID;
 
-    protected static String POST_ID;
-    protected static String POST_TITLE;
+  protected static String POST_ID;
+  protected static String POST_TITLE;
 
-    @Autowired
-    protected EntityManager entityManager;
+  @Autowired
+  protected EntityManager entityManager;
 
-    @Autowired
-    protected PostRepository postRepository;
+  @Autowired
+  protected PostRepository postRepository;
 
-    @Autowired
-    protected MemberRepository memberRepository;
+  @Autowired
+  protected MemberRepository memberRepository;
 
 }

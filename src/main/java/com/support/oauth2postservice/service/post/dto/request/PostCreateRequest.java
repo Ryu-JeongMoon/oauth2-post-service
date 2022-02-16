@@ -16,38 +16,38 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreateRequest {
 
-    @NotBlank
-    private String nickname;
+  @NotBlank
+  private String nickname;
 
-    @NotBlank
-    private String title;
+  @NotBlank
+  private String title;
 
-    @NotBlank
-    private String content;
+  @NotBlank
+  private String content;
 
-    @NotNull
-    private LocalDateTime openedAt;
+  @NotNull
+  private LocalDateTime openedAt;
 
-    @Future
-    @NotNull
-    private LocalDateTime closedAt;
+  @Future
+  @NotNull
+  private LocalDateTime closedAt;
 
-    @Builder
-    public PostCreateRequest(String nickname, String title, String content, LocalDateTime openedAt, LocalDateTime closedAt) {
-        this.nickname = nickname;
-        this.title = title;
-        this.content = content;
-        this.openedAt = openedAt;
-        this.closedAt = closedAt;
-    }
+  @Builder
+  public PostCreateRequest(String nickname, String title, String content, LocalDateTime openedAt, LocalDateTime closedAt) {
+    this.nickname = nickname;
+    this.title = title;
+    this.content = content;
+    this.openedAt = openedAt;
+    this.closedAt = closedAt;
+  }
 
-    public Post toEntity(Member member) {
-        return Post.builder()
-                .member(member)
-                .title(this.title)
-                .content(this.content)
-                .openedAt(this.openedAt)
-                .closedAt(this.closedAt)
-                .build();
-    }
+  public Post toEntity(Member member) {
+    return Post.builder()
+        .member(member)
+        .title(this.title)
+        .content(this.content)
+        .openedAt(this.openedAt)
+        .closedAt(this.closedAt)
+        .build();
+  }
 }

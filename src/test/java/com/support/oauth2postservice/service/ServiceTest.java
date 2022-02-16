@@ -15,26 +15,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ExtendWith({MockitoExtension.class})
 public class ServiceTest {
 
-    protected static String USER_ID = "1";
-    protected static String MANAGER_ID = "2";
-    protected static String ADMIN_ID = "3";
+  protected static String USER_ID = "1";
+  protected static String MANAGER_ID = "2";
+  protected static String ADMIN_ID = "3";
 
-    @Spy
-    protected PasswordEncoder passwordEncoder;
+  @Spy
+  protected PasswordEncoder passwordEncoder;
 
-    @Mock
-    protected PostRepository postRepository;
+  @Mock
+  protected PostRepository postRepository;
 
-    @Mock
-    protected MemberRepository memberRepository;
+  @Mock
+  protected MemberRepository memberRepository;
 
-    @InjectMocks
-    protected PostService postService;
+  @InjectMocks
+  protected PostService postService;
 
-    @InjectMocks
-    protected MemberService memberService;
+  @InjectMocks
+  protected MemberService memberService;
 
-    @InjectMocks
-    protected CustomUserDetailsService customUserDetailsService;
+  @InjectMocks
+  protected CustomUserDetailsService customUserDetailsService;
 
 }

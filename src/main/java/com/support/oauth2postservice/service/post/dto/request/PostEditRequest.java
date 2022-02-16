@@ -13,32 +13,32 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostEditRequest {
 
-    private String title;
+  private String title;
 
-    private String content;
+  private String content;
 
-    private Status status;
+  private Status status;
 
-    private LocalDateTime openedAt;
+  private LocalDateTime openedAt;
 
-    private LocalDateTime closedAt;
+  private LocalDateTime closedAt;
 
-    public Post toEntity() {
-        return Post.builder()
-                .title(title)
-                .content(content)
-                .status(status)
-                .openedAt(openedAt)
-                .closedAt(closedAt)
-                .build();
-    }
+  @Builder
+  public PostEditRequest(String title, String content, Status status, LocalDateTime openedAt, LocalDateTime closedAt) {
+    this.title = title;
+    this.content = content;
+    this.status = status;
+    this.openedAt = openedAt;
+    this.closedAt = closedAt;
+  }
 
-    @Builder
-    public PostEditRequest(String title, String content, Status status, LocalDateTime openedAt, LocalDateTime closedAt) {
-        this.title = title;
-        this.content = content;
-        this.status = status;
-        this.openedAt = openedAt;
-        this.closedAt = closedAt;
-    }
+  public Post toEntity() {
+    return Post.builder()
+        .title(title)
+        .content(content)
+        .status(status)
+        .openedAt(openedAt)
+        .closedAt(closedAt)
+        .build();
+  }
 }

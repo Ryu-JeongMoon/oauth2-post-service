@@ -12,11 +12,11 @@ import javax.persistence.PersistenceContext;
 @TestConfiguration
 public class TestConfig {
 
-    @PersistenceContext
-    EntityManager entityManager;
+  @PersistenceContext
+  EntityManager entityManager;
 
-    @Bean
-    public JPAQueryFactory jpaQueryFactory() {
-        return new JPAQueryFactory(entityManager);
-    }
+  @Bean
+  public JPAQueryFactory jpaQueryFactory() {
+    return new JPAQueryFactory(entityManager);
+  }
 }

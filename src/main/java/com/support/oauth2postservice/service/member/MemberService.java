@@ -15,39 +15,39 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final MemberRepository memberRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    @Transactional(readOnly = true)
-    public MemberReadResponse findActiveMember(String memberId) {
-        return memberRepository.findActive(memberId)
-                .map(MemberReadResponse::from)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
-    }
+  @Transactional(readOnly = true)
+  public MemberReadResponse findActiveMember(String memberId) {
+    return memberRepository.findActive(memberId)
+        .map(MemberReadResponse::from)
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
+  }
 
-    @Transactional
-    public void join(MemberSignupRequest memberSignupRequest) {
-        Member member = memberSignupRequest.toEntity();
-        member.encodePassword(passwordEncoder, memberSignupRequest.getPassword());
-        memberRepository.save(member);
-    }
+  @Transactional
+  public void join(MemberSignupRequest memberSignupRequest) {
+    Member member = memberSignupRequest.toEntity();
+    member.encodePassword(passwordEncoder, memberSignupRequest.getPassword());
+    memberRepository.save(member);
+  }
 
-    @Transactional
-    public void edit(String memberId, MemberEditRequest memberEditRequest) {
-        if (memberEditRequest == null)
-            return;
+  @Transactional
+  public void edit(String memberId, MemberEditRequest memberEditRequest) {
+    if (memberEditRequest == null)
+      return;
 
-        Member member = memberRepository.findActive(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
+    Member member = memberRepository.findActive(memberId)
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
 
-        member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
-        member.editInfo(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
-    }
+    member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
+    member.editInfo(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
+  }
 
-    @Transactional
-    public void leave(String memberId) {
-        memberRepository.findActive(memberId)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND))
-                .leave();
-    }
+  @Transactional
+  public void leave(String memberId) {
+    memberRepository.findActive(memberId)
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND))
+        .leave();
+  }
 }
