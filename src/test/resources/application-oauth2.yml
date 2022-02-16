@@ -4,10 +4,10 @@ spring:
       client:
         registration:
           google:
-            client-name: Google
-            client-id: Google
-            client-secret: Google
+            client-name: google
+            client-id: google
+            client-secret: google
           naver:
-            client-name: Naver
-            client-id: Naver
-            client-secret: Naver
+            client-name: naver
+            client-id: naver
+            client-secret: naver
