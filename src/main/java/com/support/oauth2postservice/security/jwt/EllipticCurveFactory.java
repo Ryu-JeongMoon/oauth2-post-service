@@ -15,21 +15,18 @@ import com.support.oauth2postservice.util.constant.Times;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class EllipticCurveFactory extends TokenFactory {
-
-    @Value(value = "${jwt.secret}")
-    private String secret;
 
     private final OctetKeyPair privateJsonWebKey;
     private final OctetKeyPair publicJsonWebKey;
@@ -38,7 +35,7 @@ public class EllipticCurveFactory extends TokenFactory {
     public EllipticCurveFactory() throws JOSEException {
         privateJsonWebKey = new OctetKeyPairGenerator(Curve.Ed25519)
                 .keyUse(KeyUse.SIGNATURE)
-                .keyID(secret)
+                .keyID(UUID.randomUUID().toString())
                 .generate();
         ed25519Signer = new Ed25519Signer(privateJsonWebKey);
 
