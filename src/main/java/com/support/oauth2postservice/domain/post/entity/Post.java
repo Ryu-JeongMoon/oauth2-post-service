@@ -3,6 +3,7 @@ package com.support.oauth2postservice.domain.post.entity;
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
@@ -16,19 +17,19 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    indexes = @Index(name = "ix_title", columnList = "title"),
-    uniqueConstraints = @UniqueConstraint(name = "uk_post_title", columnNames = "title")
+    indexes = @Index(name = ColumnConstants.Name.INDEX_TITLE, columnList = ColumnConstants.Name.TITLE),
+    uniqueConstraints = @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_TITLE, columnNames = ColumnConstants.Name.TITLE)
 )
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Post extends BaseEntity {
 
   @Id
-  @Column(name = "post_id")
+  @Column(name = ColumnConstants.Name.POST_ID)
   @GeneratedValue(generator = JpaConstants.UUID2)
   @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
   private String id;
 
-  @JoinColumn(name = "member_id")
+  @JoinColumn(name = ColumnConstants.Name.MEMBER_ID)
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private Member member;
 
@@ -43,10 +44,10 @@ public class Post extends BaseEntity {
   @Enumerated(value = EnumType.STRING)
   private Status status;
 
-  @Column(name = "opened_at", nullable = false)
+  @Column(name = ColumnConstants.Name.OPENED_AT, nullable = false)
   private LocalDateTime openedAt;
 
-  @Column(name = "closed_at", nullable = false)
+  @Column(name = ColumnConstants.Name.CLOSED_AT, nullable = false)
   private LocalDateTime closedAt;
 
   @Builder

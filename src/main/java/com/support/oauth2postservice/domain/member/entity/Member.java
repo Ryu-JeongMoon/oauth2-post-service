@@ -4,6 +4,7 @@ import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
@@ -20,42 +21,43 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-    @UniqueConstraint(name = "uk_member_email", columnNames = "email"),
-    @UniqueConstraint(name = "uk_member_nickname", columnNames = "nickname")
+    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_EMAIL, columnNames = ColumnConstants.Name.EMAIL),
+    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_NICKNAME, columnNames = ColumnConstants.Name.NICKNAME)
 })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Member extends BaseEntity {
 
   @Id
-  @Column(name = "member_id")
+  @Column(name = ColumnConstants.Name.MEMBER_ID, length = ColumnConstants.Length.ID)
   @GeneratedValue(generator = JpaConstants.UUID2)
   @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
   private String id;
 
   @EqualsAndHashCode.Include
-  @Column(nullable = false, length = 320)
+  @Column(nullable = false, length = ColumnConstants.Length.EMAIL)
   private String email;
 
   @EqualsAndHashCode.Include
-  @Column(nullable = false, length = 20)
+  @Column(name = ColumnConstants.Name.NICKNAME, nullable = false, length = ColumnConstants.Length.NICKNAME)
   private String nickname;
 
-  @Size(min = 4, max = 255)
+  @Size(min = ColumnConstants.Length.PASSWORD_MIN, max = ColumnConstants.Length.DEFAULT_MAX)
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
   @Enumerated(value = EnumType.STRING)
   private Role role;
 
-  @Column(nullable = false)
   @Enumerated(value = EnumType.STRING)
+  @Column(nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
   private Status status;
 
-  @Column(name = "login_type", nullable = false, length = 10)
   @Enumerated(value = EnumType.STRING)
+  @Column(name = "login_type", nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
   private LoginType loginType;
 
+  @Column(name = ColumnConstants.Name.LEFT_AT)
   private LocalDateTime leftAt;
 
   @Builder
