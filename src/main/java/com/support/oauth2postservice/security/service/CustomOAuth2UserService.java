@@ -1,13 +1,12 @@
 package com.support.oauth2postservice.security.service;
 
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityListeners;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,13 +38,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   }
 
   private Member getMember(String registrationId, OAuth2Attributes attributes) {
-    Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
-    if (!probableMember.isPresent()) {
-      return getNewlyRegistered(registrationId, attributes);
-    }
+    memberRepository.findActiveByEmail(attributes.getEmail())
+        .ifPresent(member -> member.synchronizeLatestAuthProvider(AuthProvider.valueOf(registrationId.toUpperCase())));
 
-    return probableMember
-        .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+    return memberRepository.findActiveByEmail(attributes.getEmail())
+        .orElseGet(() -> getNewlyRegistered(registrationId, attributes));
   }
 
   private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {

@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.security.oauth2;
 
-import com.support.oauth2postservice.domain.enumeration.LoginType;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,7 +57,7 @@ public class OAuth2Attributes {
         .email(email)
         .nickname(nickname)
         .password(encodedRandomPassword)
-        .loginType(LoginType.valueOf(registrationId.toUpperCase()))
+        .initialAuthProvider(AuthProvider.valueOf(registrationId.toUpperCase()))
         .build();
 
     return member;

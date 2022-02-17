@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.service.member.dto.response;
 
-import com.support.oauth2postservice.domain.enumeration.LoginType;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.member.entity.Member;
@@ -23,16 +23,16 @@ public class MemberReadResponse {
 
   private Status status;
 
-  private LoginType loginType;
+  private AuthProvider latestAuthProvider;
 
   @Builder
-  public MemberReadResponse(String id, String name, String email, Role role, Status status, LoginType loginType) {
+  public MemberReadResponse(String id, String name, String email, Role role, Status status, AuthProvider latestAuthProvider) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.role = role;
     this.status = status;
-    this.loginType = loginType;
+    this.latestAuthProvider = latestAuthProvider;
   }
 
   public static MemberReadResponse from(Member member) {
@@ -42,7 +42,7 @@ public class MemberReadResponse {
         .email(member.getEmail())
         .role(member.getRole())
         .status(member.getStatus())
-        .loginType(member.getLoginType())
+        .latestAuthProvider(member.getLatestAuthProvider())
         .build();
   }
 }

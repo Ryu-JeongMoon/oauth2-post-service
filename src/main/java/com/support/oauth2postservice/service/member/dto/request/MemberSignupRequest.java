@@ -1,6 +1,5 @@
 package com.support.oauth2postservice.service.member.dto.request;
 
-import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.util.constant.RegexpConstants;
 import lombok.AccessLevel;
@@ -25,14 +24,11 @@ public class MemberSignupRequest {
   @Size(min = 4, max = 255)
   private String password;
 
-  private LoginType loginType;
-
   @Builder
-  public MemberSignupRequest(String nickname, String email, String password, LoginType loginType) {
+  public MemberSignupRequest(String nickname, String email, String password) {
     this.nickname = nickname;
     this.email = email;
     this.password = password;
-    this.loginType = loginType;
   }
 
   public Member toEntity() {
@@ -40,7 +36,6 @@ public class MemberSignupRequest {
         .nickname(this.nickname)
         .email(this.email)
         .password(this.password)
-        .loginType(this.loginType)
         .build();
   }
 }
