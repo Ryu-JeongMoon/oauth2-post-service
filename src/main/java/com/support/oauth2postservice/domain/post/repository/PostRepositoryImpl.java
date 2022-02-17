@@ -24,41 +24,41 @@ import static com.support.oauth2postservice.domain.post.entity.QPost.post;
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom {
 
-    private final JPAQueryFactory queryFactory;
+  private final JPAQueryFactory queryFactory;
 
-    @Override
-    public Optional<PostReadResponse> findActiveToResponse(String id) {
-        return Optional.ofNullable(
-                queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
-                        .from(post)
-                        .join(post.member)
-                        .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
-                        .fetchOne()
-        );
-    }
+  @Override
+  public Optional<PostReadResponse> findActiveToResponse(String id) {
+    return Optional.ofNullable(
+        queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
+            .from(post)
+            .join(post.member)
+            .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
+            .fetchOne()
+    );
+  }
 
-    @Override
-    public Page<PostReadResponse> search(PostSearchRequest postSearchRequest, Pageable pageable) {
-        List<PostReadResponse> postReadResponses = queryFactory
-                .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
-                .from(post)
-                .join(post.member)
-                .where(getConditionFrom(postSearchRequest))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+  @Override
+  public Page<PostReadResponse> search(PostSearchRequest postSearchRequest, Pageable pageable) {
+    List<PostReadResponse> postReadResponses = queryFactory
+        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
+        .from(post)
+        .join(post.member)
+        .where(getConditionFrom(postSearchRequest))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
 
-        return new PageImpl<>(postReadResponses, pageable, postReadResponses.size());
-    }
+    return new PageImpl<>(postReadResponses, pageable, postReadResponses.size());
+  }
 
-    private BooleanBuilder getConditionFrom(PostSearchRequest request) {
-        return compareSafely(() -> post.member.nickname.contains(request.getNickname()))
-                .and(compareSafely(() -> post.title.contains(request.getTitle())))
-                .and(compareSafely(() -> post.status.eq(request.getStatus())))
-                .and(compareSafely(() -> post.openedAt.goe(request.getOpenedAt())));
-    }
+  private BooleanBuilder getConditionFrom(PostSearchRequest request) {
+    return compareSafely(() -> post.member.nickname.contains(request.getNickname()))
+        .and(compareSafely(() -> post.title.contains(request.getTitle())))
+        .and(compareSafely(() -> post.status.eq(request.getStatus())))
+        .and(compareSafely(() -> post.openedAt.goe(request.getOpenedAt())));
+  }
 
-    private BooleanBuilder compareSafely(Supplier<? extends BooleanExpression> expressionSupplier) {
-        return QueryDslUtils.nullSafeBuilder(expressionSupplier);
-    }
+  private BooleanBuilder compareSafely(Supplier<? extends BooleanExpression> expressionSupplier) {
+    return QueryDslUtils.nullSafeBuilder(expressionSupplier);
+  }
 }

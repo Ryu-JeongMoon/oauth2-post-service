@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PostRepositoryCustom {
 
-    Optional<PostReadResponse> findActiveToResponse(String id);
+  Optional<PostReadResponse> findActiveToResponse(String id);
 
-    Page<PostReadResponse> search(PostSearchRequest searchCondition, Pageable pageable);
+  Page<PostReadResponse> search(PostSearchRequest searchCondition, Pageable pageable);
 }

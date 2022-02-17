@@ -9,13 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Bean
-    public FilterRegistrationBean<XssEscapeServletFilter> filterFilterRegistrationBean() {
-        FilterRegistrationBean<XssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
-        filterRegistration.setFilter(new XssEscapeServletFilter());
-        filterRegistration.setOrder(1);
-        filterRegistration.addUrlPatterns("/*");
+  @Bean
+  public FilterRegistrationBean<XssEscapeServletFilter> filterFilterRegistrationBean() {
+    FilterRegistrationBean<XssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
+    filterRegistration.setFilter(new XssEscapeServletFilter());
+    filterRegistration.setOrder(1);
+    filterRegistration.addUrlPatterns("/*");
 
-        return filterRegistration;
-    }
+    return filterRegistration;
+  }
 }

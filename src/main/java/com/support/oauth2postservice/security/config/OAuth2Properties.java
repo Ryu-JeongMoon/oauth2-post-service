@@ -13,20 +13,20 @@ import java.util.Map;
 @ConfigurationProperties("spring.security.oauth2.client")
 public class OAuth2Properties {
 
-    private final Map<Client, Resource> registration;
+  private final Map<Client, Resource> registration;
 
-    enum Client {
-        GOOGLE,
-        NAVER
-    }
+  enum Client {
+    GOOGLE,
+    NAVER
+  }
 
-    @Getter
-    @ConstructorBinding
-    @RequiredArgsConstructor
-    static class Resource {
+  @Getter
+  @ConstructorBinding
+  @RequiredArgsConstructor
+  static class Resource {
 
-        private final String clientName;
-        private final String clientId;
-        private final String clientSecret;
-    }
+    private final String clientName;
+    private final String clientId;
+    private final String clientSecret;
+  }
 }

@@ -11,16 +11,16 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 @SpringBootTest(classes = OAuth2Config.class)
 class OAuth2ConfigTest {
 
-    @Autowired
-    OAuth2Config oAuth2Config;
+  @Autowired
+  OAuth2Config oAuth2Config;
 
-    @Test
-    @DisplayName("부트 시작 과정에 동적으로 설정에서 정보를 읽어온다")
-    void clientRegistrationRepository() {
-        ClientRegistrationRepository clientRegistrationRepository = oAuth2Config.clientRegistrationRepository();
-        ClientRegistration registrationId = clientRegistrationRepository
-                .findByRegistrationId(OAuth2Properties.Client.GOOGLE.name().toLowerCase());
+  @Test
+  @DisplayName("부트 시작 과정에 동적으로 설정에서 정보를 읽어온다")
+  void clientRegistrationRepository() {
+    ClientRegistrationRepository clientRegistrationRepository = oAuth2Config.clientRegistrationRepository();
+    ClientRegistration registrationId = clientRegistrationRepository
+        .findByRegistrationId(OAuth2Properties.Client.GOOGLE.name().toLowerCase());
 
-        Assertions.assertThat(registrationId.getClientName()).isNotBlank();
-    }
+    Assertions.assertThat(registrationId.getClientName()).isNotBlank();
+  }
 }

@@ -20,22 +20,22 @@ import static com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2Auth
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse resp, AuthenticationException e) throws IOException {
-        log.info("Can't Login By OAuth2 => {}", e.getMessage());
+  @Override
+  public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse resp, AuthenticationException e) throws IOException {
+    log.info("Can't Login By OAuth2 => {}", e.getMessage());
 
-        String targetUrl = CookieUtils.getCookie(req, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElseGet(() -> "/");
+    String targetUrl = CookieUtils.getCookie(req, REDIRECT_URI_PARAM_COOKIE_NAME)
+        .map(Cookie::getValue)
+        .orElseGet(() -> "/");
 
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", e.getLocalizedMessage())
-                .build()
-                .toUriString();
+    targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
+        .queryParam("error", e.getLocalizedMessage())
+        .build()
+        .toUriString();
 
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(req, resp);
-        getRedirectStrategy().sendRedirect(req, resp, targetUrl);
-    }
+    httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(req, resp);
+    getRedirectStrategy().sendRedirect(req, resp, targetUrl);
+  }
 }

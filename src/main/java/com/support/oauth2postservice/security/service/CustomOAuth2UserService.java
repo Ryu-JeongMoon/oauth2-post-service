@@ -24,33 +24,33 @@ import java.util.Optional;
 @EntityListeners(value = AuditingEntityListener.class)
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberRepository memberRepository;
+  private final MemberRepository memberRepository;
 
-    @Override
-    @Transactional
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        Map<String, Object> attributes = oAuth2User.getAttributes();
+  @Override
+  @Transactional
+  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    OAuth2User oAuth2User = super.loadUser(userRequest);
+    Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2Attributes oAuth2Attributes = OAuth2Attributes.of(registrationId, attributes);
+    String registrationId = userRequest.getClientRegistration().getRegistrationId();
+    OAuth2Attributes oAuth2Attributes = OAuth2Attributes.of(registrationId, attributes);
 
-        Member member = getMember(registrationId, oAuth2Attributes);
-        return UserPrincipal.from(member, oAuth2Attributes.getAttributes());
+    Member member = getMember(registrationId, oAuth2Attributes);
+    return UserPrincipal.from(member, oAuth2Attributes.getAttributes());
+  }
+
+  private Member getMember(String registrationId, OAuth2Attributes attributes) {
+    Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
+    if (!probableMember.isPresent()) {
+      return getNewlyRegistered(registrationId, attributes);
     }
 
-    private Member getMember(String registrationId, OAuth2Attributes attributes) {
-        Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
-        if (!probableMember.isPresent()) {
-            return getNewlyRegistered(registrationId, attributes);
-        }
+    return probableMember
+        .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+  }
 
-        return probableMember
-                .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
-    }
-
-    private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {
-        Member member = oAuth2Attributes.toEntity(registrationId);
-        return memberRepository.save(member);
-    }
+  private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {
+    Member member = oAuth2Attributes.toEntity(registrationId);
+    return memberRepository.save(member);
+  }
 }

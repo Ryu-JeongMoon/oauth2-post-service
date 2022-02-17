@@ -13,11 +13,11 @@ import java.util.Optional;
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class JpaAuditingConfig {
 
-    @Bean
-    public AuditorAware<String> auditorProvider() {
-        return () -> {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            return authentication != null ? Optional.of(authentication.getName()) : Optional.of("ANONYMOUS");
-        };
-    }
+  @Bean
+  public AuditorAware<String> auditorProvider() {
+    return () -> {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      return authentication != null ? Optional.of(authentication.getName()) : Optional.of("ANONYMOUS");
+    };
+  }
 }

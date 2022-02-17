@@ -10,11 +10,11 @@ import java.util.function.Supplier;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QueryDslUtils {
 
-    public static BooleanBuilder nullSafeBuilder(Supplier<? extends BooleanExpression> supplier) {
-        try {
-            return new BooleanBuilder(supplier.get());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return new BooleanBuilder();
-        }
+  public static BooleanBuilder nullSafeBuilder(Supplier<? extends BooleanExpression> supplier) {
+    try {
+      return new BooleanBuilder(supplier.get());
+    } catch (IllegalArgumentException | NullPointerException e) {
+      return new BooleanBuilder();
     }
+  }
 }
