@@ -2,12 +2,25 @@ package com.support.oauth2postservice.config.p6spy;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.internal.FormatStyle;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
+
+  private static final String QUERY_FILE_NAME = "logs/query/p6spy-%s.log";
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
   @Override
   public String formatMessage(final int connectionId, final String now, final long elapsed,
@@ -30,8 +43,8 @@ public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
 
     String message = new StringBuilder()
         .append("\n\n\tConnection ID: ").append(connectionId)
-        .append("\n\tExecution Time: ").append(elapsed).append(" ms\n")
-        .append("\n\tCall Stack (number 1 is entry point): ").append(callStackBuilder).append("\n")
+        .append("\n\tExecution Time: ").append(elapsed).append(" ms")
+        .append("\n\tCall Stack (number 1 is entry point): ").append(callStackBuilder)
         .append("\n----------------------------------------------------------------------------------------------------")
         .toString();
 
@@ -55,6 +68,17 @@ public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
             .format(sql);
       }
     }
+
+    String finalSql = sql;
+    CompletableFuture.runAsync(() -> {
+      File file = new File(String.format(QUERY_FILE_NAME, LocalDate.now()));
+      try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
+        bufferedWriter.write(LocalDateTime.now().format(FORMATTER));
+        bufferedWriter.write(finalSql.toUpperCase() + "\n");
+      } catch (IOException e) {
+        log.error("[SUPPORT-ERROR] :: exception {}", e);
+      }
+    });
 
     return "\n" + sql.toUpperCase() + message;
   }

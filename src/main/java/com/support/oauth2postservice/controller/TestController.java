@@ -25,4 +25,14 @@ public class TestController {
   public String home() {
     return "home";
   }
+
+  @GetMapping("/error-please")
+  public void errorBomb() {
+    throw new IllegalArgumentException("YAHOO ~~~~~");
+  }
+
+  @GetMapping("/error-please2")
+  public void errorBomb2() {
+    throw new IllegalStateException("HOORAY ~~~~~");
+  }
 }

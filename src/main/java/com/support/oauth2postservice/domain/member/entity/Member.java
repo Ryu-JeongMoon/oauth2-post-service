@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 /**
  * Member Entity 중 AuthProvider 란 인증 제공자를 의미한다<br/>
- * 애플리케이션 자체 로그인의 경우 LOCAL, 그 외 각 벤더사의 이름을 나타낸다<br/><br/>
+ * 애플리케이션 자체 로그인의 경우 LOCAL, 그 외 각 벤더의 이름을 나타낸다<br/><br/>
  * InitialAuthProvider - 신규 유입 통계를 확인하기 위해 초기 진입점 표현<br/>
  * LatestAuthProvider - 로그인 방식이 달라질 때 현재 인증 제공자 표현<br/>
  * 각각의 처리를 담당하는 CustomUserDetailsService, CustomOAuth2USerService 에서 변경 된다<br/>
