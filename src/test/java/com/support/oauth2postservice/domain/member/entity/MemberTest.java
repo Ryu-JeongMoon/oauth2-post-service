@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.domain.member.entity;
 
-import com.support.oauth2postservice.domain.enumeration.LoginType;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.MemberTestHelper;
@@ -30,7 +30,7 @@ class MemberTest {
   @Test
   @DisplayName("LoginType 기본 값 확인")
   void defaultLoginType() {
-    assertThat(user.getLoginType()).isEqualTo(LoginType.LOCAL);
+    assertThat(user.getInitialAuthProvider()).isEqualTo(AuthProvider.LOCAL);
   }
 
   @Test

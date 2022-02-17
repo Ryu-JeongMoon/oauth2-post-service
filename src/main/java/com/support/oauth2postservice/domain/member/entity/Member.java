@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.domain.member.entity;
 
 import com.support.oauth2postservice.domain.BaseEntity;
-import com.support.oauth2postservice.domain.enumeration.LoginType;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
@@ -16,6 +16,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+/**
+ * Member Entity 중 AuthProvider 란 인증 제공자를 의미한다<br/>
+ * 애플리케이션 자체 로그인의 경우 LOCAL, 그 외 각 벤더사의 이름을 나타낸다<br/><br/>
+ * InitialAuthProvider - 신규 유입 통계를 확인하기 위해 초기 진입점 표현<br/>
+ * LatestAuthProvider - 로그인 방식이 달라질 때 현재 인증 제공자 표현<br/>
+ * 각각의 처리를 담당하는 CustomUserDetailsService, CustomOAuth2USerService 에서 변경 된다<br/>
+ * 가입 후 로그인 이력이 없다면 LatestAuthProvider 는 null 로 초기화 된다
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,20 +61,24 @@ public class Member extends BaseEntity {
   private Status status;
 
   @Enumerated(value = EnumType.STRING)
-  @Column(name = "login_type", nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
-  private LoginType loginType;
+  @Column(name = ColumnConstants.Name.INITIAL_AUTH_PROVIDER, nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
+  private AuthProvider initialAuthProvider;
+
+  @Enumerated(value = EnumType.STRING)
+  @Column(name = ColumnConstants.Name.LATEST_AUTH_PROVIDER, length = ColumnConstants.Length.DEFAULT_STRING)
+  private AuthProvider latestAuthProvider;
 
   @Column(name = ColumnConstants.Name.LEFT_AT)
   private LocalDateTime leftAt;
 
   @Builder
-  public Member(String email, String nickname, String password, Role role, LoginType loginType) {
+  public Member(String email, String nickname, String password, Role role, AuthProvider initialAuthProvider) {
     this.email = email;
     this.nickname = nickname;
     this.password = password;
     this.status = Status.ACTIVE;
     this.role = role != null ? role : Role.USER;
-    this.loginType = loginType != null ? loginType : LoginType.LOCAL;
+    this.initialAuthProvider = initialAuthProvider != null ? initialAuthProvider : AuthProvider.LOCAL;
   }
 
   /**
@@ -107,5 +119,12 @@ public class Member extends BaseEntity {
       throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
 
     this.role = role;
+  }
+
+  public void synchronizeLatestAuthProvider(AuthProvider latestAuthProvider) {
+    if (this.latestAuthProvider == latestAuthProvider)
+      return;
+
+    this.latestAuthProvider = latestAuthProvider;
   }
 }

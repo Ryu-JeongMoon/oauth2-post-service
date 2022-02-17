@@ -32,7 +32,7 @@ class CustomUserDetailsServiceTest extends ServiceTest {
     UserDetails userDetails = customUserDetailsService.loadUserByUsername(MemberTestHelper.USER_EMAIL);
 
     assertThat(userDetails.getUsername()).isEqualTo(MemberTestHelper.USER_EMAIL);
-    verify(memberRepository, times(1)).findActiveByEmail(MemberTestHelper.USER_EMAIL);
+    verify(memberRepository, times(2)).findActiveByEmail(MemberTestHelper.USER_EMAIL);
   }
 
   @Test
