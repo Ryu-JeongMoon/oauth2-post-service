@@ -4,6 +4,7 @@ import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.LoginType;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
@@ -20,81 +21,82 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "uk_member_email", columnNames = "email"),
-        @UniqueConstraint(name = "uk_member_nickname", columnNames = "nickname")
+    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_EMAIL, columnNames = ColumnConstants.Name.EMAIL),
+    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_NICKNAME, columnNames = ColumnConstants.Name.NICKNAME)
 })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Member extends BaseEntity {
 
-    @Id
-    @Column(name = "member_id")
-    @GeneratedValue(generator = JpaConstants.UUID2)
-    @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
-    private String id;
+  @Id
+  @Column(name = ColumnConstants.Name.MEMBER_ID, length = ColumnConstants.Length.ID)
+  @GeneratedValue(generator = JpaConstants.UUID2)
+  @GenericGenerator(name = JpaConstants.UUID2, strategy = JpaConstants.UUID2_GENERATOR)
+  private String id;
 
-    @EqualsAndHashCode.Include
-    @Column(nullable = false, length = 320)
-    private String email;
+  @EqualsAndHashCode.Include
+  @Column(nullable = false, length = ColumnConstants.Length.EMAIL)
+  private String email;
 
-    @EqualsAndHashCode.Include
-    @Column(nullable = false, length = 20)
-    private String nickname;
+  @EqualsAndHashCode.Include
+  @Column(name = ColumnConstants.Name.NICKNAME, nullable = false, length = ColumnConstants.Length.NICKNAME)
+  private String nickname;
 
-    @Size(min = 4, max = 255)
-    @Column(nullable = false)
-    private String password;
+  @Size(min = ColumnConstants.Length.PASSWORD_MIN, max = ColumnConstants.Length.DEFAULT_MAX)
+  @Column(nullable = false)
+  private String password;
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
+  @Column(nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
+  @Enumerated(value = EnumType.STRING)
+  private Role role;
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
+  @Enumerated(value = EnumType.STRING)
+  @Column(nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
+  private Status status;
 
-    @Column(name = "login_type", nullable = false, length = 10)
-    @Enumerated(value = EnumType.STRING)
-    private LoginType loginType;
+  @Enumerated(value = EnumType.STRING)
+  @Column(name = "login_type", nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
+  private LoginType loginType;
 
-    private LocalDateTime leftAt;
+  @Column(name = ColumnConstants.Name.LEFT_AT)
+  private LocalDateTime leftAt;
 
-    @Builder
-    public Member(String email, String nickname, String password, Role role, LoginType loginType) {
-        this.email = email;
-        this.nickname = nickname;
-        this.password = password;
-        this.status = Status.ACTIVE;
-        this.role = role != null ? role : Role.USER;
-        this.loginType = loginType != null ? loginType : LoginType.LOCAL;
-    }
+  @Builder
+  public Member(String email, String nickname, String password, Role role, LoginType loginType) {
+    this.email = email;
+    this.nickname = nickname;
+    this.password = password;
+    this.status = Status.ACTIVE;
+    this.role = role != null ? role : Role.USER;
+    this.loginType = loginType != null ? loginType : LoginType.LOCAL;
+  }
 
-    public void encodePassword(PasswordEncoder passwordEncoder, String password) {
-        this.password = passwordEncoder.encode(password);
-    }
+  public void encodePassword(PasswordEncoder passwordEncoder, String password) {
+    this.password = passwordEncoder.encode(password);
+  }
 
-    public void editInfo(String nickname, Role role, Status status) {
-        if (StringUtils.hasText(nickname) && !this.nickname.equals(nickname))
-            this.nickname = nickname;
+  public void editInfo(String nickname, Role role, Status status) {
+    if (StringUtils.hasText(nickname) && !this.nickname.equals(nickname))
+      this.nickname = nickname;
 
-        if (!this.role.equals(role) && role != null)
-            this.changeRole(role);
+    if (!this.role.equals(role) && role != null)
+      this.changeRole(role);
 
-        if (!this.status.equals(status) && status != null)
-            this.status = status;
-    }
+    if (!this.status.equals(status) && status != null)
+      this.status = status;
+  }
 
-    public void leave() {
-        if (this.leftAt != null)
-            throw new IllegalStateException(ExceptionMessages.MEMBER_ALREADY_LEFT);
+  public void leave() {
+    if (this.leftAt != null)
+      throw new IllegalStateException(ExceptionMessages.MEMBER_ALREADY_LEFT);
 
-        this.leftAt = LocalDateTime.now();
-        this.status = Status.INACTIVE;
-    }
+    this.leftAt = LocalDateTime.now();
+    this.status = Status.INACTIVE;
+  }
 
-    public void changeRole(Role role) {
-        if (this.role.equals(Role.USER) || this.role.equals(Role.MANAGER) && role.equals(Role.ADMIN))
-            throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
+  public void changeRole(Role role) {
+    if (this.role.equals(Role.USER) || this.role.equals(Role.MANAGER) && role.equals(Role.ADMIN))
+      throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
 
-        this.role = role;
-    }
+    this.role = role;
+  }
 }

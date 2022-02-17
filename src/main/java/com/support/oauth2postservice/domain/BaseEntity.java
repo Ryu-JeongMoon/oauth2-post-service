@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.domain;
 
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,17 +18,19 @@ import java.time.LocalDateTime;
 @EntityListeners(value = AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-    @CreatedBy
-    @Column(updatable = false)
-    protected String createdBy;
+  @CreatedBy
+  @Column(name = ColumnConstants.Name.CREATED_BY, updatable = false)
+  protected String createdBy;
 
-    @LastModifiedBy
-    protected String modifiedBy;
+  @CreatedDate
+  @Column(name = ColumnConstants.Name.CREATED_AT, updatable = false)
+  protected LocalDateTime createdAt;
 
-    @CreatedDate
-    @Column(updatable = false)
-    protected LocalDateTime createdAt;
+  @LastModifiedBy
+  @Column(name = ColumnConstants.Name.MODIFIED_BY)
+  protected String modifiedBy;
 
-    @LastModifiedDate
-    protected LocalDateTime modifiedAt;
+  @LastModifiedDate
+  @Column(name = ColumnConstants.Name.MODIFIED_AT)
+  protected LocalDateTime modifiedAt;
 }
