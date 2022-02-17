@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityListeners;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,11 +39,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   }
 
   private Member getMember(String registrationId, OAuth2Attributes attributes) {
-    memberRepository.findActiveByEmail(attributes.getEmail())
+    Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
+    probableMember
         .ifPresent(member -> member.synchronizeLatestAuthProvider(AuthProvider.valueOf(registrationId.toUpperCase())));
 
-    return memberRepository.findActiveByEmail(attributes.getEmail())
-        .orElseGet(() -> getNewlyRegistered(registrationId, attributes));
+    return probableMember.orElseGet(() -> getNewlyRegistered(registrationId, attributes));
   }
 
   private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {
