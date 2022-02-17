@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,8 +43,10 @@ class MemberTest {
   @Test
   @DisplayName("비밀번호 암호화 성공")
   void encodePassword() {
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    user.encodePassword(passwordEncoder, "1234");
+    PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
+    String rawPassword = "1234";
+    String encodedPassword = passwordEncoder.encode(rawPassword);
+    user.putEncodedPassword(encodedPassword);
 
     boolean isMatched = passwordEncoder.matches("1234", user.getPassword());
     assertThat(isMatched).isEqualTo(true);
