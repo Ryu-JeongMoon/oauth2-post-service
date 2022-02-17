@@ -10,7 +10,6 @@ import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -42,7 +41,7 @@ public class Member extends BaseEntity {
   private String nickname;
 
   @Size(min = ColumnConstants.Length.PASSWORD_MIN, max = ColumnConstants.Length.DEFAULT_MAX)
-  @Column(nullable = false)
+  @Column(nullable = false, length = ColumnConstants.Length.ENCODED_PASSWORD)
   private String password;
 
   @Column(nullable = false, length = ColumnConstants.Length.DEFAULT_STRING)
@@ -70,8 +69,18 @@ public class Member extends BaseEntity {
     this.loginType = loginType != null ? loginType : LoginType.LOCAL;
   }
 
-  public void encodePassword(PasswordEncoder passwordEncoder, String password) {
-    this.password = passwordEncoder.encode(password);
+  /**
+   * 비밀번호 암호화는 bouncy-castle 에서 제공하는 Argon2PasswordEncoder 를 사용한다<br/>
+   * 암호화의 결과값에 영향을 미치는 요소는 아래와 같다<br/>
+   * salt length, hash length, parallelism, memory usage, iterations<br/>
+   * 기본 설정을 따르면 결과값은 96 이 나오고, 필요 시 위 요소를 변경하여<br/>
+   * 더 큰 사이즈의 암호화된 비밀번호를 얻을 수 있다
+   */
+  public void putEncodedPassword(String encodedPassword) {
+    if (encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
+      throw new IllegalArgumentException(ExceptionMessages.PASSWORD_NOT_ENCODED);
+
+    this.password = encodedPassword;
   }
 
   public void editInfo(String nickname, Role role, Status status) {

@@ -24,6 +24,12 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * 2022년 기준으로 ECC 암호화 알고리즘에서 가장 많이 사용되는 P-256 알고리즘의 경우<br/>
+ * ECC 알고리즘에서 보안을 위해 요구되는 요소 중 아래 요소들이 충족되지 않았다<br/>
+ * rigidity, ladders, completeness, indistinguishability <br/>
+ * 따라서 JWT 생성과 검증에는 P-256 대신 보안 요구 사항이 충족된 Ed25519 알고리즘을 사용한다<br/>
+ */
 @Slf4j
 @Component
 public class EllipticCurveFactory extends TokenFactory {

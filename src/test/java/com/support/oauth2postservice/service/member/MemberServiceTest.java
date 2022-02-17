@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -21,13 +23,14 @@ class MemberServiceTest extends ServiceTest {
 
   private Member user;
   private MemberSignupRequest userRequest;
+  private final PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
 
   @BeforeEach
   void setUp() {
-    memberService = new MemberService(memberRepository, passwordEncoder);
-
     user = MemberTestHelper.createUser();
+    user.putEncodedPassword(passwordEncoder.encode(user.getPassword()));
     userRequest = MemberTestHelper.createUserRequest();
+    memberService = new MemberService(memberRepository, passwordEncoder);
   }
 
   @Test

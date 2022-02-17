@@ -28,7 +28,8 @@ public class MemberService {
   @Transactional
   public void join(MemberSignupRequest memberSignupRequest) {
     Member member = memberSignupRequest.toEntity();
-    member.encodePassword(passwordEncoder, memberSignupRequest.getPassword());
+    String encodedPassword = passwordEncoder.encode(member.getPassword());
+    member.putEncodedPassword(encodedPassword);
     memberRepository.save(member);
   }
 
@@ -40,7 +41,8 @@ public class MemberService {
     Member member = memberRepository.findActive(memberId)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
 
-    member.encodePassword(passwordEncoder, memberEditRequest.getPassword());
+    String encodedPassword = passwordEncoder.encode(member.getPassword());
+    member.putEncodedPassword(encodedPassword);
     member.editInfo(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
   }
 

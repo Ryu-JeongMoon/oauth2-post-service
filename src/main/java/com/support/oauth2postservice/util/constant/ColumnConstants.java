@@ -15,6 +15,7 @@ public class ColumnConstants {
     public static final int EMAIL = 320;
     public static final int NICKNAME = 20;
     public static final int PASSWORD_MIN = 4;
+    public static final int ENCODED_PASSWORD = 96;
   }
 
   public static class Name {
