@@ -11,7 +11,6 @@ import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,8 @@ public class PostService {
   private final MemberRepository memberRepository;
 
   @Transactional(readOnly = true)
-  public Page<PostReadResponse> searchByCondition(PostSearchRequest condition, Pageable pageable) {
-    return postRepository.search(condition, pageable);
+  public Page<PostReadResponse> searchByCondition(PostSearchRequest condition) {
+    return postRepository.search(condition);
   }
 
   @Transactional(readOnly = true)

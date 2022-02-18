@@ -15,8 +15,8 @@ public class PostTestHelper {
   public static final String ID = "1234567890";
   public static final String TITLE = "panda";
   public static final String CONTENT = "bear";
-  public static final LocalDateTime OPENED_AT = LocalDateTime.MIN;
-  public static final LocalDateTime CLOSED_AT = LocalDateTime.MAX;
+  public static final LocalDateTime OPENED_AT = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+  public static final LocalDateTime CLOSED_AT = LocalDateTime.of(9999, 1, 1, 0, 0, 0);
 
   public static Post getDefault(Member member) {
     return Post.builder()

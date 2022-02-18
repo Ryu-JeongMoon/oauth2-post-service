@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 
@@ -72,20 +72,45 @@ class PostRepositoryTest extends JpaTest {
         .nickname(MemberTestHelper.USER_NICKNAME)
         .build();
 
-    Page<PostReadResponse> result = postRepository.search(searchRequest, Pageable.ofSize(Integer.MAX_VALUE));
+    Page<PostReadResponse> result = postRepository.search(searchRequest);
 
     assertThat(result.getTotalElements()).isEqualTo(1);
   }
 
   @Test
-  @DisplayName("조건 검색 실패 - 검색 결과 없음")
+  @DisplayName("조건 검색 - 날짜 조건 검색 결과 없음")
   void searchNoResultByNotMatchedCondition() {
     PostSearchRequest searchRequest = PostSearchRequest.builder()
-        .openedAt(LocalDateTime.MIN)
+        .openedAt(PostTestHelper.CLOSED_AT)
         .build();
 
-    Page<PostReadResponse> result = postRepository.search(searchRequest, Pageable.ofSize(Integer.MAX_VALUE));
+    Page<PostReadResponse> result = postRepository.search(searchRequest);
 
-    assertThat(result.getTotalElements()).isEqualTo(1);
+    assertThat(result.getTotalElements()).isEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("기본 조건으로 검색 시 게시글 오픈 날짜 내림차순 정렬")
+  void searchByDefaultCondition() {
+    // it goes to save 0panda -> 1panda -> 2panda, 2panda is last one
+    for (int i = 0; i < 3; i++) {
+      Post post = Post.builder()
+          .title(i + "panda")
+          .content(i + "bear")
+          .member(member)
+          .openedAt(LocalDateTime.now())
+          .closedAt(LocalDateTime.MAX)
+          .build();
+      postRepository.save(post);
+    }
+
+    PostSearchRequest searchRequest = PostSearchRequest.builder()
+        .pageable(PageRequest.of(0, 10))
+        .build();
+    Page<PostReadResponse> postReadResponses = postRepository.search(searchRequest);
+    PostReadResponse postReadResponse = postReadResponses.getContent().get(0);
+
+    String lastOpenedPostTitle = "2panda";
+    assertThat(postReadResponse.getTitle()).isEqualTo(lastOpenedPostTitle);
   }
 }

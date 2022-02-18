@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.etc;
+package com.support.oauth2postservice.learning;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
