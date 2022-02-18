@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -46,10 +46,10 @@ class PostServiceTest extends ServiceTest {
   void searchByCondition() {
     PostSearchRequest searchRequest = PostTestHelper.getSearchRequest(member.getNickname());
 
-    when(postRepository.search(any(), any()))
+    when(postRepository.search(any()))
         .thenReturn(new PageImpl<>(Collections.singletonList(postReadResponse)));
 
-    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest, Pageable.ofSize(10));
+    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest);
 
     assertThat(postReadResponses.getTotalElements()).isEqualTo(1);
   }
@@ -57,10 +57,12 @@ class PostServiceTest extends ServiceTest {
   @Test
   @DisplayName("검색 실패 - 페이지 검색 사이즈 0 될 수 없음")
   void searchByCondition_failByPageSize() {
-    PostSearchRequest searchRequest = PostTestHelper.getSearchRequest(member.getNickname());
-
     assertThrows(IllegalArgumentException.class,
-        () -> postService.searchByCondition(searchRequest, Pageable.ofSize(0)));
+        () -> postService.searchByCondition(
+            PostSearchRequest.builder()
+                .pageable(PageRequest.of(0, 0))
+                .build())
+    );
   }
 
   @Test

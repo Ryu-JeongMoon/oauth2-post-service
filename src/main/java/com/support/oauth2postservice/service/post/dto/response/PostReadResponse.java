@@ -1,14 +1,12 @@
 package com.support.oauth2postservice.service.post.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostReadResponse {
 
