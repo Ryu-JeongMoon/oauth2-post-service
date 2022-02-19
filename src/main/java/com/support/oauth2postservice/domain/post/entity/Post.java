@@ -79,6 +79,9 @@ public class Post extends BaseEntity {
     if (source.getOpenedAt() != null && source.getClosedAt() != null && source.getOpenedAt().isAfter(source.getClosedAt()))
       throw new IllegalArgumentException(ExceptionMessages.POST_INCORRECT_DATE);
 
+    this.openedAt = source.getOpenedAt();
+    this.closedAt = source.getClosedAt();
+
     if (StringUtils.hasText(source.getTitle()))
       this.title = source.getTitle();
 
@@ -87,11 +90,5 @@ public class Post extends BaseEntity {
 
     if (source.getStatus() != null)
       this.status = source.getStatus();
-
-    if (source.getOpenedAt() != null)
-      this.openedAt = source.getOpenedAt();
-
-    if (source.getClosedAt() != null)
-      this.closedAt = source.getClosedAt();
   }
 }

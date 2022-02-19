@@ -10,6 +10,7 @@ public class MemberTestHelper {
   public static final String PASSWORD = "password";
   public static final String USER_NICKNAME = "user";
   public static final String USER_EMAIL = "user@gmail.com";
+  public static final String USER_NICKNAME_AFTER_EDIT = "newUser";
   public static final String MANAGER_NICKNAME = "manager";
   public static final String MANGER_EMAIL = "manager@gmail.com";
   public static final String ADMIN_NICKNAME = "admin";
@@ -59,7 +60,7 @@ public class MemberTestHelper {
 
   public static MemberEditRequest createEditRequest() {
     return MemberEditRequest.builder()
-        .nickname(ADMIN_NICKNAME)
+        .nickname(USER_NICKNAME_AFTER_EDIT)
         .password(PASSWORD + PASSWORD)
         .build();
   }
