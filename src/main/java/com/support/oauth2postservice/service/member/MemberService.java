@@ -28,7 +28,7 @@ public class MemberService {
   @Transactional
   public void join(MemberSignupRequest memberSignupRequest) {
     Member member = memberSignupRequest.toEntity();
-    String encodedPassword = passwordEncoder.encode(member.getPassword());
+    String encodedPassword = passwordEncoder.encode(memberSignupRequest.getPassword());
     member.putEncodedPassword(encodedPassword);
     memberRepository.save(member);
   }

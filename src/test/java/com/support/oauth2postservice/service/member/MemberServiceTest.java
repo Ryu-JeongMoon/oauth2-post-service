@@ -50,6 +50,8 @@ class MemberServiceTest extends ServiceTest {
 
     memberService.edit(USER_ID, MemberTestHelper.createEditRequest());
 
+    assertThat(user.getNickname()).isEqualTo(MemberTestHelper.USER_NICKNAME_AFTER_EDIT);
+
     verify(memberRepository, times(1)).findActive(USER_ID);
   }
 
