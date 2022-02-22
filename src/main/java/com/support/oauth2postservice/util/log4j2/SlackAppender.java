@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
-import reactor.netty.tcp.TcpClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -85,14 +84,14 @@ public class SlackAppender extends AbstractAppender {
       layout = PatternLayout.createDefaultLayout();
     }
 
-    TcpClient tcpClient = TcpClient.create()
-        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000)
-        .doOnConnected(connection ->
-            connection.addHandlerLast(new ReadTimeoutHandler(3))
-                .addHandlerLast(new WriteTimeoutHandler(3)));
-
     WebClient slackWebClient = WebClient.builder()
-        .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient).compress(true)))
+        .clientConnector(new ReactorClientHttpConnector(HttpClient.create()
+            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000)
+            .doOnConnected(
+                connection -> connection
+                    .addHandlerLast(new ReadTimeoutHandler(3))
+                    .addHandlerLast(new WriteTimeoutHandler(3)))
+            .compress(true)))
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .build();
 
