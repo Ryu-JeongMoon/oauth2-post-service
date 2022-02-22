@@ -47,7 +47,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   }
 
   private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {
-    Member member = oAuth2Attributes.toEntity(registrationId);
+    Member member = oAuth2Attributes.toMember(registrationId);
     return memberRepository.save(member);
   }
 }

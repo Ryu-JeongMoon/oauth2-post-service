@@ -45,7 +45,7 @@ public class OAuth2Attributes {
         .build();
   }
 
-  public Member toEntity(String registrationId) {
+  public Member toMember(String registrationId) {
     if (member != null)
       return member;
 

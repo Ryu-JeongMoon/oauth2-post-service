@@ -1,7 +1,6 @@
 package com.support.oauth2postservice.security.config;
 
 import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.support.oauth2postservice.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.support.oauth2postservice.security.service.CustomOAuth2UserService;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final CustomOAuth2UserService customOAuth2UserService;
   private final CustomUserDetailsService customUserDetailsService;
   private final ClientRegistrationRepository clientRegistrationRepository;
+  private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
   private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
   private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
@@ -71,6 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .userService(customOAuth2UserService)
 
         .and()
+        .successHandler(oAuth2AuthenticationSuccessHandler)
         .failureHandler(oAuth2AuthenticationFailureHandler);
   }
 }

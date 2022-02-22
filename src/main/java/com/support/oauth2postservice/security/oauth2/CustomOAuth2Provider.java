@@ -38,7 +38,8 @@ public enum CustomOAuth2Provider {
     }
   };
 
-  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
+//  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
+  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/oauth2/callback/{registrationId}";
 
   protected final ClientRegistration.Builder getBuilder(String registrationId, ClientAuthenticationMethod method) {
     ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);
