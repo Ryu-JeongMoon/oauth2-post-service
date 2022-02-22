@@ -1,5 +1,6 @@
-package com.support.oauth2postservice.security.oauth2;
+package com.support.oauth2postservice.security.config;
 
+import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
