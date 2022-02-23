@@ -29,42 +29,42 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = NullPointerException.class)
-  public ResponseEntity<ExceptionResponse> nullPointerExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> nullPointerExceptionHandler(NullPointerException e) {
     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = IllegalArgumentException.class)
-  public ResponseEntity<ExceptionResponse> illegalArgumentExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> illegalArgumentExceptionHandler(IllegalArgumentException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = IllegalStateException.class)
-  public ResponseEntity<ExceptionResponse> illegalStateExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> illegalStateExceptionHandler(IllegalStateException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = AuthenticationException.class)
-  public ResponseEntity<ExceptionResponse> authenticationExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> authenticationExceptionHandler(AuthenticationException e) {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = EntityNotFoundException.class)
-  public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(EntityNotFoundException e) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = UsernameNotFoundException.class)
-  public ResponseEntity<ExceptionResponse> usernameNotFoundExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> usernameNotFoundExceptionHandler(UsernameNotFoundException e) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = JsonProcessingException.class)
-  public ResponseEntity<ExceptionResponse> jsonProcessingExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> jsonProcessingExceptionHandler(JsonProcessingException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = AccessDeniedException.class)
-  public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
