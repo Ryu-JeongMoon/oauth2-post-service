@@ -24,6 +24,7 @@ public class QueryDslUtils {
     }
   }
 
+  @SuppressWarnings({"rawtypes", "unchecked"})
   public static OrderSpecifier<?>[] getSortedColumn(Sort sorts, Path<?> parent) {
     return sorts.stream()
         .map(sort -> {
