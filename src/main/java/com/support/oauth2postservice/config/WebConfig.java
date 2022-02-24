@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.security.config;
+package com.support.oauth2postservice.config;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.support.oauth2postservice.util.constant.UriConstants;
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.LoggingCodecSupport;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,6 +22,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -34,6 +36,11 @@ public class WebConfig implements WebMvcConfigurer {
     filterRegistration.addUrlPatterns("/*");
 
     return filterRegistration;
+  }
+
+  @Override
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    resolvers.add(new SortArgumentResolver());
   }
 
   @Bean

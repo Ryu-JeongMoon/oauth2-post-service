@@ -7,15 +7,18 @@ import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
+import com.support.oauth2postservice.util.constant.PageConstants;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -107,12 +110,40 @@ class PostRepositoryTest extends JpaTest {
     }
 
     PostSearchRequest searchRequest = PostSearchRequest.builder()
-        .pageable(PageRequest.of(0, 10))
         .build();
     Page<PostReadResponse> postReadResponses = postRepository.search(searchRequest);
     PostReadResponse postReadResponse = postReadResponses.getContent().get(0);
 
     String lastOpenedPostTitle = "2panda";
     assertThat(postReadResponse.getTitle()).isEqualTo(lastOpenedPostTitle);
+  }
+
+  @Test
+  @DisplayName("게시 일자 오름차순으로 검색 성공")
+  void searchByOpenedAtAscending() {
+    // given
+    final String titleOfVeryOldOne = "very old one";
+    LocalDateTime veryOldDay = LocalDateTime.of(1900, 1, 1, 1, 1, 1);
+
+    Post post = Post.builder()
+        .member(member)
+        .title(titleOfVeryOldOne)
+        .content(titleOfVeryOldOne)
+        .openedAt(veryOldDay)
+        .closedAt(LocalDateTime.MAX)
+        .build();
+    postRepository.save(post);
+
+    // when
+    PostSearchRequest searchRequest = PostSearchRequest.builder()
+        .page(0)
+        .size(500)
+        .sorts(Collections.singletonList(Pair.of(PageConstants.Column.OPENED_AT, Sort.Direction.ASC)))
+        .build();
+    Page<PostReadResponse> postReadResponses = postRepository.search(searchRequest);
+    PostReadResponse postReadResponse = postReadResponses.getContent().get(0);
+
+    // then
+    assertThat(postReadResponse.getTitle()).isEqualTo(titleOfVeryOldOne);
   }
 }
