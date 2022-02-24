@@ -2,6 +2,7 @@ package com.support.oauth2postservice.config;
 
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
@@ -61,12 +62,8 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         .build();
   }
 
-  private Status getStatus(String status) {
-    String source = StringUtils.toRootUpperCase(status);
-    if (StringUtils.isBlank(source))
-      return null;
-
-    return Status.valueOf(source);
+  private Status getStatus(String statusName) {
+    return EnumUtils.getEnumIgnoreCase(Status.class, statusName);
   }
 
   private LocalDateTime getOpenedAt(String openedAtParam) {

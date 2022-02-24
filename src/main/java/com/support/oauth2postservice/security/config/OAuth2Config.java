@@ -2,6 +2,7 @@ package com.support.oauth2postservice.security.config;
 
 import com.support.oauth2postservice.security.oauth2.CustomOAuth2Provider;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ public class OAuth2Config {
     OAuth2Properties.Resource resource = oAuth2Properties.getRegistration().get(client);
     String clientName = resource.getClientName();
 
-    return CustomOAuth2Provider.valueOf(clientName.toUpperCase())
+    return EnumUtils.getEnumIgnoreCase(CustomOAuth2Provider.class, clientName)
         .getBuilder(clientName)
         .clientId(resource.getClientId())
         .clientSecret(resource.getClientSecret())

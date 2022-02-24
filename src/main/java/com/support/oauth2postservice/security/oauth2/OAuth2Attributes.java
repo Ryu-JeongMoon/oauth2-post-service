@@ -4,6 +4,7 @@ import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
@@ -52,14 +53,14 @@ public class OAuth2Attributes {
     Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
     String defaultRandomPassword = RandomStringUtils.randomAlphanumeric(10);
     String encodedRandomPassword = passwordEncoder.encode(defaultRandomPassword);
+    AuthProvider initialAuthProvider = EnumUtils.getEnumIgnoreCase(AuthProvider.class, registrationId);
 
     member = Member.builder()
         .email(email)
         .nickname(nickname)
         .password(encodedRandomPassword)
-        .initialAuthProvider(AuthProvider.valueOf(registrationId.toUpperCase()))
+        .initialAuthProvider(initialAuthProvider)
         .build();
-
     return member;
   }
 }
