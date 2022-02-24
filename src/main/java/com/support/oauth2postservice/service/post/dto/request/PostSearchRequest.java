@@ -1,9 +1,12 @@
 package com.support.oauth2postservice.service.post.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.support.oauth2postservice.domain.PageAttributes;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import lombok.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,11 +14,16 @@ import org.springframework.data.domain.Sort;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostSearchRequest {
+public class PostSearchRequest extends PageAttributes {
 
   @Size(max = ColumnConstants.Length.SEARCH)
   private String nickname;
@@ -39,29 +47,32 @@ public class PostSearchRequest {
    * ColumnConstants.Name.OPENED_AT => "opened_at"<br/>
    * PageConstants.Column.OPENED_AT => "openedAt"
    */
-  private Pageable pageable = PageRequest.of(
-      PageConstants.DEFAULT_PAGE_NUMBER,
-      PageConstants.DEFAULT_PAGE_SIZE,
-      Sort.by(PageConstants.DEFAULT_SORT_DIRECTION, PageConstants.Column.OPENED_AT)
-  );
+  private Pageable pageable;
 
   @Builder
-  public PostSearchRequest(String nickname, String title, String content, Status status, LocalDateTime openedAt, Pageable pageable) {
+  @JsonCreator
+  public PostSearchRequest(String nickname, String title, String content, Status status, LocalDateTime openedAt,
+                           int page, int size, List<Pair<String, Sort.Direction>> sorts) {
     this.nickname = nickname;
     this.title = title;
     this.content = content;
     this.status = status;
     this.openedAt = openedAt;
-
-    if (pageable != null)
-      this.pageable = setPageable(pageable);
+    this.pageable = toPageable(page, size, sorts);
   }
 
-  private Pageable setPageable(Pageable pageable) {
-    Sort sort = pageable.getSort().isEmpty() ? this.pageable.getSort() : pageable.getSort();
-    int pageSize = pageable.getPageSize() == 0 ? this.pageable.getPageSize() : pageable.getPageSize();
-    int pageNumber = pageable.getPageNumber() == 0 ? this.pageable.getPageNumber() : pageable.getPageNumber();
+  private Pageable toPageable(int page, int size, List<Pair<String, Sort.Direction>> sorts) {
+    if (size == 0)
+      size = PageConstants.DEFAULT_PAGE_SIZE;
 
-    return PageRequest.of(pageNumber, pageSize, sort);
+    Sort sort = PageConstants.POST_SEARCH_DEFAULT_SORT;
+    if (sorts != null) {
+      sort = sorts.stream()
+          .filter(Objects::nonNull)
+          .map(pair -> new Sort.Order(pair.getRight(), pair.getLeft()))
+          .collect(collectingAndThen(toList(), Sort::by));
+    }
+
+    return PageRequest.of(page, size, sort);
   }
 }

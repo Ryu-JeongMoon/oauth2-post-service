@@ -21,4 +21,5 @@ class PostSearchRequestTest {
     Assertions.assertThat(pageable.getPageSize()).isEqualTo(PageConstants.DEFAULT_PAGE_SIZE);
     Assertions.assertThat(pageable.getPageNumber()).isEqualTo(PageConstants.DEFAULT_PAGE_NUMBER);
   }
+
 }

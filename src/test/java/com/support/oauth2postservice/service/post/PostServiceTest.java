@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -55,12 +55,12 @@ class PostServiceTest extends ServiceTest {
   }
 
   @Test
-  @DisplayName("검색 실패 - 페이지 검색 사이즈 0 될 수 없음")
-  void searchByCondition_failByPageSize() {
-    assertThrows(IllegalArgumentException.class,
+  @DisplayName("페이지 검색 사이즈 0이라면 기본 설정 사이즈로 반환")
+  void searchByCondition_returnByDefaultPageSize() {
+    assertDoesNotThrow(
         () -> postService.searchByCondition(
             PostSearchRequest.builder()
-                .pageable(PageRequest.of(0, 0))
+                .size(0)
                 .build())
     );
   }
