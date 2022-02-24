@@ -13,4 +13,5 @@ public class ExceptionMessages {
   public static final String NOT_SIGNED_TOKEN = "토큰에 서명할 수 없습니다";
   public static final String WRONG_FORMAT_TOKEN = "토큰의 형태가 올바르지 않습니다";
   public static final String NOT_VERIFIED_TOKEN = "토큰의 데이터가 올바르지 않습니다";
+  public static final String TOKEN_REQUEST_REJECTED = "토큰 요청이 실패했습니다";
 }
