@@ -28,7 +28,7 @@ class MemberServiceTest extends ServiceTest {
   @BeforeEach
   void setUp() {
     user = MemberTestHelper.createUser();
-    user.putEncodedPassword(passwordEncoder.encode(user.getPassword()));
+    user.changeToEncodedPassword(passwordEncoder.encode(user.getPassword()));
     userRequest = MemberTestHelper.createUserRequest();
     memberService = new MemberService(memberRepository, passwordEncoder);
   }

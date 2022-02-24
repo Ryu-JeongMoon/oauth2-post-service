@@ -50,7 +50,7 @@ public class PostService {
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
 
     Post updateSource = postEditRequest.toEntity();
-    post.editFrom(updateSource);
+    post.changeFrom(updateSource);
   }
 
   @Transactional

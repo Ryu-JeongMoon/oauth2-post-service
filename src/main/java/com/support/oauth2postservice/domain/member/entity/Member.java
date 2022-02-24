@@ -88,21 +88,21 @@ public class Member extends BaseEntity {
    * 기본 설정을 따르면 결과값은 96 이 나오고, 필요 시 위 요소를 변경하여<br/>
    * 더 큰 사이즈의 암호화된 비밀번호를 얻을 수 있다
    */
-  public void putEncodedPassword(String encodedPassword) {
-    if (encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
+  public void changeToEncodedPassword(String encodedPassword) {
+    if (!StringUtils.hasText(encodedPassword) || encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
       throw new IllegalArgumentException(ExceptionMessages.PASSWORD_NOT_ENCODED);
 
     this.password = encodedPassword;
   }
 
-  public void editInfo(String nickname, Role role, Status status) {
-    if (StringUtils.hasText(nickname) && !this.nickname.equals(nickname))
+  public void changeBy(String nickname, Role role, Status status) {
+    if (StringUtils.hasText(nickname))
       this.nickname = nickname;
 
-    if (!this.role.equals(role) && role != null)
+    if (role != null)
       this.changeRole(role);
 
-    if (!this.status.equals(status) && status != null)
+    if (status != null)
       this.status = status;
   }
 
@@ -121,10 +121,7 @@ public class Member extends BaseEntity {
     this.role = role;
   }
 
-  public void synchronizeLatestAuthProvider(AuthProvider latestAuthProvider) {
-    if (this.latestAuthProvider == latestAuthProvider)
-      return;
-
+  public void changeLatestAuthProvider(AuthProvider latestAuthProvider) {
     this.latestAuthProvider = latestAuthProvider;
   }
 }

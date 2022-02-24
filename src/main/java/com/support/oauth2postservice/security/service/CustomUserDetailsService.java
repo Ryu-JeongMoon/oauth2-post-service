@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Optional<Member> probableMember = memberRepository.findActiveByEmail(username);
-    probableMember.ifPresent(member -> member.synchronizeLatestAuthProvider(AuthProvider.LOCAL));
+    probableMember.ifPresent(member -> member.changeLatestAuthProvider(AuthProvider.LOCAL));
 
     return probableMember
         .map(UserPrincipal::from)

@@ -131,7 +131,7 @@ class PostServiceTest extends ServiceTest {
     postService.edit(PostTestHelper.ID, editRequest);
 
     verify(mockedPost, times(1))
-        .editFrom(updateSource);
+        .changeFrom(updateSource);
   }
 
   @Test

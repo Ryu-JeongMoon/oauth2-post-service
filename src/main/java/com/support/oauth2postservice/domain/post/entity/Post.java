@@ -75,7 +75,7 @@ public class Post extends BaseEntity {
     this.status = status;
   }
 
-  public void editFrom(Post source) {
+  public void changeFrom(Post source) {
     if (source.getOpenedAt() != null && source.getClosedAt() != null && source.getOpenedAt().isAfter(source.getClosedAt()))
       throw new IllegalArgumentException(ExceptionMessages.POST_INCORRECT_DATE);
 
