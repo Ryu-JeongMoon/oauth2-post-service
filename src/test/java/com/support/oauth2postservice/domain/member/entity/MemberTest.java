@@ -46,7 +46,7 @@ class MemberTest {
     PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
     String rawPassword = "1234";
     String encodedPassword = passwordEncoder.encode(rawPassword);
-    user.putEncodedPassword(encodedPassword);
+    user.changeToEncodedPassword(encodedPassword);
 
     boolean isMatched = passwordEncoder.matches("1234", user.getPassword());
     assertThat(isMatched).isEqualTo(true);
@@ -55,7 +55,7 @@ class MemberTest {
   @Test
   @DisplayName("개인정보 수정 성공")
   void editInfo() {
-    user.editInfo("AAAA", null, null);
+    user.changeBy("AAAA", null, null);
 
     assertThat(user.getNickname()).isEqualTo("AAAA");
   }
@@ -64,7 +64,7 @@ class MemberTest {
   @DisplayName("개인정보 수정 실패 - 권한 변경 실패")
   void editInfoFailByAuthority() {
     assertThrows(AccessDeniedException.class,
-        () -> user.editInfo("AAAA", Role.MANAGER, null));
+        () -> user.changeBy("AAAA", Role.MANAGER, null));
   }
 
   @Test

@@ -20,7 +20,7 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
 
   private static final String SORTS = "sorts";
   private static final String SIZE = "size";
-  private static final String PAGE = "size";
+  private static final String PAGE = "page";
   private static final String NICKNAME = "nickname";
   private static final String TITLE = "title";
   private static final String CONTENT = "content";

@@ -66,7 +66,7 @@ class PostTest {
         .content("new-content")
         .build();
 
-    post.editFrom(updateSource);
+    post.changeFrom(updateSource);
 
     assertThat(post.getTitle()).isEqualTo(updateSource.getTitle());
     assertThat(post.getContent()).isEqualTo(updateSource.getContent());

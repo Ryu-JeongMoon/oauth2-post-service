@@ -42,7 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   private Member getMember(String registrationId, OAuth2Attributes attributes) {
     Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
     probableMember.ifPresent(member ->
-        member.synchronizeLatestAuthProvider(EnumUtils.getEnumIgnoreCase(AuthProvider.class, registrationId))
+        member.changeLatestAuthProvider(EnumUtils.getEnumIgnoreCase(AuthProvider.class, registrationId))
     );
 
     return probableMember.orElseGet(() -> getNewlyRegistered(registrationId, attributes));
