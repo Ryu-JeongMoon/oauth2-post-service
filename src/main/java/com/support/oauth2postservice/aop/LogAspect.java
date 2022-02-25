@@ -22,13 +22,7 @@ public class LogAspect {
     CompletableFuture.runAsync(
         () -> Arrays.stream(joinPoint.getArgs())
             .filter(arg -> arg instanceof Exception)
-            .forEach(arg -> log.error("[SUPPORT-ERROR] :: exception {}", (Exception) arg))
+            .forEach(arg -> log.error("[SUPPORT-ERROR] :: exception", (Exception) arg))
     );
-
-    Arrays.stream(joinPoint.getArgs())
-        .filter(arg -> arg instanceof Exception)
-        .flatMap(arg -> Arrays.stream(((Exception) arg).getStackTrace()))
-        .limit(1)
-        .forEach(stackTraceElement -> log.info("[SUPPORT-ERROR] :: exception  -> {}", stackTraceElement));
   }
 }

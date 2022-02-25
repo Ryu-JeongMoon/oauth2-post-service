@@ -28,54 +28,39 @@ public class GlobalExceptionHandler {
     return e != null ? e.getClass().getName() : "";
   }
 
-  @ExceptionHandler(value = NullPointerException.class)
-  public ResponseEntity<ExceptionResponse> nullPointerExceptionHandler(NullPointerException e) {
+  @ExceptionHandler(value = {
+      IllegalArgumentException.class, EntityNotFoundException.class, UsernameNotFoundException.class,
+      JsonProcessingException.class, ConstraintViolationException.class, ArithmeticException.class
+  })
+  public ResponseEntity<ExceptionResponse> badRequestHandler(Exception e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
+  }
+
+  @ExceptionHandler(value = {
+      IllegalStateException.class, NullPointerException.class
+  })
+  public ResponseEntity<ExceptionResponse> notAcceptableHandler(Exception e) {
     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
-  @ExceptionHandler(value = IllegalArgumentException.class)
-  public ResponseEntity<ExceptionResponse> illegalArgumentExceptionHandler(IllegalArgumentException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
-  @ExceptionHandler(value = IllegalStateException.class)
-  public ResponseEntity<ExceptionResponse> illegalStateExceptionHandler(IllegalStateException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
   @ExceptionHandler(value = AuthenticationException.class)
-  public ResponseEntity<ExceptionResponse> authenticationExceptionHandler(AuthenticationException e) {
+  public ResponseEntity<ExceptionResponse> unauthorizedHandler(Exception e) {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
-  @ExceptionHandler(value = EntityNotFoundException.class)
-  public ResponseEntity<ExceptionResponse> entityNotFoundExceptionHandler(EntityNotFoundException e) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
-  @ExceptionHandler(value = UsernameNotFoundException.class)
-  public ResponseEntity<ExceptionResponse> usernameNotFoundExceptionHandler(UsernameNotFoundException e) {
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
-  @ExceptionHandler(value = JsonProcessingException.class)
-  public ResponseEntity<ExceptionResponse> jsonProcessingExceptionHandler(JsonProcessingException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
   @ExceptionHandler(value = AccessDeniedException.class)
-  public ResponseEntity<ExceptionResponse> accessDeniedExceptionHandler(AccessDeniedException e) {
+  public ResponseEntity<ExceptionResponse> forbiddenHandler(Exception e) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
-  @ExceptionHandler(value = ConstraintViolationException.class)
-  public ResponseEntity<ExceptionResponse> constraintViolationExceptionHandler(ConstraintViolationException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
+  @ExceptionHandler(value = Exception.class)
+  public ResponseEntity<ExceptionResponse> anyOtherExceptionHandler(Exception e) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @SneakyThrows(value = JsonProcessingException.class)
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
-  public ResponseEntity<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+  public ResponseEntity<String> notValidMethodArgumentHandler(MethodArgumentNotValidException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(objectMapper.writeValueAsString(e.getBindingResult()));
   }
 }
