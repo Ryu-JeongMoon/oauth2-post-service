@@ -53,12 +53,18 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .orderBy(getSortedColumnInPost(pageable.getSort()))
         .fetch();
 
-    return new PageImpl<>(postReadResponses, pageable, postReadResponses.size());
+    Long total = queryFactory.select(post.count())
+        .from(post)
+        .where(getConditionFrom(postSearchRequest))
+        .fetchFirst();
+
+    return new PageImpl<>(postReadResponses, pageable, total);
   }
 
   private BooleanBuilder getConditionFrom(PostSearchRequest request) {
     return compareSafely(() -> post.member.nickname.contains(request.getNickname()))
         .and(compareSafely(() -> post.title.contains(request.getTitle())))
+        .and(compareSafely(() -> post.content.contains(request.getContent())))
         .and(compareSafely(() -> post.status.eq(request.getStatus())))
         .and(compareSafely(() -> post.openedAt.after(request.getOpenedAt())));
   }
