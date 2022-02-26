@@ -1,12 +1,11 @@
 package com.support.oauth2postservice.security.jwt;
 
 import com.support.oauth2postservice.util.TokenUtils;
-import com.support.oauth2postservice.util.constant.TokenConstants;
-import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,27 +18,38 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
+  private static final String LOCAL_KEY_PREFIX = "eyJraW";
+
   private final TokenVerifier tokenVerifier;
+  private final OAuth2TokenVerifier oAuth2TokenVerifier;
 
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
-    doFilterByLocalToken(req, resp, fc);
+    String accessToken = TokenUtils.resolveAccessToken(req);
+    if (!StringUtils.hasText(accessToken)) {
+      fc.doFilter(req, resp);
+      return;
+    }
 
+    if (!accessToken.startsWith(LOCAL_KEY_PREFIX))
+      doFilterByOAuth2Token(accessToken);
+
+    doFilterByLocalToken(accessToken);
     fc.doFilter(req, resp);
   }
 
-  private void doFilterByLocalToken(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
-    String accessToken = TokenUtils.resolveAccessToken(req);
-    if (tokenVerifier.isValid(accessToken)) {
-      Authentication authentication = tokenVerifier.getAuthentication(accessToken);
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      fc.doFilter(req, resp);
-    }
+  private void doFilterByLocalToken(String token) throws ServletException, IOException {
+    doFilterByVerifier(token, tokenVerifier);
+  }
 
-    String refreshToken = TokenUtils.resolveRefreshToken(req);
-    if (tokenVerifier.isValid(refreshToken)) {
-      req.setAttribute(TokenConstants.REFRESH_TOKEN, refreshToken);
-      req.getRequestDispatcher(UriConstants.Mapping.ACCESS_TOKEN_REISSUE).forward(req, resp);
+  private void doFilterByOAuth2Token(String token) throws ServletException, IOException {
+    doFilterByVerifier(token, oAuth2TokenVerifier);
+  }
+
+  private void doFilterByVerifier(String token, TokenVerifier verifier) throws IOException, ServletException {
+    if (verifier.isValid(token)) {
+      Authentication authentication = verifier.getAuthentication(token);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
     }
   }
 }
