@@ -38,6 +38,10 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         authorities);
   }
 
+  public static UserPrincipal of(String email, String password, Status status, Collection<? extends GrantedAuthority> authorities) {
+    return new UserPrincipal(email, password, status, null, authorities);
+  }
+
   @Override
   public String getName() {
     return email;

@@ -5,6 +5,7 @@ import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.jwt.EllipticCurveFactory;
 import com.support.oauth2postservice.security.jwt.EllipticCurveVerifier;
+import com.support.oauth2postservice.security.jwt.TokenException;
 import com.support.oauth2postservice.security.jwt.TokenResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("EC 알고리즘 테스트")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -78,6 +78,12 @@ class EllipticCurveFactoryTest {
     void isValid_refreshToken_failByWrongToken() {
       boolean validity = ellipticCurveVerifier.isValid(tokenResponse.getRefreshToken() + 1);
       assertFalse(validity);
+    }
+
+    @Test
+    @DisplayName("Token 확인 실패 - 빈 토큰 값")
+    void isValid_token_failByEmptyToken() {
+      assertThrows(TokenException.class, () -> ellipticCurveVerifier.isValid(""));
     }
   }
 }

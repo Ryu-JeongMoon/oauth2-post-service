@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+  private final JwtSecurityConfig jwtSecurityConfig;
   private final CustomOAuth2UserService customOAuth2UserService;
   private final CustomUserDetailsService customUserDetailsService;
   private final ClientRegistrationRepository clientRegistrationRepository;
@@ -58,6 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .httpBasic().disable()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+
+        .apply(jwtSecurityConfig)
         .and()
 
         .oauth2Login()

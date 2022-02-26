@@ -10,6 +10,8 @@ public class UriConstants {
   }
 
   public static class Mapping {
+
     public static final String OAUTH2_CALLBACK = "/oauth2/callback/{registrationId}";
+    public static final String ACCESS_TOKEN_REISSUE = "to-be-added";
   }
 }
