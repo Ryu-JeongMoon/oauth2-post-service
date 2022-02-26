@@ -3,6 +3,7 @@ package com.support.oauth2postservice.controller;
 import com.support.oauth2postservice.security.config.JwtSecurityConfig;
 import com.support.oauth2postservice.security.config.OAuth2Config;
 import com.support.oauth2postservice.security.config.SecurityConfig;
+import com.support.oauth2postservice.security.jwt.TokenAuthenticationFilter;
 import com.support.oauth2postservice.security.jwt.TokenVerifier;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = OAuth2Controller.class, excludeFilters = {
     @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-        SecurityConfig.class, OAuth2Config.class, JwtSecurityConfig.class
+        SecurityConfig.class, OAuth2Config.class, JwtSecurityConfig.class, TokenAuthenticationFilter.class
     })
 })
 class OAuth2ControllerTest extends AbstractWebMvcTest {

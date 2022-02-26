@@ -32,4 +32,9 @@ public class OAuth2Controller {
 
     return webClientWrappable.getOAuth2TokenResponse(clientRegistration, oAuth2TokenRequest);
   }
+
+  @GetMapping("/code")
+  public String validate(@RequestParam String token) {
+    return String.valueOf(webClientWrappable.validateByOAuth2(token));
+  }
 }

@@ -19,4 +19,9 @@ public class MockWebClientWrapper implements WebClientWrappable {
   public OAuth2TokenResponse getOAuth2TokenResponse(ClientRegistration clientRegistration, OAuth2TokenRequest oAuth2TokenRequest) {
     return new OAuth2TokenResponse(SCOPE, TOKEN_TYPE, EXPIRES_IN, ACCESS_TOKEN, REFRESH_TOKEN);
   }
+
+  @Override
+  public boolean validateByOAuth2(String token) {
+    return false;
+  }
 }

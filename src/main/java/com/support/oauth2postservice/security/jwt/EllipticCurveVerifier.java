@@ -11,6 +11,7 @@ import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Slf4j
+@Primary
 @Component
 @RequiredArgsConstructor
 public class EllipticCurveVerifier implements TokenVerifier {
