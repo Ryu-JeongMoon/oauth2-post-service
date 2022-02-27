@@ -38,15 +38,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     fc.doFilter(req, resp);
   }
 
-  private void doFilterByLocalToken(String token) throws ServletException, IOException {
+  private void doFilterByLocalToken(String token) {
     doFilterByVerifier(token, tokenVerifier);
   }
 
-  private void doFilterByOAuth2Token(String token) throws ServletException, IOException {
+  private void doFilterByOAuth2Token(String token) {
     doFilterByVerifier(token, oAuth2TokenVerifier);
   }
 
-  private void doFilterByVerifier(String token, TokenVerifier verifier) throws IOException, ServletException {
+  private void doFilterByVerifier(String token, TokenVerifier verifier) {
     if (verifier.isValid(token)) {
       Authentication authentication = verifier.getAuthentication(token);
       SecurityContextHolder.getContext().setAuthentication(authentication);

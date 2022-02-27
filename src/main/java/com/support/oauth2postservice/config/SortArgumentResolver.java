@@ -47,35 +47,32 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         );
       }
 
-    LocalDateTime openedAt = getOpenedAt(webRequest.getParameter(OPENED_AT));
-    Status status = getStatus(webRequest.getParameter(STATUS));
-
     return PostSearchRequest.builder()
         .title(webRequest.getParameter(TITLE))
         .content(webRequest.getParameter(CONTENT))
         .nickname(webRequest.getParameter(NICKNAME))
-        .status(status)
-        .page(getIntValue(webRequest.getParameter(PAGE)))
-        .size(getIntValue(webRequest.getParameter(SIZE)))
-        .openedAt(openedAt)
+        .status(toEnum(Status.class, webRequest.getParameter(STATUS)))
+        .page(toInt(webRequest.getParameter(PAGE)))
+        .size(toInt(webRequest.getParameter(SIZE)))
+        .openedAt(toLocalDateTime(webRequest.getParameter(OPENED_AT)))
         .sorts(sortCondition)
         .build();
   }
 
-  private Status getStatus(String statusName) {
-    return EnumUtils.getEnumIgnoreCase(Status.class, statusName);
-  }
-
-  private LocalDateTime getOpenedAt(String openedAtParam) {
-    LocalDateTime openedAt = null;
-
-    if (StringUtils.isNotBlank(openedAtParam))
-      openedAt = LocalDateTime.parse(openedAtParam);
-
-    return openedAt;
-  }
-
-  private Integer getIntValue(String param) {
+  private Integer toInt(String param) {
     return param != null ? Integer.parseInt(param) : 0;
+  }
+
+  private <E extends Enum<E>> E toEnum(Class<E> enumClass, String param) {
+    return EnumUtils.getEnumIgnoreCase(enumClass, param);
+  }
+
+  private LocalDateTime toLocalDateTime(String localDateTimeParam) {
+    LocalDateTime localDateTime = null;
+
+    if (StringUtils.isNotBlank(localDateTimeParam))
+      localDateTime = LocalDateTime.parse(localDateTimeParam);
+
+    return localDateTime;
   }
 }
