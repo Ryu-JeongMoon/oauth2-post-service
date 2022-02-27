@@ -25,7 +25,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * 2022년 기준으로 ECC 암호화 알고리즘에서 가장 많이 사용되는 P-256 알고리즘의 경우<br/>
+ * The 2021 TLS Telemetry Report 보고서에 따르면 많은 웹사이트가 점점 TLS v1.3으로 옮겨가는 추세이고<br/>
+ * ECC 256 bits 의 안정성은 RSA 3072 bits 와 동일하다<br/>
+ * 따라서 RSA 와 비교하여 안정성은 더 높고 리소스 사용률이 적은 ECC 를 채택한다<br/><br/>
+ * 2016년 기준 ECC 암호화 알고리즘에서 가장 많이 사용된 P-256 알고리즘의 경우<br/>
  * ECC 알고리즘에서 보안을 위해 요구되는 요소 중 아래 요소들이 충족되지 않았다<br/>
  * rigidity, ladders, completeness, indistinguishability <br/>
  * 따라서 JWT 생성과 검증에는 P-256 대신 보안 요구 사항이 충족된 Ed25519 알고리즘을 사용한다<br/>
