@@ -43,7 +43,7 @@ public class WebClientWrapper implements WebClientWrappable {
         .flux()
         .toStream()
         .findAny()
-        .orElseThrow(() -> new OAuth2AuthenticationException(ExceptionMessages.TOKEN_REQUEST_REJECTED));
+        .orElseThrow(() -> new OAuth2AuthenticationException(ExceptionMessages.Token.REQUEST_REJECTED));
   }
 
   private void configureDefaultHeaders(HttpHeaders httpHeaders, ClientRegistration clientRegistration) {
@@ -60,11 +60,11 @@ public class WebClientWrapper implements WebClientWrappable {
   }
 
   @Override
-  public boolean validateByOAuth2(String token) {
+  public boolean validateByOidc(String idToken) {
     return webClient.mutate().baseUrl(VERIFICATION_URI).build()
         .get()
         .uri(uriBuilder -> uriBuilder
-            .queryParam(TokenConstants.ACCESS_TOKEN, token)
+            .queryParam(TokenConstants.ID_TOKEN, idToken)
             .build())
         .retrieve()
         .onStatus(
@@ -73,6 +73,7 @@ public class WebClientWrapper implements WebClientWrappable {
         )
         .bodyToMono(String.class)
         .map(response -> !response.contains(ERROR))
+        .onErrorReturn(OAuth2AuthenticationException.class, false)
         .flux()
         .toStream()
         .findAny()

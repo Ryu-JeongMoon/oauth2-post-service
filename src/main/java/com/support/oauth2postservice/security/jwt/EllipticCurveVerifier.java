@@ -4,7 +4,6 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.crypto.Ed25519Verifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
@@ -36,7 +35,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
       return signedJWT.verify(ed25519Verifier);
     } catch (JOSEException e) {
       log.info("JWT VERIFYING ERROR => {}", e.getMessage());
-      throw new TokenException(ExceptionMessages.NOT_VALID_TOKEN);
+      throw new TokenException(ExceptionMessages.Token.NOT_VALID);
     }
   }
 
@@ -45,7 +44,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
       return SignedJWT.parse(token);
     } catch (ParseException e) {
       log.info("JWT PARSING ERROR => {}", e.getMessage());
-      throw new TokenException(ExceptionMessages.WRONG_FORMAT_TOKEN);
+      throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT);
     }
   }
 
@@ -55,7 +54,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
     List<SimpleGrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority(claimsSet.getStringClaim(TokenConstants.AUTHORITIES)));
 
-    UserPrincipal principal = UserPrincipal.of(claimsSet.getSubject(), "", Status.ACTIVE, authorities);
+    UserPrincipal principal = UserPrincipal.of(claimsSet.getSubject(), authorities);
     return new UsernamePasswordAuthenticationToken(principal, "");
   }
 }
