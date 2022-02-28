@@ -21,7 +21,7 @@ public class MockWebClientWrapper implements WebClientWrappable {
   }
 
   @Override
-  public boolean validateByOAuth2(String token) {
+  public boolean validateByOidc(String idToken) {
     return false;
   }
 }

@@ -31,8 +31,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    if (!accessToken.startsWith(LOCAL_KEY_PREFIX))
+    if (!accessToken.startsWith(LOCAL_KEY_PREFIX)) {
       doFilterByOAuth2Token(accessToken);
+      fc.doFilter(req, resp);
+      return;
+    }
 
     doFilterByLocalToken(accessToken);
     fc.doFilter(req, resp);

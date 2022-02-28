@@ -12,7 +12,7 @@ public enum CustomOAuth2Provider {
     @Override
     public Builder getBuilder(String registrationId) {
       ClientRegistration.Builder builder = getBuilder(registrationId, ClientAuthenticationMethod.CLIENT_SECRET_BASIC);
-      builder.scope("profile", "email");
+      builder.scope("openid", "profile", "email");
       builder.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth");
       builder.tokenUri("https://www.googleapis.com/oauth2/v4/token");
       builder.jwkSetUri("https://www.googleapis.com/oauth2/v3/certs");
@@ -38,8 +38,7 @@ public enum CustomOAuth2Provider {
     }
   };
 
-//  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
-  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/oauth2/callback/{registrationId}";
+  private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
 
   protected final ClientRegistration.Builder getBuilder(String registrationId, ClientAuthenticationMethod method) {
     ClientRegistration.Builder builder = ClientRegistration.withRegistrationId(registrationId);

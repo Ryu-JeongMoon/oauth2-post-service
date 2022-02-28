@@ -3,6 +3,7 @@ package com.support.oauth2postservice.controller;
 import com.support.oauth2postservice.service.post.PostService;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 @Slf4j
@@ -39,7 +42,9 @@ public class TestController {
   }
 
   @GetMapping
-  public String home() {
+  public String home(HttpServletRequest request, Model model) {
+    String code = (String) request.getAttribute("code");
+    model.addAttribute("code", code);
     return "home";
   }
 
@@ -80,8 +85,30 @@ public class TestController {
     return postService.searchByCondition(postSearchRequest);
   }
 
-  @GetMapping("/code")
-  public String validate(@RequestParam String token) {
-    return String.valueOf(webClientWrappable.validateByOAuth2(token));
+  @GetMapping("/id_token")
+  @ResponseBody
+  public String validate(@RequestParam(TokenConstants.ID_TOKEN) String idToken) {
+    return String.valueOf(webClientWrappable.validateByOidc(idToken));
+  }
+
+  @GetMapping("/user-only")
+  @ResponseBody
+  @PreAuthorize("hasAuthority('ROLE_USER')")
+  public String userOnly() {
+    return "user";
+  }
+
+  @GetMapping("/manager-only")
+  @ResponseBody
+  @PreAuthorize("hasAuthority('ROLE_MANAGER')")
+  public String managerOnly() {
+    return "manager";
+  }
+
+  @GetMapping("/admin-only")
+  @ResponseBody
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  public String adminOnly() {
+    return "admin";
   }
 }

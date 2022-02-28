@@ -2,6 +2,7 @@ package com.support.oauth2postservice.security.config;
 
 import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.security.service.CustomOAuth2UserService;
+import com.support.oauth2postservice.security.service.CustomOidcUserService;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtSecurityConfig jwtSecurityConfig;
+  private final CustomOidcUserService customOidcUserService;
   private final CustomOAuth2UserService customOAuth2UserService;
   private final CustomUserDetailsService customUserDetailsService;
   private final ClientRegistrationRepository clientRegistrationRepository;
@@ -73,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .userInfoEndpoint()
         .userService(customOAuth2UserService)
+        .oidcUserService(customOidcUserService)
 
         .and()
         .successHandler(oAuth2AuthenticationSuccessHandler)

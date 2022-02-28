@@ -101,7 +101,7 @@ public class EllipticCurveFactory extends TokenFactory {
       jwtToBeSerialized.sign(ed25519Signer);
     } catch (JOSEException e) {
       log.info("JWT SIGN ERROR => {}", e.getMessage());
-      throw new TokenException(ExceptionMessages.NOT_SIGNED_TOKEN);
+      throw new TokenException(ExceptionMessages.Token.NOT_SIGNED);
     }
     return jwtToBeSerialized.serialize();
   }

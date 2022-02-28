@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.security.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.support.oauth2postservice.util.constant.ColumnConstants;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,16 +13,16 @@ public class OAuth2TokenResponse {
 
   private String scope;
 
-  @JsonProperty(value = ColumnConstants.Name.TOKEN_TYPE)
+  @JsonProperty(value = TokenConstants.TOKEN_TYPE)
   private String tokenType;
 
-  @JsonProperty(value = ColumnConstants.Name.EXPIRES_IN)
+  @JsonProperty(value = TokenConstants.EXPIRES_IN)
   private String expiresIn;
 
-  @JsonProperty(value = ColumnConstants.Name.ACCESS_TOKEN)
+  @JsonProperty(value = TokenConstants.ACCESS_TOKEN)
   private String accessToken;
 
-  @JsonProperty(value = ColumnConstants.Name.REFRESH_TOKEN)
+  @JsonProperty(value = TokenConstants.REFRESH_TOKEN)
   private String refreshToken;
 
   public OAuth2TokenResponse(String scope, String tokenType, String expiresIn, String accessToken, String refreshToken) {

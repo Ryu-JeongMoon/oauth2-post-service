@@ -8,5 +8,5 @@ public interface WebClientWrappable {
 
   OAuth2TokenResponse getOAuth2TokenResponse(ClientRegistration clientRegistration, OAuth2TokenRequest oAuth2TokenRequest);
 
-  boolean validateByOAuth2(String token);
+  boolean validateByOidc(String idToken);
 }
