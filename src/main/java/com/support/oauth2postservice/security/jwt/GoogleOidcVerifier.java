@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleOAuth2Verifier implements OAuth2TokenVerifier {
+public class GoogleOidcVerifier implements OAuth2TokenVerifier {
 
   private final WebClientWrappable webClientWrappable;
 
   @Override
   public boolean isValid(String token) {
-    return webClientWrappable.validateByOAuth2(token);
+    return webClientWrappable.validateByOidc(token);
   }
 
   @Override

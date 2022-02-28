@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.security.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.support.oauth2postservice.util.constant.ColumnConstants;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +14,11 @@ import org.springframework.util.MultiValueMap;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuth2TokenRequest {
 
-  private String code;
-
-  @JsonProperty(value = ColumnConstants.Name.REDIRECT_URI)
-  private String redirectUri;
-
-  @JsonProperty(value = ColumnConstants.Name.GRANT_TYPE)
+  @JsonProperty(value = TokenConstants.GRANT_TYPE)
   private final String grantType = AuthorizationGrantType.AUTHORIZATION_CODE.getValue();
+  private String code;
+  @JsonProperty(value = TokenConstants.REDIRECT_URI)
+  private String redirectUri;
 
   @Builder
   public OAuth2TokenRequest(String code, String redirectUri) {
@@ -30,9 +28,9 @@ public class OAuth2TokenRequest {
 
   public MultiValueMap<String, String> toFormData() {
     MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-    formData.add(ColumnConstants.Name.CODE, this.code);
-    formData.add(ColumnConstants.Name.GRANT_TYPE, this.grantType);
-    formData.add(ColumnConstants.Name.REDIRECT_URI, this.redirectUri);
+    formData.add(TokenConstants.CODE, this.code);
+    formData.add(TokenConstants.GRANT_TYPE, this.grantType);
+    formData.add(TokenConstants.REDIRECT_URI, this.redirectUri);
     return formData;
   }
 }
