@@ -3,12 +3,11 @@ package com.support.oauth2postservice.util.wrapper;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenRequest;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.util.constant.TokenConstants;
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
+import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -23,37 +22,34 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class WebClientWrapper implements WebClientWrappable {
 
-  private static final String VERIFICATION_URI = "https://www.googleapis.com/oauth2/v3/tokeninfo";
-  private static final String ERROR = "error";
-
   private final WebClient webClient;
 
   @Override
-  public OAuth2TokenResponse getOAuth2TokenResponse(ClientRegistration clientRegistration, OAuth2TokenRequest oAuth2TokenRequest) {
-    return webClient.post()
-        .uri(clientRegistration.getProviderDetails().getTokenUri())
-        .headers(httpHeader -> configureDefaultHeaders(httpHeader, clientRegistration))
+  public OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest) {
+    return webClient.mutate().baseUrl(UriConstants.Full.TOKEN_REQUEST_URI).build()
+        .post()
+        .headers(this::configureDefaultHeaders)
         .bodyValue(oAuth2TokenRequest.toFormData())
         .retrieve()
         .onStatus(
             status -> status.is4xxClientError() || status.is5xxServerError(),
-            this::convertToAuthenticationException
+            this::convertToOAuth2AuthenticationException
         )
         .bodyToMono(OAuth2TokenResponse.class)
+        .onErrorReturn(OAuth2TokenResponse.empty())
         .flux()
         .toStream()
         .findAny()
-        .orElseThrow(() -> new OAuth2AuthenticationException(ExceptionMessages.Token.REQUEST_REJECTED));
+        .orElseGet(OAuth2TokenResponse::empty);
   }
 
-  private void configureDefaultHeaders(HttpHeaders httpHeaders, ClientRegistration clientRegistration) {
+  private void configureDefaultHeaders(HttpHeaders httpHeaders) {
     httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     httpHeaders.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-    httpHeaders.setBasicAuth(clientRegistration.getClientId(), clientRegistration.getClientSecret());
   }
 
-  private Mono<OAuth2AuthenticationException> convertToAuthenticationException(ClientResponse clientResponse) {
+  private Mono<OAuth2AuthenticationException> convertToOAuth2AuthenticationException(ClientResponse clientResponse) {
     return clientResponse
         .bodyToMono(String.class)
         .map(OAuth2AuthenticationException::new);
@@ -61,7 +57,7 @@ public class WebClientWrapper implements WebClientWrappable {
 
   @Override
   public boolean validateByOidc(String idToken) {
-    return webClient.mutate().baseUrl(VERIFICATION_URI).build()
+    return webClient.mutate().baseUrl(UriConstants.Full.VERIFICATION_URI).build()
         .get()
         .uri(uriBuilder -> uriBuilder
             .queryParam(TokenConstants.ID_TOKEN, idToken)
@@ -69,10 +65,10 @@ public class WebClientWrapper implements WebClientWrappable {
         .retrieve()
         .onStatus(
             status -> status.is4xxClientError() || status.is5xxServerError(),
-            this::convertToAuthenticationException
+            this::convertToOAuth2AuthenticationException
         )
         .bodyToMono(String.class)
-        .map(response -> !response.contains(ERROR))
+        .map(response -> !response.contains(TokenConstants.ERROR))
         .onErrorReturn(OAuth2AuthenticationException.class, false)
         .flux()
         .toStream()

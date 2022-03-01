@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -25,27 +26,29 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
   private final String email;
   private final Status status;
+  private final OAuth2Token oAuth2Token;
   private final OidcIdToken oidcIdToken;
   private final Map<String, Object> claims;
   private final Map<String, Object> attributes;
   private final Collection<? extends GrantedAuthority> authorities;
 
-  public static OAuth2UserPrincipal of(Member member, OAuth2User oAuth2User) {
+  public static OAuth2UserPrincipal of(Member member, OAuth2User oAuth2User, OAuth2Token oAuth2Token) {
     if (oAuth2User == null)
       return null;
 
     if (oAuth2User instanceof OidcUser) {
       OidcUser oidcUser = (OidcUser) oAuth2User;
-      return toOidcUserPrincipal(member, oidcUser);
+      return toOidcUserPrincipal(member, oidcUser, oAuth2Token);
     }
 
-    return toOAuth2UserPrincipal(member, oAuth2User);
+    return toOAuth2UserPrincipal(member, oAuth2User, oAuth2Token);
   }
 
-  private static OAuth2UserPrincipal toOAuth2UserPrincipal(Member member, OAuth2User oAuth2User) {
+  private static OAuth2UserPrincipal toOAuth2UserPrincipal(Member member, OAuth2User oAuth2User, OAuth2Token oAuth2Token) {
     return new OAuth2UserPrincipal(
         member.getEmail(),
         member.getStatus(),
+        oAuth2Token,
         OidcIdToken.withTokenValue("").build(),
         new ConcurrentHashMap<>(),
         oAuth2User.getAttributes(),
@@ -53,10 +56,11 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
     );
   }
 
-  private static OAuth2UserPrincipal toOidcUserPrincipal(Member member, OidcUser oidcUser) {
+  private static OAuth2UserPrincipal toOidcUserPrincipal(Member member, OidcUser oidcUser, OAuth2Token oAuth2Token) {
     return new OAuth2UserPrincipal(
         member.getEmail(),
         member.getStatus(),
+        oAuth2Token,
         oidcUser.getIdToken(),
         oidcUser.getClaims(),
         oidcUser.getAttributes(),

@@ -8,6 +8,9 @@
 <div>
     <h2>로그인</h2>
     <br/>
+    <a class="btn"
+       href="https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile%20https://www.googleapis.com/auth/userinfo.email%20openid%20https://www.googleapis.com/auth/userinfo.profile&access_type=offline&response_type=code&redirect_uri=https://localhost:8443/token/google&client_id=447668502695-ild1rm5sbivb9inkrvuidd89agpmc26g.apps.googleusercontent.com&prompt=login">구글
+        로그인!!</a>
     <br/>
     <a class="btn_social btn-secondary active" data-social="google" href="javascript:" role="button">Google Login</a>
     <br/>
@@ -20,7 +23,7 @@
     for (let social of socials) {
         social.addEventListener('click', function () {
             let socialType = this.getAttribute('data-social');
-            location.href = "/oauth2/authorization/" + socialType;
+            location.href = "/oauth2/authorization/" + socialType + "?access_type=offline";
         })
     }
 </script>
