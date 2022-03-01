@@ -3,21 +3,21 @@ package com.support.oauth2postservice.helper;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenRequest;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MockWebClientWrapper implements WebClientWrappable {
 
-  public static final String SCOPE = "panda";
-  public static final String TOKEN_TYPE = "bear";
-  public static final String EXPIRES_IN = "rabbit";
-  public static final String ACCESS_TOKEN = "mouse";
-  public static final String REFRESH_TOKEN = "tiger";
+  private static final String SCOPE = "panda";
+  private static final String TOKEN_TYPE = "bear";
+  private static final String EXPIRES_IN = "rabbit";
+  private static final String ACCESS_TOKEN = "mouse";
+  private static final String REFRESH_TOKEN = "tiger";
+  private static final String OIDC_ID_TOKEN = "elephant";
 
   @Override
-  public OAuth2TokenResponse getOAuth2TokenResponse(ClientRegistration clientRegistration, OAuth2TokenRequest oAuth2TokenRequest) {
-    return new OAuth2TokenResponse(SCOPE, TOKEN_TYPE, EXPIRES_IN, ACCESS_TOKEN, REFRESH_TOKEN);
+  public OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest) {
+    return new OAuth2TokenResponse(SCOPE, TOKEN_TYPE, EXPIRES_IN, ACCESS_TOKEN, REFRESH_TOKEN, OIDC_ID_TOKEN);
   }
 
   @Override

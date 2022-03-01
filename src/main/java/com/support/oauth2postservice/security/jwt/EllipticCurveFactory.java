@@ -67,7 +67,7 @@ public class EllipticCurveFactory extends TokenFactory {
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
         .subject(authentication.getName())
         .claim(TokenConstants.AUTHORITIES, authorities)
-        .claim(TokenConstants.TYPE, TokenConstants.ACCESS_ONLY)
+        .claim(TokenConstants.TOKEN_TYPE, TokenConstants.ACCESS_TOKEN)
         .expirationTime(new Date(currentTime + Times.ACCESS_TOKEN_EXPIRATION_MILLIS.getNumber()))
         .build();
 
@@ -84,7 +84,7 @@ public class EllipticCurveFactory extends TokenFactory {
 
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
         .subject(authentication.getName())
-        .claim(TokenConstants.TYPE, TokenConstants.REFRESH_ONLY)
+        .claim(TokenConstants.TOKEN_TYPE, TokenConstants.REFRESH_TOKEN)
         .expirationTime(new Date(currentTime + Times.REFRESH_TOKEN_EXPIRATION_MILLIS.getNumber()))
         .build();
 

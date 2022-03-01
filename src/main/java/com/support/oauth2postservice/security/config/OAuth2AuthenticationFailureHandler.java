@@ -2,6 +2,7 @@ package com.support.oauth2postservice.security.config;
 
 import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -14,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
   public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse resp, AuthenticationException e) throws IOException {
     log.info("Can't Login By OAuth2 => {}", e.getMessage());
 
-    String targetUrl = CookieUtils.getCookie(req, REDIRECT_URI_PARAM_COOKIE_NAME)
+    String targetUrl = CookieUtils.getCookie(req, TokenConstants.REDIRECT_URI)
         .map(Cookie::getValue)
         .orElseGet(() -> "/");
 
