@@ -21,7 +21,7 @@ public class CustomOAuth2MemberService implements OAuth2MemberService {
   public Member getMember(String registrationId, OAuth2Attributes attributes) {
     Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
     probableMember.ifPresent(member ->
-        member.changeLatestAuthProvider(AuthProvider.toEnum(registrationId))
+        member.changeLatestAuthProvider(AuthProvider.valueOfCaseInsensitively(registrationId))
     );
 
     return probableMember.orElseGet(() -> getNewlyRegistered(registrationId, attributes));

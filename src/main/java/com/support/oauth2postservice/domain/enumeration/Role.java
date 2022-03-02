@@ -15,7 +15,7 @@ public enum Role {
 
   private final String key;
 
-  public static Role toEnum(String name) {
+  public static Role valueOfCaseInsensitively(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 }

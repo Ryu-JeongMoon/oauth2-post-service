@@ -6,7 +6,7 @@ public enum AuthProvider {
   LOCAL,
   GOOGLE;
 
-  public static AuthProvider toEnum(String name) {
+  public static AuthProvider valueOfCaseInsensitively(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 }

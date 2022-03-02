@@ -14,7 +14,7 @@ class EnumUtilsTest {
   void fromIgnoreCaseByLowerCase() {
     String lowerCase = "local";
 
-    AuthProvider authProvider = AuthProvider.toEnum(lowerCase);
+    AuthProvider authProvider = AuthProvider.valueOfCaseInsensitively(lowerCase);
 
     assertThat(authProvider).isNotNull();
   }
@@ -24,7 +24,7 @@ class EnumUtilsTest {
   void fromIgnoreCaseByUpperCase() {
     String upperCase = "LOCAL";
 
-    AuthProvider authProvider = AuthProvider.toEnum(upperCase);
+    AuthProvider authProvider = AuthProvider.valueOfCaseInsensitively(upperCase);
 
     assertThat(authProvider).isNotNull();
   }
@@ -34,7 +34,7 @@ class EnumUtilsTest {
   void fromIgnoreCaseByMixedCase() {
     String mixedCase = "LoCaL";
 
-    AuthProvider authProvider = AuthProvider.toEnum(mixedCase);
+    AuthProvider authProvider = AuthProvider.valueOfCaseInsensitively(mixedCase);
 
     assertThat(authProvider).isNotNull();
   }
@@ -46,7 +46,7 @@ class EnumUtilsTest {
 
     assertThrows(
         IllegalArgumentException.class,
-        () -> AuthProvider.toEnum(nonExistsString)
+        () -> AuthProvider.valueOfCaseInsensitively(nonExistsString)
     );
   }
 }
