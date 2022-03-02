@@ -2,22 +2,20 @@ package com.support.oauth2postservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.support.oauth2postservice.aop.annotations.LogForException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.MethodNotAllowedException;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
-@LogForException
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
@@ -29,28 +27,33 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = {
-      IllegalArgumentException.class, EntityNotFoundException.class, UsernameNotFoundException.class,
+      IllegalArgumentException.class, PersistenceException.class,
       JsonProcessingException.class, ConstraintViolationException.class, ArithmeticException.class
   })
   public ResponseEntity<ExceptionResponse> badRequestHandler(Exception e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
-  @ExceptionHandler(value = {
-      IllegalStateException.class, NullPointerException.class
-  })
-  public ResponseEntity<ExceptionResponse> notAcceptableHandler(Exception e) {
-    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
-  }
-
   @ExceptionHandler(value = AuthenticationException.class)
-  public ResponseEntity<ExceptionResponse> unauthorizedHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> unauthorizedHandler(AuthenticationException e) {
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = AccessDeniedException.class)
-  public ResponseEntity<ExceptionResponse> forbiddenHandler(Exception e) {
+  public ResponseEntity<ExceptionResponse> forbiddenHandler(AccessDeniedException e) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
+  }
+
+  @ExceptionHandler(value = MethodNotAllowedException.class)
+  public ResponseEntity<ExceptionResponse> methodNowAllowedHandler(MethodNotAllowedException e) {
+    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
+  }
+
+  @ExceptionHandler(value = {
+      IllegalStateException.class, NullPointerException.class
+  })
+  public ResponseEntity<ExceptionResponse> internalServerErrorHandler(RuntimeException e) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 
   @ExceptionHandler(value = Exception.class)
