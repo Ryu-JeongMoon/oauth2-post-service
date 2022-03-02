@@ -30,4 +30,12 @@ class CustomOAuth2ProviderTest {
 
     assertThat(oAuth2Provider).isNotNull();
   }
+
+  @Test
+  @DisplayName("toEnum 사용")
+  void toEnum() {
+    CustomOAuth2Provider customOAuth2Provider = CustomOAuth2Provider.toEnum("google");
+
+    assertThat(customOAuth2Provider).isNotNull();
+  }
 }

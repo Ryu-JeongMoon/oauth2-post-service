@@ -2,7 +2,6 @@ package com.support.oauth2postservice.config;
 
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
@@ -51,7 +50,7 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         .title(webRequest.getParameter(TITLE))
         .content(webRequest.getParameter(CONTENT))
         .nickname(webRequest.getParameter(NICKNAME))
-        .status(toEnum(Status.class, webRequest.getParameter(STATUS)))
+        .status(Status.toEnum(webRequest.getParameter(STATUS)))
         .page(toInt(webRequest.getParameter(PAGE)))
         .size(toInt(webRequest.getParameter(SIZE)))
         .openedAt(toLocalDateTime(webRequest.getParameter(OPENED_AT)))
@@ -61,10 +60,6 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
 
   private Integer toInt(String param) {
     return param != null ? Integer.parseInt(param) : 0;
-  }
-
-  private <E extends Enum<E>> E toEnum(Class<E> enumClass, String param) {
-    return EnumUtils.getEnumIgnoreCase(enumClass, param);
   }
 
   private LocalDateTime toLocalDateTime(String localDateTimeParam) {

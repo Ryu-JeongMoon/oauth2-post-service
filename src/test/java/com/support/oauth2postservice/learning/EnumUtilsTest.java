@@ -1,11 +1,11 @@
 package com.support.oauth2postservice.learning;
 
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
-import org.apache.commons.lang3.EnumUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EnumUtilsTest {
 
@@ -14,7 +14,7 @@ class EnumUtilsTest {
   void fromIgnoreCaseByLowerCase() {
     String lowerCase = "local";
 
-    AuthProvider authProvider = EnumUtils.getEnumIgnoreCase(AuthProvider.class, lowerCase);
+    AuthProvider authProvider = AuthProvider.toEnum(lowerCase);
 
     assertThat(authProvider).isNotNull();
   }
@@ -24,7 +24,7 @@ class EnumUtilsTest {
   void fromIgnoreCaseByUpperCase() {
     String upperCase = "LOCAL";
 
-    AuthProvider authProvider = EnumUtils.getEnumIgnoreCase(AuthProvider.class, upperCase);
+    AuthProvider authProvider = AuthProvider.toEnum(upperCase);
 
     assertThat(authProvider).isNotNull();
   }
@@ -34,18 +34,19 @@ class EnumUtilsTest {
   void fromIgnoreCaseByMixedCase() {
     String mixedCase = "LoCaL";
 
-    AuthProvider authProvider = EnumUtils.getEnumIgnoreCase(AuthProvider.class, mixedCase);
+    AuthProvider authProvider = AuthProvider.toEnum(mixedCase);
 
     assertThat(authProvider).isNotNull();
   }
 
   @Test
-  @DisplayName("존재하지 않는 인자 입력 시 null 반환")
+  @DisplayName("존재하지 않는 인자 입력 시 IllegalArgumentException 발생")
   void fromIgnoreCaseByNonExistsString() {
     String nonExistsString = "LoCaLLL";
 
-    AuthProvider authProvider = EnumUtils.getEnumIgnoreCase(AuthProvider.class, nonExistsString);
-
-    assertThat(authProvider).isNull();
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> AuthProvider.toEnum(nonExistsString)
+    );
   }
 }
