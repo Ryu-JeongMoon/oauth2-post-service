@@ -168,13 +168,13 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
 
     @Test
     @WithMockUser
-    @DisplayName("등록되지 않은 Registration - HTTP STATUS 406 반환")
+    @DisplayName("등록되지 않은 Registration - HTTP STATUS 500 반환")
     void renew_failByWrongUrl() throws Exception {
       mockMvc.perform(
               get(UriConstants.Mapping.RENEW_TOKEN.replace("{registrationId}", "facebook"))
                   .queryParam(TokenConstants.REFRESH_TOKEN, "panda")
           )
-          .andExpect(status().isNotAcceptable())
+          .andExpect(status().isInternalServerError())
           .andExpect(jsonPath("exception").hasJsonPath())
           .andExpect(jsonPath("message").hasJsonPath())
           .andDo(print());
