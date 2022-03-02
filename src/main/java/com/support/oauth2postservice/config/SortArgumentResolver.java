@@ -50,7 +50,7 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         .title(webRequest.getParameter(TITLE))
         .content(webRequest.getParameter(CONTENT))
         .nickname(webRequest.getParameter(NICKNAME))
-        .status(Status.toEnum(webRequest.getParameter(STATUS)))
+        .status(Status.valueOfCaseInsensitively(webRequest.getParameter(STATUS)))
         .page(toInt(webRequest.getParameter(PAGE)))
         .size(toInt(webRequest.getParameter(SIZE)))
         .openedAt(toLocalDateTime(webRequest.getParameter(OPENED_AT)))

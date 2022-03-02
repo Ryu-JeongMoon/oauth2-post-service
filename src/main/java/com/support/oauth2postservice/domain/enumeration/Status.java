@@ -6,7 +6,7 @@ public enum Status {
   ACTIVE,
   INACTIVE;
 
-  public static Status toEnum(String name) {
+  public static Status valueOfCaseInsensitively(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 }

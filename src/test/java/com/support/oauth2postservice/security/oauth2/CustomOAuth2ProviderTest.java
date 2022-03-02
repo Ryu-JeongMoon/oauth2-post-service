@@ -32,9 +32,9 @@ class CustomOAuth2ProviderTest {
   }
 
   @Test
-  @DisplayName("toEnum 사용")
-  void toEnum() {
-    CustomOAuth2Provider customOAuth2Provider = CustomOAuth2Provider.toEnum("google");
+  @DisplayName("valueOfCaseInsensitively 사용")
+  void valueOfCaseInsensitively() {
+    CustomOAuth2Provider customOAuth2Provider = CustomOAuth2Provider.valueOfCaseInsensitively("google");
 
     assertThat(customOAuth2Provider).isNotNull();
   }

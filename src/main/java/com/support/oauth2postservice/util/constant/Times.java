@@ -16,7 +16,7 @@ public enum Times {
 
   private final long number;
 
-  public static Times toEnum(String name) {
+  public static Times valueOfCaseInsensitively(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 }
