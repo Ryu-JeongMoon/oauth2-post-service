@@ -5,7 +5,9 @@ import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 
 public interface WebClientWrappable {
 
+  boolean validateByOidc(String idToken);
+
   OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest);
 
-  boolean validateByOidc(String idToken);
+  OAuth2TokenResponse renewAccessToken(OAuth2TokenRequest oAuth2TokenRequest);
 }

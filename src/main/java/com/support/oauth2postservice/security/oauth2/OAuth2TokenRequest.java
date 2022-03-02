@@ -1,33 +1,36 @@
 package com.support.oauth2postservice.security.oauth2;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.*;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.beans.ConstructorProperties;
 
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuth2TokenRequest {
 
-  @JsonProperty(TokenConstants.GRANT_TYPE)
-  private final String grantType = AuthorizationGrantType.AUTHORIZATION_CODE.getValue();
   private String code;
-  @JsonProperty(TokenConstants.CLIENT_ID)
   private String clientId;
-  @JsonProperty(TokenConstants.CLIENT_SECRET)
   private String clientSecret;
-  @JsonProperty(TokenConstants.REDIRECT_URI)
   private String redirectUri;
+  private String grantType;
+  private String refreshToken;
 
   @Builder
-  public OAuth2TokenRequest(String code, String clientId, String clientSecret, String redirectUri) {
+  @ConstructorProperties({
+      TokenConstants.CODE, TokenConstants.CLIENT_ID, TokenConstants.CLIENT_SECRET,
+      TokenConstants.REDIRECT_URI, TokenConstants.GRANT_TYPE, TokenConstants.REFRESH_TOKEN
+  })
+  public OAuth2TokenRequest(String code, String clientId, String clientSecret, String redirectUri, String grantType, String refreshToken) {
     this.code = code;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.redirectUri = redirectUri;
+    this.grantType = grantType;
+    this.refreshToken = refreshToken;
   }
 
   public MultiValueMap<String, String> toFormData() {
@@ -37,6 +40,7 @@ public class OAuth2TokenRequest {
     formData.add(TokenConstants.REDIRECT_URI, this.redirectUri);
     formData.add(TokenConstants.CLIENT_ID, this.clientId);
     formData.add(TokenConstants.CLIENT_SECRET, this.clientSecret);
+    formData.add(TokenConstants.REFRESH_TOKEN, this.refreshToken);
     return formData;
   }
 }

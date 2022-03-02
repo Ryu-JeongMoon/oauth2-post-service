@@ -13,7 +13,8 @@ public class UriConstants {
 
   public static class Mapping {
 
-    public static final String REISSUE_TOKEN = "/token/{registrationId}";
+    public static final String ISSUE_TOKEN = "/token/{registrationId}";
+    public static final String RENEW_TOKEN = "/token/{registrationId}/renewal";
     public static final String VALIDATE_TOKEN = "/token/validation";
     public static final String DEFAULT_REDIRECT_URL_PREFIX = "/login/oauth2/code/";
   }

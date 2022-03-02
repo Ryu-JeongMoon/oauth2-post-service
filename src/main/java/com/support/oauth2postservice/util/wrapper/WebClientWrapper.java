@@ -56,6 +56,25 @@ public class WebClientWrapper implements WebClientWrappable {
   }
 
   @Override
+  public OAuth2TokenResponse renewAccessToken(OAuth2TokenRequest oAuth2TokenRequest) {
+    return webClient.mutate().baseUrl(UriConstants.Full.TOKEN_REQUEST_URI).build()
+        .post()
+        .headers(this::configureDefaultHeaders)
+        .bodyValue(oAuth2TokenRequest.toFormData())
+        .retrieve()
+        .onStatus(
+            status -> status.is4xxClientError() || status.is5xxServerError(),
+            this::convertToOAuth2AuthenticationException
+        )
+        .bodyToMono(OAuth2TokenResponse.class)
+        .onErrorReturn(OAuth2TokenResponse.empty())
+        .flux()
+        .toStream()
+        .findAny()
+        .orElseGet(OAuth2TokenResponse::empty);
+  }
+
+  @Override
   public boolean validateByOidc(String idToken) {
     return webClient.mutate().baseUrl(UriConstants.Full.VERIFICATION_URI).build()
         .get()
