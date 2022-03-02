@@ -5,7 +5,6 @@ import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.domain.member.repository.MemberRepository;
 import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class CustomOAuth2MemberService implements OAuth2MemberService {
   public Member getMember(String registrationId, OAuth2Attributes attributes) {
     Optional<Member> probableMember = memberRepository.findActiveByEmail(attributes.getEmail());
     probableMember.ifPresent(member ->
-        member.changeLatestAuthProvider(EnumUtils.getEnumIgnoreCase(AuthProvider.class, registrationId))
+        member.changeLatestAuthProvider(AuthProvider.toEnum(registrationId))
     );
 
     return probableMember.orElseGet(() -> getNewlyRegistered(registrationId, attributes));

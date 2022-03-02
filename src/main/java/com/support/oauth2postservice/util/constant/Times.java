@@ -2,6 +2,7 @@ package com.support.oauth2postservice.util.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,4 +15,8 @@ public enum Times {
   REFRESH_TOKEN_EXPIRATION_MILLIS(1000 * 60 * 60 * 24 * 7);
 
   private final long number;
+
+  public static Times toEnum(String name) {
+    return valueOf(StringUtils.upperCase(name));
+  }
 }
