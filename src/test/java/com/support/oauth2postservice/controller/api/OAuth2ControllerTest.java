@@ -1,6 +1,7 @@
 package com.support.oauth2postservice.controller.api;
 
 import com.support.oauth2postservice.controller.AbstractWebMvcTest;
+import com.support.oauth2postservice.helper.MockWebClientWrapper;
 import com.support.oauth2postservice.security.config.JwtSecurityConfig;
 import com.support.oauth2postservice.security.config.OAuth2Config;
 import com.support.oauth2postservice.security.config.SecurityConfig;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
@@ -36,6 +38,9 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
 
   @MockBean
   TokenVerifier tokenVerifier;
+
+  @SpyBean
+  MockWebClientWrapper mockWebClientWrapper;
 
   @Nested
   @DisplayName("Access Token 요청")
