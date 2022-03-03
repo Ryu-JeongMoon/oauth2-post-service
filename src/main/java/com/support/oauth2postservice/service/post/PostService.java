@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.service.post;
 
 import com.support.oauth2postservice.domain.entity.Member;
-import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.PostRepository;
 import com.support.oauth2postservice.service.post.dto.request.PostCreateRequest;
 import com.support.oauth2postservice.service.post.dto.request.PostEditRequest;
@@ -29,13 +29,13 @@ public class PostService {
   @Transactional(readOnly = true)
   public PostReadResponse findActivePost(String postId) {
     return postRepository.findActiveToResponse(postId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND));
   }
 
   @Transactional
   public void write(PostCreateRequest postCreateRequest) {
     Member member = memberRepository.findActiveByNickname(postCreateRequest.getNickname())
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     Post post = postCreateRequest.toEntity(member);
     postRepository.save(post);
@@ -47,7 +47,7 @@ public class PostService {
       return;
 
     Post post = postRepository.findActive(postId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND));
 
     Post updateSource = postEditRequest.toEntity();
     post.changeFrom(updateSource);
@@ -56,14 +56,14 @@ public class PostService {
   @Transactional
   public void close(String postId) {
     postRepository.findActive(postId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND))
         .close();
   }
 
   @Transactional
   public void reopen(String postId) {
     postRepository.findInactive(postId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.POST_NOT_FOUND))
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND))
         .reopen();
   }
 }

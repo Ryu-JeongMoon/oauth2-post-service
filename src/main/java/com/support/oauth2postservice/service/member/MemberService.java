@@ -19,10 +19,17 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
 
   @Transactional(readOnly = true)
-  public MemberReadResponse findActiveMember(String memberId) {
+  public MemberReadResponse findActiveMemberById(String memberId) {
     return memberRepository.findActive(memberId)
         .map(MemberReadResponse::from)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
+  }
+
+  @Transactional(readOnly = true)
+  public MemberReadResponse findActiveMemberByEmail(String email) {
+    return memberRepository.findActiveByEmail(email)
+        .map(MemberReadResponse::from)
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
   }
 
   @Transactional
@@ -39,7 +46,7 @@ public class MemberService {
       return;
 
     Member member = memberRepository.findActive(memberId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     String encodedPassword = passwordEncoder.encode(member.getPassword());
     member.changeToEncodedPassword(encodedPassword);
@@ -49,7 +56,7 @@ public class MemberService {
   @Transactional
   public void leave(String memberId) {
     memberRepository.findActive(memberId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.MEMBER_NOT_FOUND))
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND))
         .leave();
   }
 }

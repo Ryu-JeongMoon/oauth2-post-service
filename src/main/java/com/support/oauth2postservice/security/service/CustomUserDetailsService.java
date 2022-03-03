@@ -28,6 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     return probableMember
         .map(UserPrincipal::from)
-        .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.MEMBER_NOT_FOUND));
+        .orElseThrow(() -> new UsernameNotFoundException(ExceptionMessages.Member.NOT_FOUND));
   }
 }

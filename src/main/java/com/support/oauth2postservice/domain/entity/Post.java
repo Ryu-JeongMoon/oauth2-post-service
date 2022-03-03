@@ -52,7 +52,7 @@ public class Post extends BaseEntity {
   @Builder
   public Post(Member member, String title, String content, Status status, LocalDateTime openedAt, LocalDateTime closedAt) {
     if (openedAt != null && closedAt != null && openedAt.isAfter(closedAt))
-      throw new IllegalArgumentException(ExceptionMessages.POST_INCORRECT_DATE);
+      throw new IllegalArgumentException(ExceptionMessages.Post.INCORRECT_DATE);
 
     this.member = member;
     this.title = title;
@@ -76,7 +76,7 @@ public class Post extends BaseEntity {
 
   public void changeFrom(Post source) {
     if (source.getOpenedAt() != null && source.getClosedAt() != null && source.getOpenedAt().isAfter(source.getClosedAt()))
-      throw new IllegalArgumentException(ExceptionMessages.POST_INCORRECT_DATE);
+      throw new IllegalArgumentException(ExceptionMessages.Post.INCORRECT_DATE);
 
     this.openedAt = source.getOpenedAt();
     this.closedAt = source.getClosedAt();

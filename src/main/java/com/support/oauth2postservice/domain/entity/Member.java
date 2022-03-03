@@ -90,7 +90,7 @@ public class Member extends BaseEntity {
    */
   public void changeToEncodedPassword(String encodedPassword) {
     if (!StringUtils.hasText(encodedPassword) || encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
-      throw new IllegalArgumentException(ExceptionMessages.PASSWORD_NOT_ENCODED);
+      throw new IllegalArgumentException(ExceptionMessages.Member.PASSWORD_NOT_ENCODED);
 
     this.password = encodedPassword;
   }
@@ -108,7 +108,7 @@ public class Member extends BaseEntity {
 
   public void leave() {
     if (this.leftAt != null)
-      throw new IllegalStateException(ExceptionMessages.MEMBER_ALREADY_LEFT);
+      throw new IllegalStateException(ExceptionMessages.Member.ALREADY_LEFT);
 
     this.leftAt = LocalDateTime.now();
     this.status = Status.INACTIVE;
@@ -116,7 +116,7 @@ public class Member extends BaseEntity {
 
   public void changeRole(Role role) {
     if (this.role.equals(Role.USER) || this.role.equals(Role.MANAGER) && role.equals(Role.ADMIN))
-      throw new AccessDeniedException(ExceptionMessages.MEMBER_ACCESS_DENIED);
+      throw new AccessDeniedException(ExceptionMessages.Member.ACCESS_DENIED);
 
     this.role = role;
   }

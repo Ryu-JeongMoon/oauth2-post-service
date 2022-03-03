@@ -60,7 +60,7 @@ class MemberServiceTest extends ServiceTest {
   void findActiveMember() {
     when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(user));
 
-    MemberReadResponse memberReadResponse = memberService.findActiveMember(USER_ID);
+    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(USER_ID);
 
     assertThat(memberReadResponse.getEmail()).isEqualTo(user.getEmail());
 
@@ -72,7 +72,7 @@ class MemberServiceTest extends ServiceTest {
   void failFindActiveMember() {
     when(memberRepository.findActive(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
 
-    assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMember(USER_ID));
+    assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMemberById(USER_ID));
 
     verify(memberRepository, times(1)).findActive(USER_ID);
   }
