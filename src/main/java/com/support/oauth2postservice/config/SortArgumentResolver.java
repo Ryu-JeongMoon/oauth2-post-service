@@ -50,12 +50,16 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         .title(webRequest.getParameter(TITLE))
         .content(webRequest.getParameter(CONTENT))
         .nickname(webRequest.getParameter(NICKNAME))
-        .status(Status.valueOfCaseInsensitively(webRequest.getParameter(STATUS)))
+        .status(toStatus(webRequest.getParameter(STATUS)))
         .page(toInt(webRequest.getParameter(PAGE)))
         .size(toInt(webRequest.getParameter(SIZE)))
         .openedAt(toLocalDateTime(webRequest.getParameter(OPENED_AT)))
         .sorts(sortCondition)
         .build();
+  }
+
+  private Status toStatus(String statusParam) {
+    return StringUtils.isNotBlank(statusParam) ? Status.valueOfCaseInsensitively(statusParam) : null;
   }
 
   private Integer toInt(String param) {

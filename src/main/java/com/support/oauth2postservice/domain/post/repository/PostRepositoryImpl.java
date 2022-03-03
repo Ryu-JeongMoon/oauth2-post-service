@@ -3,29 +3,31 @@ package com.support.oauth2postservice.domain.post.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
 import com.support.oauth2postservice.service.post.dto.response.QPostReadResponse;
+import com.support.oauth2postservice.util.PagingHelper;
 import com.support.oauth2postservice.util.QueryDslUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.support.oauth2postservice.domain.post.entity.QPost.post;
 
+
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom {
 
+  private final PagingHelper pagingHelper;
   private final JPAQueryFactory queryFactory;
 
   @Override
@@ -43,22 +45,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   public Page<PostReadResponse> search(PostSearchRequest postSearchRequest) {
     Pageable pageable = postSearchRequest.getPageable();
 
-    List<PostReadResponse> postReadResponses = queryFactory
+    JPQLQuery<PostReadResponse> query = queryFactory
         .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
         .from(post)
         .join(post.member)
-        .where(getConditionFrom(postSearchRequest))
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
-        .orderBy(getSortedColumnInPost(pageable.getSort()))
-        .fetch();
+        .where(getConditionFrom(postSearchRequest));
 
-    Long total = queryFactory.select(post.count())
-        .from(post)
-        .where(getConditionFrom(postSearchRequest))
-        .fetchFirst();
-
-    return new PageImpl<>(postReadResponses, pageable, total);
+    return pagingHelper.getPage(post.getType(), query, pageable);
   }
 
   private BooleanBuilder getConditionFrom(PostSearchRequest request) {
