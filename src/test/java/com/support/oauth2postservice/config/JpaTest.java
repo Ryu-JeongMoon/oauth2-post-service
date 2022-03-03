@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
-import com.support.oauth2postservice.domain.post.repository.PostRepository;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.domain.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;

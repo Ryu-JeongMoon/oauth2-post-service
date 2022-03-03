@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.domain.member.entity;
+package com.support.oauth2postservice.domain.entity;
 
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;

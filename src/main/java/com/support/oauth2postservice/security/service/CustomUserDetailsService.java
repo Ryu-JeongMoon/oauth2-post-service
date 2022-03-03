@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.security.service;
 
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
-import com.support.oauth2postservice.domain.member.entity.Member;
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
+import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;

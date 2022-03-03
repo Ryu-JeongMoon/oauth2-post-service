@@ -1,8 +1,7 @@
-package com.support.oauth2postservice.domain.post.entity;
+package com.support.oauth2postservice.domain.entity;
 
 import com.support.oauth2postservice.domain.BaseEntity;
 import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.domain.member.entity.Member;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;

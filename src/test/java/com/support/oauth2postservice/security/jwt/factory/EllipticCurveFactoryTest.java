@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.security.jwt.factory;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.jwt.EllipticCurveFactory;

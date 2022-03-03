@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.domain.member.repository;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

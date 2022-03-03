@@ -1,9 +1,9 @@
 package com.support.oauth2postservice.service.post;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
-import com.support.oauth2postservice.domain.post.entity.Post;
-import com.support.oauth2postservice.domain.post.repository.PostRepository;
+import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.repository.PostRepository;
 import com.support.oauth2postservice.service.post.dto.request.PostCreateRequest;
 import com.support.oauth2postservice.service.post.dto.request.PostEditRequest;
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;

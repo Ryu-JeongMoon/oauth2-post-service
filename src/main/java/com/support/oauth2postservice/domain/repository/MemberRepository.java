@@ -1,6 +1,6 @@
-package com.support.oauth2postservice.domain.member.repository;
+package com.support.oauth2postservice.domain.repository;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

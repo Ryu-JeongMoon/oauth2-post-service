@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.security.service;
 
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
-import com.support.oauth2postservice.domain.member.entity.Member;
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
+import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

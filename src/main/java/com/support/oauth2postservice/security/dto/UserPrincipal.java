@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.security.dto;
 
 import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
