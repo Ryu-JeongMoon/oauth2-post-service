@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.service;
 
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
-import com.support.oauth2postservice.domain.post.repository.PostRepository;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.domain.repository.PostRepository;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import com.support.oauth2postservice.service.member.MemberService;
 import com.support.oauth2postservice.service.post.PostService;

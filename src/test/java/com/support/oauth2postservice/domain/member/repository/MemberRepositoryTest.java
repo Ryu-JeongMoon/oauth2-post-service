@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.domain.member.repository;
 
 import com.support.oauth2postservice.config.JpaTest;
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

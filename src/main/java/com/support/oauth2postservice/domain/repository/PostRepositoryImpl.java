@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.domain.post.repository;
+package com.support.oauth2postservice.domain.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
@@ -20,8 +20,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.support.oauth2postservice.domain.post.entity.QPost.post;
-
+import static com.support.oauth2postservice.domain.entity.QPost.post;
 
 @Repository
 @RequiredArgsConstructor

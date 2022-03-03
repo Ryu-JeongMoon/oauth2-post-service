@@ -3,7 +3,7 @@ package com.support.oauth2postservice.service.member.dto.response;
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.util.security.service;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.service.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;

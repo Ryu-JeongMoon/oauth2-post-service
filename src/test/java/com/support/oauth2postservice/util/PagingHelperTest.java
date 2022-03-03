@@ -13,8 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-import static com.support.oauth2postservice.domain.post.entity.QPost.post;
-
+import static com.support.oauth2postservice.domain.entity.QPost.post;
 
 class PagingHelperTest extends JpaTest {
 

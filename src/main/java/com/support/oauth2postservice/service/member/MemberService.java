@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.service.member;
 
-import com.support.oauth2postservice.domain.member.entity.Member;
-import com.support.oauth2postservice.domain.member.repository.MemberRepository;
+import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;

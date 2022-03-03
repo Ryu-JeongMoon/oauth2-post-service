@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.service.post;
 
 import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.domain.member.entity.Member;
-import com.support.oauth2postservice.domain.post.entity.Post;
+import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
 import com.support.oauth2postservice.service.ServiceTest;

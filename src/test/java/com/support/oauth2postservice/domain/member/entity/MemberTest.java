@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.domain.member.entity;
 
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;

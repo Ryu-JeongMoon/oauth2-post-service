@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.domain.post.entity;
 
+import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.PostTestHelper;
 import org.junit.jupiter.api.BeforeEach;

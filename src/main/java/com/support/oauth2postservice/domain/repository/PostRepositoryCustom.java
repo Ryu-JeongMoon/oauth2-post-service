@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.domain.post.repository;
+package com.support.oauth2postservice.domain.repository;
 
 import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
