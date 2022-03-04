@@ -1,6 +1,9 @@
 package com.support.oauth2postservice.config;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
+import org.apache.tomcat.util.http.LegacyCookieProcessor;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +23,13 @@ public class WebConfig implements WebMvcConfigurer {
     filterRegistration.addUrlPatterns("/*");
 
     return filterRegistration;
+  }
+
+  @Bean
+  public WebServerFactoryCustomizer<TomcatServletWebServerFactory> cookieProcessorCustomizer() {
+    return serverFactory -> serverFactory.addContextCustomizers(
+        context -> context.setCookieProcessor(new LegacyCookieProcessor())
+    );
   }
 
   @Override

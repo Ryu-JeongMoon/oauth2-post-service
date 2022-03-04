@@ -5,8 +5,10 @@ import com.support.oauth2postservice.helper.MockWebClientWrapper;
 import com.support.oauth2postservice.security.config.JwtSecurityConfig;
 import com.support.oauth2postservice.security.config.OAuth2Config;
 import com.support.oauth2postservice.security.config.SecurityConfig;
-import com.support.oauth2postservice.security.jwt.TokenAuthenticationFilter;
+import com.support.oauth2postservice.security.jwt.LocalTokenAuthenticationFilter;
+import com.support.oauth2postservice.security.jwt.OAuth2TokenAuthenticationFilter;
 import com.support.oauth2postservice.security.jwt.TokenVerifier;
+import com.support.oauth2postservice.service.OAuth2TokenService;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import org.apache.commons.lang3.BooleanUtils;
@@ -28,17 +30,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = OAuth2Controller.class, excludeFilters = {
+@WebMvcTest(controllers = OAuth2TokenApiController.class, excludeFilters = {
     @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-        SecurityConfig.class, JwtSecurityConfig.class, TokenAuthenticationFilter.class
+        SecurityConfig.class, JwtSecurityConfig.class,
+        LocalTokenAuthenticationFilter.class, OAuth2TokenAuthenticationFilter.class
     })
 })
 @Import(OAuth2Config.class)
-class OAuth2ControllerTest extends AbstractWebMvcTest {
+class OAuth2TokenApiControllerTest extends AbstractWebMvcTest {
 
   @MockBean
   TokenVerifier tokenVerifier;
-
+  @SpyBean
+  OAuth2TokenService oAuth2TokenService;
   @SpyBean
   MockWebClientWrapper mockWebClientWrapper;
 
@@ -51,7 +55,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("성공 - OAuth2TokenResponse 반환")
     void getOAuth2Token() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.ISSUE_TOKEN.replace("{registrationId}", "google"))
+              get(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN.replace("{registrationId}", "google"))
                   .queryParam(TokenConstants.CODE, "1234")
           )
           .andExpect(status().isOk())
@@ -69,7 +73,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("실패 - 빈 Code 로 요청 시 빈 TokenResponse 반환")
     void getOAuth2Token_failByEmptyCode() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.ISSUE_TOKEN.replace("{registrationId}", "google"))
+              get(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN.replace("{registrationId}", "google"))
                   .queryParam(TokenConstants.CODE, "")
           )
           .andExpect(status().isOk())
@@ -87,7 +91,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("실패 - code query-string 없을 시 MissingServletRequestParameterException 발생")
     void getOAuth2Token_failByEmptyQueryString() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.ISSUE_TOKEN.replace("{registrationId}", "google"))
+              get(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN.replace("{registrationId}", "google"))
           )
           .andExpect(status().isNotFound())
           .andExpect(jsonPath("exception").exists())
@@ -105,7 +109,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("성공 - true 반환")
     void validate() throws Exception {
       MvcResult result = mockMvc.perform(
-              get(UriConstants.Mapping.VALIDATE_TOKEN)
+              get(UriConstants.Mapping.VALIDATE_OAUTH2_TOKEN)
                   .queryParam(TokenConstants.ID_TOKEN, "yahoo~~")
           )
           .andExpect(status().isOk())
@@ -121,7 +125,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("실패 - 빈 ID Token 면 false 반환")
     void validate_failByEmptyIdToken() throws Exception {
       MvcResult result = mockMvc.perform(
-              get(UriConstants.Mapping.VALIDATE_TOKEN)
+              get(UriConstants.Mapping.VALIDATE_OAUTH2_TOKEN)
                   .queryParam(TokenConstants.ID_TOKEN, "")
           )
           .andExpect(status().isOk())
@@ -136,7 +140,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("실패 - 권한 없을 시 로그인 페이지 리다이렉트")
     void validate_failByAuthority() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.VALIDATE_TOKEN)
+              get(UriConstants.Mapping.VALIDATE_OAUTH2_TOKEN)
                   .queryParam(TokenConstants.ID_TOKEN, "yahoo~~")
           )
           .andExpect(status().is3xxRedirection())
@@ -153,7 +157,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("성공 - OAuth2TokenResponse 반환")
     void renew() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.RENEW_TOKEN.replace("{registrationId}", "google"))
+              get(UriConstants.Mapping.RENEW_GOOGLE_TOKEN.replace("{registrationId}", "google"))
                   .queryParam(TokenConstants.REFRESH_TOKEN, "panda")
           )
           .andExpect(status().isOk())
@@ -171,7 +175,7 @@ class OAuth2ControllerTest extends AbstractWebMvcTest {
     @DisplayName("등록되지 않은 Registration - HTTP STATUS 500 반환")
     void renew_failByWrongUrl() throws Exception {
       mockMvc.perform(
-              get(UriConstants.Mapping.RENEW_TOKEN.replace("{registrationId}", "facebook"))
+              get(UriConstants.Mapping.RENEW_OAUTH2_TOKEN.replace("{registrationId}", "facebook"))
                   .queryParam(TokenConstants.REFRESH_TOKEN, "panda")
           )
           .andExpect(status().isInternalServerError())

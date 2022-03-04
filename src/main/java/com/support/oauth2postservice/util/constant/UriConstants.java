@@ -12,6 +12,7 @@ public class UriConstants {
   }
 
   public static class Mapping {
+    public static final String ROOT = "/";
     public static final String MEMBERS = "/members";
     public static final String MY_PAGE = "/members/my-page";
 
@@ -21,6 +22,9 @@ public class UriConstants {
     public static final String RENEW_OAUTH2_TOKEN = "/oauth2/{registrationId}/renewal";
     public static final String RENEW_OAUTH2_TOKEN_AND_REDIRECT = "/oauth2/{registrationId}/renewal/redirect";
     public static final String VALIDATE_OAUTH2_TOKEN = "/oauth2/validation";
-    public static final String DEFAULT_REDIRECT_URL_PREFIX = "/login/oauth2/code/";
+  }
+
+  public static class Keyword {
+    public static final String REDIRECT = "redirect:";
   }
 }

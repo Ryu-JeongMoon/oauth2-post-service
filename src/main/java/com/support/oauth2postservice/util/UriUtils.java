@@ -9,7 +9,7 @@ public class UriUtils {
 
   private static final String REGISTRATION_ID = "{registrationId}";
 
-  public static String toGoogle(String uri) {
-    return StringUtils.replace(uri, REGISTRATION_ID, "google");
+  public static String toGoogle(String oldUri) {
+    return StringUtils.replace(oldUri, REGISTRATION_ID, "google");
   }
 }

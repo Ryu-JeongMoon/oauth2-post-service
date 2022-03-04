@@ -25,7 +25,28 @@ public class WebClientWrapper implements WebClientWrappable {
   private final WebClient webClient;
 
   @Override
-  public OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest) {
+  public boolean validateByOidc(String idToken) {
+    return webClient.mutate().baseUrl(UriConstants.Full.VERIFICATION_URI).build()
+        .get()
+        .uri(uriBuilder -> uriBuilder
+            .queryParam(TokenConstants.ID_TOKEN, idToken)
+            .build())
+        .retrieve()
+        .onStatus(
+            status -> status.is4xxClientError() || status.is5xxServerError(),
+            this::convertToOAuth2AuthenticationException
+        )
+        .bodyToMono(String.class)
+        .map(response -> !response.contains(TokenConstants.ERROR))
+        .onErrorReturn(OAuth2AuthenticationException.class, false)
+        .flux()
+        .toStream()
+        .findAny()
+        .orElseGet(() -> false);
+  }
+
+  @Override
+  public OAuth2TokenResponse getToken(OAuth2TokenRequest oAuth2TokenRequest) {
     return webClient.mutate().baseUrl(UriConstants.Full.TOKEN_REQUEST_URI).build()
         .post()
         .headers(this::configureDefaultHeaders)
@@ -56,7 +77,7 @@ public class WebClientWrapper implements WebClientWrappable {
   }
 
   @Override
-  public OAuth2TokenResponse renewAccessToken(OAuth2TokenRequest oAuth2TokenRequest) {
+  public OAuth2TokenResponse getRenewedToken(OAuth2TokenRequest oAuth2TokenRequest) {
     return webClient.mutate().baseUrl(UriConstants.Full.TOKEN_REQUEST_URI).build()
         .post()
         .headers(this::configureDefaultHeaders)
@@ -72,26 +93,5 @@ public class WebClientWrapper implements WebClientWrappable {
         .toStream()
         .findAny()
         .orElseGet(OAuth2TokenResponse::empty);
-  }
-
-  @Override
-  public boolean validateByOidc(String idToken) {
-    return webClient.mutate().baseUrl(UriConstants.Full.VERIFICATION_URI).build()
-        .get()
-        .uri(uriBuilder -> uriBuilder
-            .queryParam(TokenConstants.ID_TOKEN, idToken)
-            .build())
-        .retrieve()
-        .onStatus(
-            status -> status.is4xxClientError() || status.is5xxServerError(),
-            this::convertToOAuth2AuthenticationException
-        )
-        .bodyToMono(String.class)
-        .map(response -> !response.contains(TokenConstants.ERROR))
-        .onErrorReturn(OAuth2AuthenticationException.class, false)
-        .flux()
-        .toStream()
-        .findAny()
-        .orElseGet(() -> false);
   }
 }

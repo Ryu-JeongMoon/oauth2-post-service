@@ -16,6 +16,11 @@ public class MockWebClientWrapper implements WebClientWrappable {
   private static final String REFRESH_TOKEN = "tiger";
   private static final String OIDC_ID_TOKEN = "elephant";
 
+  @Override
+  public boolean validateByOidc(String idToken) {
+    return StringUtils.hasText(idToken);
+  }
+
   /**
    * query-string 으로 받아오는 code 또는 refresh_token<br/>
    * 있을 시엔 값이 있는 객체를 반환하고 없다면 값들이 null 로 채워진 객체를 반환한다<br/>
@@ -23,7 +28,7 @@ public class MockWebClientWrapper implements WebClientWrappable {
    * 추후 비지니스 로직 수정에 따라 메서드의 로직 또한 수정 되어야 한다
    */
   @Override
-  public OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest) {
+  public OAuth2TokenResponse getToken(OAuth2TokenRequest oAuth2TokenRequest) {
     if (StringUtils.hasText(oAuth2TokenRequest.getCode()) || StringUtils.hasText(oAuth2TokenRequest.getRefreshToken()))
       return new OAuth2TokenResponse(SCOPE, TOKEN_TYPE, EXPIRES_IN, ACCESS_TOKEN, REFRESH_TOKEN, OIDC_ID_TOKEN);
 
@@ -31,12 +36,7 @@ public class MockWebClientWrapper implements WebClientWrappable {
   }
 
   @Override
-  public OAuth2TokenResponse renewAccessToken(OAuth2TokenRequest oAuth2TokenRequest) {
-    return getOAuth2TokenResponse(oAuth2TokenRequest);
-  }
-
-  @Override
-  public boolean validateByOidc(String idToken) {
-    return StringUtils.hasText(idToken);
+  public OAuth2TokenResponse getRenewedToken(OAuth2TokenRequest oAuth2TokenRequest) {
+    return getToken(oAuth2TokenRequest);
   }
 }

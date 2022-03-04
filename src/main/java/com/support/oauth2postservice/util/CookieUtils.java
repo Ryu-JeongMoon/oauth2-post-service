@@ -5,8 +5,8 @@ import com.support.oauth2postservice.util.constant.Times;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.SerializationUtils;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,23 +19,23 @@ import java.util.Optional;
 public class CookieUtils {
 
   public static void setTokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
-    response.addHeader(
-        TokenConstants.AUTHORIZATION_HEADER, TokenConstants.BEARER_TYPE + renewedTokenResponse.getAccessToken());
+    String accessToken = renewedTokenResponse.getAccessToken();
+    if (StringUtils.isNotBlank(accessToken)) {
+      CookieUtils.addCookie(
+          response,
+          TokenConstants.ACCESS_TOKEN,
+          TokenConstants.BEARER_TYPE + accessToken,
+          Times.ACCESS_TOKEN_EXPIRATION_SECONDS.getValue());
+    }
 
     String oidcIdToken = renewedTokenResponse.getOidcIdToken();
-    if (org.springframework.util.StringUtils.hasText(oidcIdToken)) {
+    if (StringUtils.isNotBlank(oidcIdToken)) {
       CookieUtils.addCookie(
           response,
           TokenConstants.ID_TOKEN,
           oidcIdToken,
           Times.ID_TOKEN_EXPIRATION_SECONDS.getValue());
     }
-
-    CookieUtils.addCookie(
-        response,
-        TokenConstants.REFRESH_TOKEN,
-        renewedTokenResponse.getRefreshToken(),
-        Times.REFRESH_TOKEN_EXPIRATION_SECONDS.getValue());
   }
 
   public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
