@@ -11,6 +11,7 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.constant.Times;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
@@ -65,7 +66,7 @@ public class EllipticCurveFactory extends TokenFactory {
         .collect(Collectors.joining(","));
 
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-        .subject(authentication.getName())
+        .subject(getIdFromAuthentication(authentication))
         .claim(TokenConstants.AUTHORITIES, authorities)
         .claim(TokenConstants.TOKEN_TYPE, TokenConstants.ACCESS_TOKEN)
         .expirationTime(new Date(currentTime + Times.ACCESS_TOKEN_EXPIRATION_MILLIS.getNumber()))
@@ -76,6 +77,14 @@ public class EllipticCurveFactory extends TokenFactory {
         .build();
 
     return createNewJWT(header, claimsSet);
+  }
+
+  private String getIdFromAuthentication(Authentication authentication) {
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof UserPrincipal) {
+      return ((UserPrincipal)principal).getId();
+    }
+    return null;
   }
 
   @Override

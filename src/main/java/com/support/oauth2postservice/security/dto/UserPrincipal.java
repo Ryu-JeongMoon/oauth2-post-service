@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.security.dto;
 
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -18,17 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
+  private final String id;
   private final String email;
   private final Status status;
   private final Collection<? extends GrantedAuthority> authorities;
 
   public static UserPrincipal from(Member member) {
     List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().toString()));
-    return UserPrincipal.of(member.getEmail(), authorities);
+    return UserPrincipal.of(member.getId(), member.getEmail(), authorities);
   }
 
-  public static UserPrincipal of(String email, Collection<? extends GrantedAuthority> authorities) {
-    return new UserPrincipal(email, Status.ACTIVE, authorities);
+  public static UserPrincipal of(String id, String email, Collection<? extends GrantedAuthority> authorities) {
+    return new UserPrincipal(id, email, Status.ACTIVE, authorities);
   }
 
   @Override
