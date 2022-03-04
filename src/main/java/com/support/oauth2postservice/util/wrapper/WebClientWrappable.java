@@ -7,7 +7,7 @@ public interface WebClientWrappable {
 
   boolean validateByOidc(String idToken);
 
-  OAuth2TokenResponse getOAuth2TokenResponse(OAuth2TokenRequest oAuth2TokenRequest);
+  OAuth2TokenResponse getToken(OAuth2TokenRequest oAuth2TokenRequest);
 
-  OAuth2TokenResponse renewAccessToken(OAuth2TokenRequest oAuth2TokenRequest);
+  OAuth2TokenResponse getRenewedToken(OAuth2TokenRequest oAuth2TokenRequest);
 }

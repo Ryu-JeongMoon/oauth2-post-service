@@ -19,6 +19,12 @@ public abstract class TokenUtils {
         token.substring(TokenConstants.BEARER_TYPE.length()) : "";
   }
 
+  public static String resolveIdToken(HttpServletRequest request) {
+    return CookieUtils.getCookie(request, TokenConstants.ID_TOKEN)
+        .map(Cookie::getValue)
+        .orElseGet(() -> EMPTY_VALUE);
+  }
+
   public static String resolveRefreshToken(HttpServletRequest request) {
     return CookieUtils.getCookie(request, TokenConstants.REFRESH_TOKEN)
         .map(Cookie::getValue)

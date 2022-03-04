@@ -1,9 +1,12 @@
 package com.support.oauth2postservice.util;
 
+import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
+import com.support.oauth2postservice.util.constant.Times;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.SerializationUtils;
-import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +17,26 @@ import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CookieUtils {
+
+  public static void setTokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
+    String accessToken = renewedTokenResponse.getAccessToken();
+    if (StringUtils.isNotBlank(accessToken)) {
+      CookieUtils.addCookie(
+          response,
+          TokenConstants.ACCESS_TOKEN,
+          TokenConstants.BEARER_TYPE + accessToken,
+          Times.ACCESS_TOKEN_EXPIRATION_SECONDS.getValue());
+    }
+
+    String oidcIdToken = renewedTokenResponse.getOidcIdToken();
+    if (StringUtils.isNotBlank(oidcIdToken)) {
+      CookieUtils.addCookie(
+          response,
+          TokenConstants.ID_TOKEN,
+          oidcIdToken,
+          Times.ID_TOKEN_EXPIRATION_SECONDS.getValue());
+    }
+  }
 
   public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
     Cookie[] cookies = request.getCookies();

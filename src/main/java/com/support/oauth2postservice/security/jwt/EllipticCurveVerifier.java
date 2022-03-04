@@ -34,8 +34,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
     try {
       return signedJWT.verify(ed25519Verifier);
     } catch (JOSEException e) {
-      log.info("JWT VERIFYING ERROR => {}", e.getMessage());
-      throw new TokenException(ExceptionMessages.Token.NOT_VALID);
+      return false;
     }
   }
 
