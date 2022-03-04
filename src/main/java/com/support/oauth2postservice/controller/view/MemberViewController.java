@@ -20,8 +20,8 @@ public class MemberViewController {
   @GetMapping(UriConstants.Mapping.MY_PAGE)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
-    String currentUserEmail = SecurityUtils.getCurrentUserEmail();
-    MemberReadResponse memberResponse = memberService.findActiveMemberByEmail(currentUserEmail);
+    String id = SecurityUtils.getIdFromCurrentUser();
+    MemberReadResponse memberResponse = memberService.findActiveMemberById(id);
 
     model.addAttribute("memberResponse", memberResponse);
     return "member/my-page";

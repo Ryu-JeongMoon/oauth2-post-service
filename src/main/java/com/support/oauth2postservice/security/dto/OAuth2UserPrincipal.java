@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.security.dto;
 
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
+  private final String id;
   private final String email;
   private final Status status;
   private final OAuth2Token oAuth2Token;
@@ -46,6 +47,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
   private static OAuth2UserPrincipal toOAuth2UserPrincipal(Member member, OAuth2User oAuth2User, OAuth2Token oAuth2Token) {
     return new OAuth2UserPrincipal(
+        member.getId(),
         member.getEmail(),
         member.getStatus(),
         oAuth2Token,
@@ -58,6 +60,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
   private static OAuth2UserPrincipal toOidcUserPrincipal(Member member, OidcUser oidcUser, OAuth2Token oAuth2Token) {
     return new OAuth2UserPrincipal(
+        member.getId(),
         member.getEmail(),
         member.getStatus(),
         oAuth2Token,

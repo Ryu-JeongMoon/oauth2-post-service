@@ -24,6 +24,7 @@ public class TokenConstants {
   public static final String ACCESS_TOKEN = "access_token";
   public static final String REFRESH_TOKEN = "refresh_token";
 
+  public static final String USER_ID = "user_id";
   public static final String AUTHORITIES = "authorities";
   public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
 }

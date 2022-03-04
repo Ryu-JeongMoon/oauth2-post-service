@@ -1,6 +1,7 @@
 package com.support.oauth2postservice.util;
 
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -8,28 +9,41 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
 
-  public static String getCurrentUserEmail() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  public static String getIdFromCurrentUser() {
+    Object principal = getPrincipalNullSafely();
 
-    if (ObjectUtils.isEmpty(authentication))
-      throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);
+    if (principal instanceof UserPrincipal)
+      return ((UserPrincipal) principal).getId();
+    else if (principal instanceof OAuth2UserPrincipal)
+      return ((OAuth2UserPrincipal) principal).getId();
 
-    return getEmailFromPrincipal(authentication.getPrincipal());
+    throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
   }
 
-  private static String getEmailFromPrincipal(Object principal) {
-    if (principal instanceof UserDetails)
-      return ((UserDetails) principal).getUsername();
+  public static String getEmailFromCurrentUser() {
+    Object principal = getPrincipalNullSafely();
 
-    if (principal instanceof OAuth2AuthenticatedPrincipal)
+    if (principal instanceof UserPrincipal)
+      return ((UserPrincipal) principal).getEmail();
+    else if (principal instanceof OAuth2UserPrincipal)
       return ((OAuth2UserPrincipal) principal).getEmail();
 
     throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
+  }
+
+  private static Object getPrincipalNullSafely() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (ObjectUtils.isEmpty(authentication))
+      throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);
+
+    Object principal = authentication.getPrincipal();
+    if (ObjectUtils.isEmpty(principal))
+      throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);
+
+    return principal;
   }
 }
