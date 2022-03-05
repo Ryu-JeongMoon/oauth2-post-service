@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+<body>
+<table class="table table-hover table-bordered">
+  <tr>
+    <th>id</th>
+    <th>email</th>
+    <th>nickname</th>
+    <th>role</th>
+    <th>status</th>
+    <th>auth-provider</th>
+  </tr>
+  <tr th:each="member : ${memberReadResponses}">
+    <td th:text="${member.id}"></td>
+    <td th:text="${member.email}"></td>
+    <td th:text="${member.nickname}"></td>
+    <td th:text="${member.role}"></td>
+    <td th:text="${member.status}"></td>
+    <td th:text="${member.latestAuthProvider}"></td>
+  </tr>
+</table>
+
+<p th:text="${memberReadResponses.size}"></p>
+<p th:text="${memberReadResponses.pageable}"></p>
+<p th:text="${memberReadResponses.totalPages}"></p>
+<p th:text="${memberReadResponses.totalElements}"></p>
+
+</body>
+</html>
