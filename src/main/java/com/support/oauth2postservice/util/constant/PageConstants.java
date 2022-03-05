@@ -7,6 +7,7 @@ public class PageConstants {
   public static final int DEFAULT_PAGE_SIZE = 10;
   public static final int DEFAULT_PAGE_NUMBER = 0;
   public static final Sort POST_SEARCH_DEFAULT_SORT = Sort.by(Sort.Direction.DESC, Column.OPENED_AT);
+  public static final Sort MEMBER_SEARCH_DEFAULT_SORT = Sort.by(Sort.Direction.DESC, Column.ROLE);
 
   public static class Column {
 
@@ -19,5 +20,6 @@ public class PageConstants {
      * PageConstants.Column.OPENED_AT => "openedAt"
      */
     public static final String OPENED_AT = "openedAt";
+    public static final String ROLE = "role";
   }
 }
