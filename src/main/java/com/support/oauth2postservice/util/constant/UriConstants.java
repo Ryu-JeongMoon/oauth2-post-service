@@ -13,6 +13,7 @@ public class UriConstants {
 
   public static class Mapping {
     public static final String ROOT = "/";
+    public static final String LOGIN = "/login";
 
     public static final String MEMBERS = "/members";
     public static final String MEMBERS_SINGLE = "/members/{id}";
