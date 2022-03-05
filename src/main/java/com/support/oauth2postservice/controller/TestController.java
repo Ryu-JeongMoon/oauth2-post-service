@@ -26,11 +26,6 @@ public class TestController {
     return token.toString();
   }
 
-  @GetMapping("/login")
-  public String loginPage() {
-    return "login";
-  }
-
   @GetMapping
   public String home() {
     return "home";
