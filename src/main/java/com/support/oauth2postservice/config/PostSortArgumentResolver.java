@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SortArgumentResolver implements HandlerMethodArgumentResolver {
+public class PostSortArgumentResolver implements HandlerMethodArgumentResolver {
 
   private static final String SORTS = "sorts";
   private static final String SIZE = "size";
