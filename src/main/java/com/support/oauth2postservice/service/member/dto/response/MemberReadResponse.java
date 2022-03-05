@@ -1,23 +1,22 @@
 package com.support.oauth2postservice.service.member.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.domain.entity.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberReadResponse {
 
   private String id;
 
-  private String name;
-
   private String email;
+
+  private String nickname;
 
   private Role role;
 
@@ -26,10 +25,11 @@ public class MemberReadResponse {
   private AuthProvider latestAuthProvider;
 
   @Builder
-  public MemberReadResponse(String id, String name, String email, Role role, Status status, AuthProvider latestAuthProvider) {
+  @QueryProjection
+  public MemberReadResponse(String id, String email, String nickname, Role role, Status status, AuthProvider latestAuthProvider) {
     this.id = id;
-    this.name = name;
     this.email = email;
+    this.nickname = nickname;
     this.role = role;
     this.status = status;
     this.latestAuthProvider = latestAuthProvider;
@@ -38,8 +38,8 @@ public class MemberReadResponse {
   public static MemberReadResponse from(Member member) {
     return MemberReadResponse.builder()
         .id(member.getId())
-        .name(member.getNickname())
         .email(member.getEmail())
+        .nickname(member.getNickname())
         .role(member.getRole())
         .status(member.getStatus())
         .latestAuthProvider(member.getLatestAuthProvider())
