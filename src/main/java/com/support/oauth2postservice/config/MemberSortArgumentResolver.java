@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.config;
 
-import com.support.oauth2postservice.domain.enumeration.Status;
-import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
+import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.service.member.dto.request.MemberSearchRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;
@@ -11,24 +11,21 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SortArgumentResolver implements HandlerMethodArgumentResolver {
+public class MemberSortArgumentResolver implements HandlerMethodArgumentResolver {
 
   private static final String SORTS = "sorts";
   private static final String SIZE = "size";
   private static final String PAGE = "page";
   private static final String NICKNAME = "nickname";
-  private static final String TITLE = "title";
-  private static final String CONTENT = "content";
-  private static final String STATUS = "status";
-  private static final String OPENED_AT = "openedAt";
+  private static final String EMAIL = "email";
+  private static final String ROLE = "role";
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return parameter.getParameterType().equals(PostSearchRequest.class);
+    return parameter.getParameterType().equals(MemberSearchRequest.class);
   }
 
   @Override
@@ -46,32 +43,22 @@ public class SortArgumentResolver implements HandlerMethodArgumentResolver {
         );
       }
 
-    return PostSearchRequest.builder()
-        .title(webRequest.getParameter(TITLE))
-        .content(webRequest.getParameter(CONTENT))
+    return MemberSearchRequest.builder()
+        .email(webRequest.getParameter(EMAIL))
         .nickname(webRequest.getParameter(NICKNAME))
-        .status(toStatus(webRequest.getParameter(STATUS)))
+        .role(toRole(webRequest.getParameter(ROLE)))
         .page(toInt(webRequest.getParameter(PAGE)))
         .size(toInt(webRequest.getParameter(SIZE)))
-        .openedAt(toLocalDateTime(webRequest.getParameter(OPENED_AT)))
         .sorts(sortCondition)
         .build();
   }
 
-  private Status toStatus(String statusParam) {
-    return StringUtils.isNotBlank(statusParam) ? Status.valueOfCaseInsensitively(statusParam) : null;
+  private Role toRole(String roleParam) {
+    return StringUtils.isNotBlank(roleParam) ? Role.valueOfCaseInsensitively(roleParam) : null;
   }
 
   private Integer toInt(String param) {
     return param != null ? Integer.parseInt(param) : 0;
   }
-
-  private LocalDateTime toLocalDateTime(String localDateTimeParam) {
-    LocalDateTime localDateTime = null;
-
-    if (StringUtils.isNotBlank(localDateTimeParam))
-      localDateTime = LocalDateTime.parse(localDateTimeParam);
-
-    return localDateTime;
-  }
 }
+

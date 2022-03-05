@@ -13,7 +13,9 @@ public class UriConstants {
 
   public static class Mapping {
     public static final String ROOT = "/";
+
     public static final String MEMBERS = "/members";
+    public static final String MEMBERS_SINGLE = "/members/{id}";
     public static final String MY_PAGE = "/members/my-page";
 
     public static final String ISSUE_GOOGLE_TOKEN = "/oauth2/google";

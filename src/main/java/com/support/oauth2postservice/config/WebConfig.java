@@ -34,6 +34,7 @@ public class WebConfig implements WebMvcConfigurer {
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-    resolvers.add(new SortArgumentResolver());
+    resolvers.add(new PostSortArgumentResolver());
+    resolvers.add(new MemberSortArgumentResolver());
   }
 }
