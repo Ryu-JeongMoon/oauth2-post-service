@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.config;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
-import com.support.oauth2postservice.service.member.dto.request.MemberSearchRequest;
+import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.core.MethodParameter;

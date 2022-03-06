@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.controller;
 
-import com.support.oauth2postservice.service.post.PostService;
-import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
-import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
+import com.support.oauth2postservice.service.PostService;
+import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
+import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

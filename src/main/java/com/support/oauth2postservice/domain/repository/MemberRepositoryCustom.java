@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.domain.repository;
 
-import com.support.oauth2postservice.service.member.dto.request.MemberSearchRequest;
-import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
+import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;

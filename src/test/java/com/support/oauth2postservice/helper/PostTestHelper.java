@@ -3,10 +3,10 @@ package com.support.oauth2postservice.helper;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
-import com.support.oauth2postservice.service.post.dto.request.PostCreateRequest;
-import com.support.oauth2postservice.service.post.dto.request.PostEditRequest;
-import com.support.oauth2postservice.service.post.dto.request.PostSearchRequest;
-import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
+import com.support.oauth2postservice.service.dto.request.PostCreateRequest;
+import com.support.oauth2postservice.service.dto.request.PostEditRequest;
+import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
+import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.service.post.dto.response;
+package com.support.oauth2postservice.service.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;

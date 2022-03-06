@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.service.post.dto.request;
+package com.support.oauth2postservice.service.dto.request;
 
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Post;

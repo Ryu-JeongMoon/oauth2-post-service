@@ -1,9 +1,8 @@
 package com.support.oauth2postservice.controller.api;
 
-import com.support.oauth2postservice.service.member.MemberService;
-import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
-import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
-import com.support.oauth2postservice.util.SecurityUtils;
+import com.support.oauth2postservice.service.MemberService;
+import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
+import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
