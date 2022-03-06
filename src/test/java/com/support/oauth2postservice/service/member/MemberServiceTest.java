@@ -49,11 +49,11 @@ class MemberServiceTest extends ServiceTest {
   void edit() {
     when(memberRepository.findActive(any())).thenReturn(Optional.ofNullable(member));
 
-    memberService.edit(USER_ID, MemberTestHelper.createEditRequest());
+    memberService.edit(MemberTestHelper.createEditRequest());
 
     assertThat(member.getNickname()).isEqualTo(MemberTestHelper.USER_NICKNAME_AFTER_EDIT);
 
-    verify(memberRepository, times(1)).findActive(USER_ID);
+    verify(memberRepository, times(1)).findActive(any());
   }
 
   @Nested

@@ -9,7 +9,6 @@ import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -115,9 +114,6 @@ public class Member extends BaseEntity {
   }
 
   public void changeRole(Role role) {
-    if (this.role.equals(Role.USER) || this.role.equals(Role.MANAGER) && role.equals(Role.ADMIN))
-      throw new AccessDeniedException(ExceptionMessages.Member.ACCESS_DENIED);
-
     this.role = role;
   }
 

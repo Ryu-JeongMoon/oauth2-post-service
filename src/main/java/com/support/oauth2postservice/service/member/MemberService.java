@@ -47,14 +47,14 @@ public class MemberService {
   }
 
   @Transactional
-  public void edit(String memberId, MemberEditRequest memberEditRequest) {
+  public void edit(MemberEditRequest memberEditRequest) {
     if (memberEditRequest == null)
       return;
 
-    Member member = memberRepository.findActive(memberId)
+    Member member = memberRepository.findActive(memberEditRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
-    String encodedPassword = passwordEncoder.encode(member.getPassword());
+    String encodedPassword = passwordEncoder.encode(memberEditRequest.getPassword());
     member.changeToEncodedPassword(encodedPassword);
     member.changeBy(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
   }
