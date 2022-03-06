@@ -29,10 +29,9 @@ public class MemberApiController {
     return ResponseEntity.created(uri).build();
   }
 
-  @PatchMapping(UriConstants.Mapping.MY_PAGE)
+  @PatchMapping(UriConstants.Mapping.EDIT_PAGE)
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
-    String memberId = SecurityUtils.getIdFromCurrentUser();
-    memberService.edit(memberId, memberEditRequest);
+    memberService.edit(memberEditRequest);
 
     return ResponseEntity.ok().build();
   }

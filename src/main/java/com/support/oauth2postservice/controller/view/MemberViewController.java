@@ -1,21 +1,21 @@
 package com.support.oauth2postservice.controller.view;
 
 import com.support.oauth2postservice.service.member.MemberService;
+import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.member.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberViewController {
@@ -27,21 +27,38 @@ public class MemberViewController {
     Page<MemberReadResponse> memberReadResponses = memberService.searchByCondition(memberSearchRequest);
 
     model.addAttribute("memberReadResponses", memberReadResponses);
-    memberReadResponses.getContent().forEach(System.out::println);
     return "member/list";
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_SINGLE)
-  public String getMember(@PathVariable String id) {
+  public String getMember(@PathVariable String id, Model model) {
+    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
+
+    model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/my-page";
   }
 
   @GetMapping(UriConstants.Mapping.MY_PAGE)
   public String myPage(Model model) {
     String id = SecurityUtils.getIdFromCurrentUser();
-    MemberReadResponse memberResponse = memberService.findActiveMemberById(id);
+    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
-    model.addAttribute("memberResponse", memberResponse);
+    model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/my-page";
+  }
+
+  @GetMapping(UriConstants.Mapping.EDIT_PAGE)
+  public String editPage(@RequestParam String id, Model model) {
+    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
+
+    MemberEditRequest memberEditRequest = MemberEditRequest.builder()
+        .nickname(memberReadResponse.getNickname())
+        .role(memberReadResponse.getRole())
+        .status(memberReadResponse.getStatus())
+        .build();
+
+    model.addAttribute("memberEditRequest", memberEditRequest);
+    model.addAttribute("memberReadResponse", memberReadResponse);
+    return "member/edit-page";
   }
 }

@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!--<head th:replace="/fragments/header.html :: fragment-header"></head>-->
-<head>
-  <div th:replace="/fragments/header :: fragment-header"></div>
-</head>
-
+<html lang='en' xmlns:th='http://www.thymeleaf.org'>
+<head th:replace='/fragments/header.html :: fragment-header'></head>
 <body>
-
+<div class='container'>
+  <form class='row g-3' th:object='${memberReadResponse}'>
+    <div class='col-12'>
+      <label class='form-label' for='id'>ID</label>
+      <input class='form-control' id='id' readonly th:field='*{id}' th:id='id'>
+    </div>
+    <div class='col-12'>
+      <label class='form-label' for='email'>Email</label>
+      <input class='form-control' id='email' readonly th:field='*{email}' th:id='email'>
+    </div>
+    <div class='col-12'>
+      <label class='form-label' for='nickname'>Nickname</label>
+      <input class='form-control' id='nickname' placeholder='1234 Main St' readonly th:field='*{nickname}'
+             th:id='nickname'>
+    </div>
+    <div class='col-12'>
+      <label class='form-label' for='role'>Role</label>
+      <input class='form-control' id='role' readonly th:field='*{role}' th:id='role' type='text'>
+    </div>
+    <div class='col-12'>
+      <label class='form-label' for='status'>Status</label>
+      <input class='form-control' id='status' readonly th:field='*{status}' th:id='status'>
+    </div>
+    <div class='col-12'>
+      <label class='form-label' for='auth-provider'>Auth-Provider</label>
+      <input class='form-control' id='auth-provider' readonly th:field='*{latestAuthProvider}' th:id='auth-provider'>
+    </div>
+  </form>
+  <div class='col-12 mt-4' style='text-align: center;'>
+    <button class='btn btn-primary' th:onclick='goToEditPage([[${memberReadResponse.id}]])'>수정</button>
+  </div>
+</div>
 </body>
+
+<script>
+  function goToEditPage(id) {
+    location.href = '/members/edit-page?id=' + id;
+  }
+</script>
 </html>
