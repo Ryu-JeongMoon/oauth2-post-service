@@ -1,11 +1,11 @@
-package com.support.oauth2postservice.service.member;
+package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
-import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
-import com.support.oauth2postservice.service.member.dto.request.MemberSearchRequest;
-import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
-import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
+import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
+import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

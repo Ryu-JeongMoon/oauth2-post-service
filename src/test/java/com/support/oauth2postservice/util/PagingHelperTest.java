@@ -2,8 +2,8 @@ package com.support.oauth2postservice.util;
 
 import com.querydsl.jpa.JPQLQuery;
 import com.support.oauth2postservice.config.JpaTest;
-import com.support.oauth2postservice.service.post.dto.response.PostReadResponse;
-import com.support.oauth2postservice.service.post.dto.response.QPostReadResponse;
+import com.support.oauth2postservice.service.dto.response.PostReadResponse;
+import com.support.oauth2postservice.service.dto.response.QPostReadResponse;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

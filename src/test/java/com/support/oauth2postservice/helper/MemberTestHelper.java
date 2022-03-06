@@ -2,8 +2,8 @@ package com.support.oauth2postservice.helper;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.entity.Member;
-import com.support.oauth2postservice.service.member.dto.request.MemberEditRequest;
-import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
+import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 
 public class MemberTestHelper {
 

@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.service.member.dto.request;
+package com.support.oauth2postservice.service.dto.request;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.util.constant.RegexpConstants;

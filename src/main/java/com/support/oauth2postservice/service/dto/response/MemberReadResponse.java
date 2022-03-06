@@ -1,4 +1,4 @@
-package com.support.oauth2postservice.service.member.dto.response;
+package com.support.oauth2postservice.service.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.support.oauth2postservice.domain.entity.Member;

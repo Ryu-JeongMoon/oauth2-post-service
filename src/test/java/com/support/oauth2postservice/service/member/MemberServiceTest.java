@@ -2,9 +2,10 @@ package com.support.oauth2postservice.service.member;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
+import com.support.oauth2postservice.service.MemberService;
 import com.support.oauth2postservice.service.ServiceTest;
-import com.support.oauth2postservice.service.member.dto.request.MemberSignupRequest;
-import com.support.oauth2postservice.service.member.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

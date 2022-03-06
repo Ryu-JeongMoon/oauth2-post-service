@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.service.post.dto.request;
 
+import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
