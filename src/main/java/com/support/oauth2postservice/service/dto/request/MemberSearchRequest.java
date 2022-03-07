@@ -2,15 +2,16 @@ package com.support.oauth2postservice.service.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.support.oauth2postservice.domain.PageAttributes;
+import com.support.oauth2postservice.domain.entity.QMember;
 import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.util.EnumUtils;
+import com.support.oauth2postservice.util.QueryDslUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
+import com.support.oauth2postservice.util.constant.PageConstants;
 import lombok.*;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QSort;
 
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Getter
 @ToString
@@ -23,18 +24,28 @@ public class MemberSearchRequest extends PageAttributes {
   @Size(max = ColumnConstants.Length.SEARCH)
   private String nickname;
 
-  @Size(max = ColumnConstants.Length.SEARCH)
   private Role role;
-
-  private Pageable pageable;
 
   @Builder
   @JsonCreator
-  public MemberSearchRequest(String email, String nickname, Role role,
-                             int page, int size, List<Pair<String, Sort.Direction>> sorts) {
+  public MemberSearchRequest(String email, String nickname, Role role) {
     this.email = email;
     this.nickname = nickname;
     this.role = role;
-    this.pageable = toPageable(page, size, sorts);
+  }
+
+  private enum Keyword {
+    EMAIL,
+    ROLE,
+    NICKNAME
+  }
+
+  @Override
+  public QSort getQSort() {
+    if (getSorts().isEmpty())
+      return PageConstants.MEMBER_SEARCH_DEFAULT_SORT;
+
+    String[] keywords = EnumUtils.toStringArray(Keyword.values());
+    return QueryDslUtils.getQSort(getSorts(), QMember.member, keywords);
   }
 }

@@ -1,8 +1,8 @@
 package com.support.oauth2postservice.service.post;
 
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
 import com.support.oauth2postservice.service.PostService;
@@ -60,9 +60,7 @@ class PostServiceTest extends ServiceTest {
   void searchByCondition_returnByDefaultPageSize() {
     assertDoesNotThrow(
         () -> postService.searchByCondition(
-            PostSearchRequest.builder()
-                .size(0)
-                .build())
+            PostSearchRequest.builder().build())
     );
   }
 

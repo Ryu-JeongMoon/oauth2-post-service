@@ -10,7 +10,6 @@ import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
@@ -95,7 +94,6 @@ class PostRepositoryTest extends JpaTest {
     assertThat(result.getTotalElements()).isEqualTo(0);
   }
 
-  @Disabled("검색 조건 변경으로 인한 일시 중단")
   @Test
   @DisplayName("기본 조건으로 검색 시 게시글 오픈 날짜 내림차순 정렬")
   void searchByDefaultCondition() {
@@ -137,13 +135,14 @@ class PostRepositoryTest extends JpaTest {
     postRepository.save(post);
 
     // when
-    PostSearchRequest searchRequest = PostSearchRequest.builder()
-        .page(0)
-        .size(500)
-        .sorts(Collections.singletonList(Pair.of(PageConstants.Column.OPENED_AT, Sort.Direction.ASC)))
-        .build();
+    PostSearchRequest searchRequest = PostSearchRequest.builder().build();
+    searchRequest.setSorts(Collections.singletonList(Pair.of(PageConstants.Column.OPENED_AT, Sort.Direction.ASC)));
+    searchRequest.setPage(0);
+    searchRequest.setSize(5);
+
     Page<PostReadResponse> postReadResponses = postRepository.search(searchRequest);
     PostReadResponse postReadResponse = postReadResponses.getContent().get(0);
+    postReadResponses.getContent().forEach(System.out::println);
 
     // then
     assertThat(postReadResponse.getTitle()).isEqualTo(titleOfVeryOldOne);
