@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -55,7 +54,8 @@ public class EllipticCurveVerifier implements TokenVerifier {
     List<SimpleGrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority(claimsSet.getStringClaim(TokenConstants.AUTHORITIES)));
 
-    UserPrincipal principal = UserPrincipal.of(id, email, authorities);
-    return new UsernamePasswordAuthenticationToken(principal, "");
+    return UserPrincipal
+        .of(id, email, authorities)
+        .toAuthentication();
   }
 }

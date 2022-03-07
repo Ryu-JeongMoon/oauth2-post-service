@@ -46,4 +46,9 @@ public class SecurityUtils {
 
     return principal;
   }
+
+  public static void setAuthentication(Authentication authentication) {
+    SecurityContextHolder.clearContext();
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
 }

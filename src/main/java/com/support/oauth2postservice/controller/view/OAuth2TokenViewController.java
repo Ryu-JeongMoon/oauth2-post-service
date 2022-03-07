@@ -28,7 +28,7 @@ public class OAuth2TokenViewController {
 
     OAuth2TokenResponse renewedTokenResponse = oAuth2TokenService.renew(registrationId, refreshToken);
 
-    CookieUtils.setTokenToBrowser(response, renewedTokenResponse);
+    CookieUtils.setOAuth2TokenToBrowser(response, renewedTokenResponse);
     return UriConstants.Keyword.REDIRECT + redirectUri;
   }
 }
