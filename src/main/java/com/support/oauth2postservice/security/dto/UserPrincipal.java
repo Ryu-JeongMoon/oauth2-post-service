@@ -5,6 +5,8 @@ import com.support.oauth2postservice.domain.enumeration.Status;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +32,10 @@ public class UserPrincipal implements UserDetails {
 
   public static UserPrincipal of(String id, String email, Collection<? extends GrantedAuthority> authorities) {
     return new UserPrincipal(id, email, Status.ACTIVE, authorities);
+  }
+
+  public Authentication toAuthentication() {
+    return new UsernamePasswordAuthenticationToken(this, "", this.authorities);
   }
 
   @Override

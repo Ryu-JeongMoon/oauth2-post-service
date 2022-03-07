@@ -6,13 +6,16 @@ import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,6 +35,19 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
   private final Map<String, Object> claims;
   private final Map<String, Object> attributes;
   private final Collection<? extends GrantedAuthority> authorities;
+
+  public static OAuth2UserPrincipal from(Member member) {
+    return new OAuth2UserPrincipal(
+        member.getId(),
+        member.getEmail(),
+        member.getStatus(),
+        Jwt.withTokenValue("").build(),
+        OidcIdToken.withTokenValue("").build(),
+        new ConcurrentHashMap<>(),
+        new ConcurrentHashMap<>(),
+        Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
+    );
+  }
 
   public static OAuth2UserPrincipal of(Member member, OAuth2User oAuth2User, OAuth2Token oAuth2Token) {
     if (oAuth2User == null)
@@ -68,6 +84,14 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         oidcUser.getClaims(),
         oidcUser.getAttributes(),
         Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
+    );
+  }
+
+  public Authentication toAuthentication() {
+    return new OAuth2AuthenticationToken(
+        this,
+        this.authorities,
+        this.attributes.getOrDefault("registrationId", "google").toString()
     );
   }
 

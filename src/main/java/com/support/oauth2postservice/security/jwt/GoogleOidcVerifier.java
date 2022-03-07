@@ -5,6 +5,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
@@ -31,7 +32,9 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
     Member member = memberRepository.findActiveByEmail(email)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
-    return null;
+    return OAuth2UserPrincipal
+        .from(member)
+        .toAuthentication();
   }
 
   private DecodedJWT parse(String idToken) {
