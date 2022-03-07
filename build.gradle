@@ -81,20 +81,3 @@ tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
 }
-
-node {
-    version = '17.6.0'
-    yarnVersion = "1.22.17"
-    download = true
-    distBaseUrl = 'https://nodejs.org/dist'
-    workDir = file("./nodejs")
-    yarnWorkDir = file("./yarn")
-    nodeModulesDir = file("./")
-}
-
-task setUp(type: YarnTask) {
-    description = "Install Node.js packages"
-    args = ['install']
-    inputs.files file('package.json')
-    outputs.files file('node_modules')
-}
