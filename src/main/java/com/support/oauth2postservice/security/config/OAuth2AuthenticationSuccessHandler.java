@@ -4,11 +4,11 @@ import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityUtils.setAuthentication(authentication);
     log.info("authentication = {}", authentication);
 
     OAuth2UserPrincipal principal = (OAuth2UserPrincipal) authentication.getPrincipal();
@@ -37,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         .oidcIdToken(principal.getIdToken().getTokenValue())
         .build();
 
-    CookieUtils.setTokenToBrowser(response, oAuth2TokenResponse);
+    CookieUtils.setOAuth2TokenToBrowser(response, oAuth2TokenResponse);
     request.getRequestDispatcher(UriConstants.Mapping.ROOT).forward(request, response);
   }
 }

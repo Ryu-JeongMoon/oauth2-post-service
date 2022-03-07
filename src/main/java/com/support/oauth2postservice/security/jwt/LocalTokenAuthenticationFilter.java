@@ -1,9 +1,11 @@
 package com.support.oauth2postservice.security.jwt;
 
-import com.support.oauth2postservice.util.TokenFilterHelper;
+import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,7 +20,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
-  private final TokenFilterHelper tokenFilterHelper;
+  private final TokenFactory tokenFactory;
+  private final TokenVerifier tokenVerifier;
 
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
@@ -28,11 +31,31 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    boolean isValidAccessToken = tokenFilterHelper.validateByLocal(accessToken);
+    boolean isReissued = reissueIfExpired(req, resp);
+    if (isReissued)
+      return;
+
     fc.doFilter(req, resp);
   }
 
   private boolean isLocalToken(String accessToken) {
-    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.LOCAL_TOKEN_PREFIX);
+    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.LOCAL_ACCESS_TOKEN_PREFIX);
+  }
+
+  private boolean reissueIfExpired(HttpServletRequest request, HttpServletResponse response) {
+    String accessToken = TokenUtils.resolveAccessToken(request);
+    if (tokenVerifier.isValid(accessToken))
+      return false;
+
+    String refreshToken = TokenUtils.resolveRefreshToken(request);
+    if (!tokenVerifier.isValid(refreshToken))
+      return false;
+
+    Authentication authentication = tokenVerifier.getAuthentication(accessToken);
+    TokenResponse tokenResponse = tokenFactory.create(authentication);
+
+    CookieUtils.setLocalTokenToBrowser(response, tokenResponse);
+    SecurityUtils.setAuthentication(authentication);
+    return true;
   }
 }

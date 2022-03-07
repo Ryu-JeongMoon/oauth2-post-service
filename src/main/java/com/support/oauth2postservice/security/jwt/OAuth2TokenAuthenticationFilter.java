@@ -1,10 +1,10 @@
 package com.support.oauth2postservice.security.jwt;
 
-import com.support.oauth2postservice.util.TokenFilterHelper;
 import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -15,11 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
-  private final TokenFilterHelper tokenFilterHelper;
+  private final OAuth2TokenVerifier oAuth2TokenVerifier;
 
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
@@ -29,19 +30,27 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    boolean isValidAccessToken = tokenFilterHelper.validateByOAuth2(accessToken);
-    if (!isValidAccessToken) {
-      String refreshToken = TokenUtils.resolveRefreshToken(req);
-      String pathInfo = req.getPathInfo();
-      req.getRequestDispatcher(
-          UriConstants.Mapping.RENEW_GOOGLE_TOKEN + "?redirect_uri=" + pathInfo + "&refresh_token=" + refreshToken
-      ).forward(req, resp);
-    }
+    boolean isRedirected = redirectIfExpired(req, resp);
+    if (isRedirected)
+      return;
 
     fc.doFilter(req, resp);
   }
 
   private boolean isOAuth2Token(String accessToken) {
-    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.OAUTH2_TOKEN_PREFIX);
+    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.OAUTH2_ACCESS_TOKEN_PREFIX);
+  }
+
+  private boolean redirectIfExpired(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String idToken = TokenUtils.resolveIdToken(request);
+    if (oAuth2TokenVerifier.isValid(idToken))
+      return false;
+
+    String refreshToken = TokenUtils.resolveRefreshToken(request);
+    request.getRequestDispatcher(
+        UriConstants.Mapping.RENEW_OAUTH2_TOKEN_AND_REDIRECT.replace("{registrationId}", "google") +
+            "?redirect_uri=" + request.getRequestURI() + "&refresh_token=" + refreshToken
+    ).forward(request, response);
+    return true;
   }
 }
