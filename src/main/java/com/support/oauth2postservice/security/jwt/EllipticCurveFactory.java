@@ -82,7 +82,7 @@ public class EllipticCurveFactory extends TokenFactory {
   private String getIdFromAuthentication(Authentication authentication) {
     Object principal = authentication.getPrincipal();
     if (principal instanceof UserPrincipal) {
-      return ((UserPrincipal)principal).getId();
+      return ((UserPrincipal) principal).getId();
     }
     return null;
   }

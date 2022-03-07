@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityUtils {
 
   public static String getIdFromCurrentUser() {
-    Object principal = getPrincipalNullSafely();
+    Object principal = getNullSafePrincipal();
 
     if (principal instanceof UserPrincipal)
       return ((UserPrincipal) principal).getId();
@@ -25,7 +25,7 @@ public class SecurityUtils {
   }
 
   public static String getEmailFromCurrentUser() {
-    Object principal = getPrincipalNullSafely();
+    Object principal = getNullSafePrincipal();
 
     if (principal instanceof UserPrincipal)
       return ((UserPrincipal) principal).getEmail();
@@ -35,7 +35,7 @@ public class SecurityUtils {
     throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
   }
 
-  private static Object getPrincipalNullSafely() {
+  private static Object getNullSafePrincipal() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (ObjectUtils.isEmpty(authentication))
       throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);

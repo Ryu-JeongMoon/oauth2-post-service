@@ -5,8 +5,6 @@ import java.util.function.Consumer;
 @FunctionalInterface
 public interface ThrowingConsumer<T, E extends Throwable> {
 
-  void accept(T t) throws E;
-
   static <T, E extends Throwable> Consumer<T> unchecked(ThrowingConsumer<T, E> f) {
     return t -> {
       try {
@@ -26,4 +24,6 @@ public interface ThrowingConsumer<T, E extends Throwable> {
       }
     };
   }
+
+  void accept(T t) throws E;
 }
