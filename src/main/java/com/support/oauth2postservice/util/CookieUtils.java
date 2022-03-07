@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.util;
 
+import com.support.oauth2postservice.security.jwt.TokenResponse;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.util.constant.Times;
 import com.support.oauth2postservice.util.constant.TokenConstants;
@@ -18,7 +19,27 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CookieUtils {
 
-  public static void setTokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
+  public static void setLocalTokenToBrowser(HttpServletResponse response, TokenResponse tokenResponse) {
+    String accessToken = tokenResponse.getAccessToken();
+    if (StringUtils.isNotBlank(accessToken)) {
+      CookieUtils.addCookie(
+          response,
+          TokenConstants.ACCESS_TOKEN,
+          TokenConstants.BEARER_TYPE + accessToken,
+          Times.ACCESS_TOKEN_EXPIRATION_SECONDS.getValue());
+    }
+
+    String refreshToken = tokenResponse.getRefreshToken();
+    if (StringUtils.isNotBlank(refreshToken)) {
+      CookieUtils.addCookie(
+          response,
+          TokenConstants.REFRESH_TOKEN,
+          refreshToken,
+          Times.REFRESH_TOKEN_EXPIRATION_SECONDS.getValue());
+    }
+  }
+
+  public static void setOAuth2TokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
     String accessToken = renewedTokenResponse.getAccessToken();
     if (StringUtils.isNotBlank(accessToken)) {
       CookieUtils.addCookie(
