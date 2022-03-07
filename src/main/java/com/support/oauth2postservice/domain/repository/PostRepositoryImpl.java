@@ -1,7 +1,6 @@
 package com.support.oauth2postservice.domain.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.support.oauth2postservice.domain.enumeration.Status;
@@ -12,13 +11,11 @@ import com.support.oauth2postservice.util.PagingHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 import static com.support.oauth2postservice.domain.entity.QPost.post;
-import static com.support.oauth2postservice.util.QueryDslUtils.getSortedColumn;
 import static com.support.oauth2postservice.util.QueryDslUtils.nullSafeBuilder;
 
 @Repository
@@ -58,9 +55,5 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .and(nullSafeBuilder(() -> post.content.contains(request.getContent())))
         .and(nullSafeBuilder(() -> post.status.eq(request.getStatus())))
         .and(nullSafeBuilder(() -> post.openedAt.after(request.getOpenedAt())));
-  }
-
-  private OrderSpecifier<?>[] getSortedColumnInPost(Sort sorts) {
-    return getSortedColumn(sorts, post);
   }
 }

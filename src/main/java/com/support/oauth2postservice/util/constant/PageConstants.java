@@ -1,13 +1,17 @@
 package com.support.oauth2postservice.util.constant;
 
-import org.springframework.data.domain.Sort;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.support.oauth2postservice.domain.entity.QMember;
+import com.support.oauth2postservice.domain.entity.QPost;
+import org.springframework.data.querydsl.QSort;
 
 public class PageConstants {
 
   public static final int DEFAULT_PAGE_SIZE = 10;
   public static final int DEFAULT_PAGE_NUMBER = 0;
-  public static final Sort POST_SEARCH_DEFAULT_SORT = Sort.by(Sort.Direction.DESC, Column.OPENED_AT);
-  public static final Sort MEMBER_SEARCH_DEFAULT_SORT = Sort.by(Sort.Direction.DESC, Column.ROLE);
+  public static final QSort POST_SEARCH_DEFAULT_SORT = QSort.by(new OrderSpecifier<>(Order.DESC, QPost.post.openedAt));
+  public static final QSort MEMBER_SEARCH_DEFAULT_SORT = QSort.by(new OrderSpecifier<>(Order.DESC, QMember.member.createdAt));
 
   public static class Column {
 
