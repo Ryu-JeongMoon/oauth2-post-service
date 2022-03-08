@@ -2,14 +2,15 @@ package com.support.oauth2postservice.security.dto;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -20,7 +21,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 @ToString
@@ -41,10 +41,10 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         member.getId(),
         member.getEmail(),
         member.getStatus(),
-        Jwt.withTokenValue("").build(),
-        OidcIdToken.withTokenValue("").build(),
-        new ConcurrentHashMap<>(),
-        new ConcurrentHashMap<>(),
+        Jwt.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
+        OidcIdToken.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
+        Collections.emptyMap(),
+        Collections.emptyMap(),
         Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
     );
   }
@@ -68,7 +68,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         member.getStatus(),
         oAuth2Token,
         OidcIdToken.withTokenValue("").build(),
-        new ConcurrentHashMap<>(),
+        Collections.emptyMap(),
         oAuth2User.getAttributes(),
         Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
     );
@@ -88,21 +88,21 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
   }
 
   public Authentication toAuthentication() {
-    return new OAuth2AuthenticationToken(
+    return new UsernamePasswordAuthenticationToken(
         this,
-        this.authorities,
-        this.attributes.getOrDefault("registrationId", "google").toString()
+        "",
+        this.authorities
     );
   }
 
   @Override
   public Map<String, Object> getAttributes() {
-    return attributes;
+    return Collections.unmodifiableMap(attributes);
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities;
+    return Collections.unmodifiableCollection(authorities);
   }
 
   @Override
@@ -112,7 +112,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
   @Override
   public Map<String, Object> getClaims() {
-    return claims;
+    return Collections.unmodifiableMap(claims);
   }
 
   @Override

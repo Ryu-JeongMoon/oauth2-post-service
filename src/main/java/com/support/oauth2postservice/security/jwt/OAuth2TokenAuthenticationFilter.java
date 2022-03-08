@@ -1,12 +1,11 @@
 package com.support.oauth2postservice.security.jwt;
 
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
-import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -23,25 +22,28 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
-    String accessToken = TokenUtils.resolveAccessToken(req);
-    if (!isOAuth2Token(accessToken)) {
-      fc.doFilter(req, resp);
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    String idToken = TokenUtils.resolveIdToken(request);
+    if (!oAuth2TokenVerifier.isGoogleToken(idToken)) {
+      chain.doFilter(request, response);
       return;
     }
 
-    boolean isRedirected = redirectIfExpired(req, resp);
-    if (isRedirected)
+    setAuthenticationIfValid(idToken);
+
+    boolean isForwarded = forwardIfExpired(request, response);
+    if (isForwarded)
       return;
 
-    fc.doFilter(req, resp);
+    chain.doFilter(request, response);
   }
 
-  private boolean isOAuth2Token(String accessToken) {
-    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.OAUTH2_ACCESS_TOKEN_PREFIX);
+  private void setAuthenticationIfValid(String idToken) {
+    if (oAuth2TokenVerifier.isValid(idToken))
+      SecurityUtils.setAuthentication(oAuth2TokenVerifier.getAuthentication(idToken));
   }
 
-  private boolean redirectIfExpired(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  private boolean forwardIfExpired(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String idToken = TokenUtils.resolveIdToken(request);
     if (oAuth2TokenVerifier.isValid(idToken))
       return false;

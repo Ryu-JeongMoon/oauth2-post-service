@@ -6,5 +6,7 @@ public interface TokenVerifier {
 
   boolean isValid(String token);
 
+  boolean isLocalToken(String accessToken);
+
   Authentication getAuthentication(String token);
 }

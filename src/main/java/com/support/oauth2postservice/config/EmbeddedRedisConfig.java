@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 
 @Slf4j
 @Configuration
-@Profile({"test", "local"})
+@Profile("test")
 @RequiredArgsConstructor
 @EnableConfigurationProperties(RedisProperties.class)
 public class EmbeddedRedisConfig {
@@ -70,7 +70,7 @@ public class EmbeddedRedisConfig {
       while ((line = input.readLine()) != null)
         pidInfo.append(line);
     } catch (Exception e) {
-      log.info("[ERROR] embedded-redis not working");
+      log.info("[FAILED] EMBEDDED-REDIS NOT WORKING");
     }
 
     return !StringUtils.isEmpty(pidInfo.toString());

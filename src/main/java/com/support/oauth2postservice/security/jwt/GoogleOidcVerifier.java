@@ -10,9 +10,12 @@ import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GoogleOidcVerifier implements OAuth2TokenVerifier {
@@ -41,7 +44,14 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
     try {
       return JWT.decode(idToken);
     } catch (JWTDecodeException e) {
+      log.info("[FAILED] :: OAUTH2 JWT PARSING FAILED => {}", e.getMessage());
       throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT, e);
     }
+  }
+
+  @Override
+  public boolean isGoogleToken(String idToken) {
+    DecodedJWT decodedJWT = parse(idToken);
+    return StringUtils.equalsIgnoreCase(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
   }
 }

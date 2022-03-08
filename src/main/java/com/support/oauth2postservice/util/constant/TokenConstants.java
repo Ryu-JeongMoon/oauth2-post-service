@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 public class TokenConstants {
 
   public static final String BEARER_TYPE = "Bearer ";
-  public static final String LOCAL_ACCESS_TOKEN_PREFIX = "eyJraW";
-  public static final String OAUTH2_ACCESS_TOKEN_PREFIX = "ya29";
   public static final String AUTHORIZATION_HEADER = "Authorization";
+
+  public static final String LOCAL_TOKEN_ISSUER = "https://accounts.support.com";
+  public static final String OAUTH2_GOOGLE_TOKEN_ISSUER = "https://accounts.google.com";
 
   public static final String CODE = "code";
   public static final String ERROR = "error";

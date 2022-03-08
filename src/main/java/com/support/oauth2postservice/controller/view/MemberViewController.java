@@ -5,9 +5,11 @@ import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import com.support.oauth2postservice.util.SecurityUtils;
+import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ public class MemberViewController {
   private final MemberService memberService;
 
   @GetMapping(UriConstants.Mapping.MEMBERS)
+  @PreAuthorize(SpELConstants.MANAGER_GOE_ALLOWED)
   public String getMembers(@Valid MemberSearchRequest memberSearchRequest, Model model) {
     Page<MemberReadResponse> memberReadResponses = memberService.searchByCondition(memberSearchRequest);
 

@@ -81,9 +81,10 @@ class EllipticCurveFactoryTest {
     }
 
     @Test
-    @DisplayName("Token 확인 실패 - 빈 토큰 값")
+    @DisplayName("Token 확인 false - 빈 토큰 값")
     void isValid_token_failByEmptyToken() {
-      assertThrows(TokenException.class, () -> ellipticCurveVerifier.isValid(""));
+      boolean validity = ellipticCurveVerifier.isValid("");
+      assertFalse(validity);
     }
   }
 }

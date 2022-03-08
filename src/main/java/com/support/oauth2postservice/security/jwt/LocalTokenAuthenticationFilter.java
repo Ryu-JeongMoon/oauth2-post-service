@@ -3,11 +3,10 @@ package com.support.oauth2postservice.security.jwt;
 import com.support.oauth2postservice.util.CookieUtils;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
-import com.support.oauth2postservice.util.constant.TokenConstants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
@@ -26,36 +26,36 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
     String accessToken = TokenUtils.resolveAccessToken(req);
-    if (!isLocalToken(accessToken)) {
+    if (!tokenVerifier.isLocalToken(accessToken)) {
       fc.doFilter(req, resp);
       return;
     }
 
-    boolean isReissued = reissueIfExpired(req, resp);
-    if (isReissued)
-      return;
+    setAuthenticationIfValid(accessToken);
+
+    reissueIfExpired(req, resp);
 
     fc.doFilter(req, resp);
   }
 
-  private boolean isLocalToken(String accessToken) {
-    return StringUtils.startsWithIgnoreCase(accessToken, TokenConstants.LOCAL_ACCESS_TOKEN_PREFIX);
+  private void setAuthenticationIfValid(String accessToken) {
+    if (tokenVerifier.isValid(accessToken))
+      SecurityUtils.setAuthentication(tokenVerifier.getAuthentication(accessToken));
   }
 
-  private boolean reissueIfExpired(HttpServletRequest request, HttpServletResponse response) {
+  private void reissueIfExpired(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = TokenUtils.resolveAccessToken(request);
     if (tokenVerifier.isValid(accessToken))
-      return false;
+      return;
 
     String refreshToken = TokenUtils.resolveRefreshToken(request);
     if (!tokenVerifier.isValid(refreshToken))
-      return false;
+      return;
 
     Authentication authentication = tokenVerifier.getAuthentication(accessToken);
     TokenResponse tokenResponse = tokenFactory.create(authentication);
 
     CookieUtils.setLocalTokenToBrowser(response, tokenResponse);
     SecurityUtils.setAuthentication(authentication);
-    return true;
   }
 }
