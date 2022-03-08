@@ -10,6 +10,7 @@ import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,10 +30,21 @@ public class EllipticCurveVerifier implements TokenVerifier {
 
   @Override
   public boolean isValid(String token) {
-    SignedJWT signedJWT = parse(token);
     try {
+      SignedJWT signedJWT = parse(token);
       return signedJWT.verify(ed25519Verifier);
-    } catch (JOSEException e) {
+    } catch (JOSEException | TokenException e) {
+      return false;
+    }
+  }
+
+  @Override
+  public boolean isLocalToken(String accessToken) {
+    SignedJWT signedJWT = parse(accessToken);
+    try {
+      String issuer = signedJWT.getJWTClaimsSet().getIssuer();
+      return StringUtils.equalsIgnoreCase(TokenConstants.LOCAL_TOKEN_ISSUER, issuer);
+    } catch (ParseException e) {
       return false;
     }
   }
@@ -41,7 +53,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
     try {
       return SignedJWT.parse(token);
     } catch (ParseException e) {
-      log.info("JWT PARSING ERROR => {}", e.getMessage());
+      log.info("[FAILED] :: ELLIPTIC JWT PARSING FAILED => {}", e.getMessage());
       throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT);
     }
   }

@@ -63,10 +63,11 @@ public class EllipticCurveFactory extends TokenFactory {
 
     String authorities = authentication.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(","));
+        .collect(Collectors.joining(""));
 
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
         .subject(getIdFromAuthentication(authentication))
+        .issuer(TokenConstants.LOCAL_TOKEN_ISSUER)
         .claim(TokenConstants.AUTHORITIES, authorities)
         .claim(TokenConstants.TOKEN_TYPE, TokenConstants.ACCESS_TOKEN)
         .expirationTime(new Date(currentTime + Times.ACCESS_TOKEN_EXPIRATION_MILLIS.getValue()))
@@ -81,10 +82,10 @@ public class EllipticCurveFactory extends TokenFactory {
 
   private String getIdFromAuthentication(Authentication authentication) {
     Object principal = authentication.getPrincipal();
-    if (principal instanceof UserPrincipal) {
-      return ((UserPrincipal) principal).getId();
-    }
-    return null;
+    if (!(principal instanceof UserPrincipal))
+      return "";
+
+    return ((UserPrincipal) principal).getId();
   }
 
   @Override
@@ -93,6 +94,7 @@ public class EllipticCurveFactory extends TokenFactory {
 
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
         .subject(authentication.getName())
+        .issuer(TokenConstants.LOCAL_TOKEN_ISSUER)
         .claim(TokenConstants.TOKEN_TYPE, TokenConstants.REFRESH_TOKEN)
         .expirationTime(new Date(currentTime + Times.REFRESH_TOKEN_EXPIRATION_MILLIS.getValue()))
         .build();
