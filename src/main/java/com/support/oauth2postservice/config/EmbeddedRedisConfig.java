@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 
 @Slf4j
 @Configuration
-@Profile("local")
+@Profile({"test", "local"})
 @RequiredArgsConstructor
 @EnableConfigurationProperties(RedisProperties.class)
 public class EmbeddedRedisConfig {
