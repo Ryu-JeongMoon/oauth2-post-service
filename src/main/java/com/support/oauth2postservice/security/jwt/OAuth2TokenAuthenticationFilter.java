@@ -1,5 +1,8 @@
 package com.support.oauth2postservice.security.jwt;
 
+import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.service.RefreshTokenService;
+import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
@@ -20,6 +23,7 @@ import java.io.IOException;
 public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
+  private final RefreshTokenService refreshTokenService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -48,11 +52,20 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
     if (oAuth2TokenVerifier.isValid(idToken))
       return false;
 
-    String refreshToken = TokenUtils.resolveRefreshToken(request);
+    String refreshToken = getRefreshTokenFromIdToken(idToken);
     request.getRequestDispatcher(
         UriConstants.Mapping.RENEW_OAUTH2_TOKEN_AND_REDIRECT.replace("{registrationId}", "google") +
             "?redirect_uri=" + request.getRequestURI() + "&refresh_token=" + refreshToken
     ).forward(request, response);
     return true;
+  }
+
+  private String getRefreshTokenFromIdToken(String idToken) {
+    OAuth2UserPrincipal principal = (OAuth2UserPrincipal) oAuth2TokenVerifier
+        .getAuthentication(idToken)
+        .getPrincipal();
+
+    RefreshTokenResponse refreshTokenResponse = refreshTokenService.findByEmail(principal.getEmail());
+    return refreshTokenResponse.getTokenValue();
   }
 }
