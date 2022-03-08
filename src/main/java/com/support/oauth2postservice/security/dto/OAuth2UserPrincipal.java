@@ -41,7 +41,10 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         member.getId(),
         member.getEmail(),
         member.getStatus(),
-        Jwt.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
+        Jwt.withTokenValue("NOT_VALID")
+            .header(TokenConstants.BEARER_TYPE, TokenConstants.BEARER_TYPE)
+            .issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER)
+            .build(),
         OidcIdToken.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
         Collections.emptyMap(),
         Collections.emptyMap(),

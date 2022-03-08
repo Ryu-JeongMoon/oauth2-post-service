@@ -51,7 +51,11 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
 
   @Override
   public boolean isGoogleToken(String idToken) {
-    DecodedJWT decodedJWT = parse(idToken);
-    return StringUtils.equalsIgnoreCase(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
+    try {
+      DecodedJWT decodedJWT = parse(idToken);
+      return StringUtils.equalsIgnoreCase(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
+    } catch (TokenException e) {
+      return false;
+    }
   }
 }

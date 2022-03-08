@@ -42,5 +42,8 @@ public class ColumnConstants {
     public static final String UNIQUE_TITLE = "uk_post_title";
     public static final String OPENED_AT = "opened_at";
     public static final String CLOSED_AT = "closed_at";
+
+    public static final String TOKEN_ID = "token_id";
+    public static final String TOKEN_VALUE = "token_value";
   }
 }
