@@ -12,6 +12,10 @@ spring:
         ddl-auto: create-drop
         dialect: org.hibernate.dialect.H2Dialect
 
+  redis:
+    port: 6379
+    host: localhost
+
 logging:
   level:
     com.support.oauth2postservice: debug
