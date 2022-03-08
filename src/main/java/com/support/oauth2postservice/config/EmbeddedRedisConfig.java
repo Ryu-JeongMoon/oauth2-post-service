@@ -28,7 +28,7 @@ public class EmbeddedRedisConfig {
   @PostConstruct
   public void redisServer() throws IOException {
     int port = isRedisRunning() ? findAvailablePort() : redisProperties.getPort();
-    redisServer = new RedisServer(redisProperties.getPort());
+    redisServer = new RedisServer(port);
     redisServer.start();
   }
 
