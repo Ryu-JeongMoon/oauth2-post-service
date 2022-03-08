@@ -16,6 +16,14 @@ public class MemberTestHelper {
   public static final String ADMIN_NICKNAME = "admin";
   public static final String ADMIN_EMAIL = "admin@gmail.com";
 
+  public static Member createCustomUser(String email) {
+    return Member.builder()
+        .nickname(USER_NICKNAME)
+        .email(email)
+        .password(PASSWORD)
+        .build();
+  }
+
   public static Member createUser() {
     return Member.builder()
         .nickname(USER_NICKNAME)

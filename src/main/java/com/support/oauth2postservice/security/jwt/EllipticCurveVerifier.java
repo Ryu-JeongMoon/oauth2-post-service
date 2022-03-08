@@ -40,11 +40,11 @@ public class EllipticCurveVerifier implements TokenVerifier {
 
   @Override
   public boolean isLocalToken(String accessToken) {
-    SignedJWT signedJWT = parse(accessToken);
     try {
+      SignedJWT signedJWT = parse(accessToken);
       String issuer = signedJWT.getJWTClaimsSet().getIssuer();
       return StringUtils.equalsIgnoreCase(TokenConstants.LOCAL_TOKEN_ISSUER, issuer);
-    } catch (ParseException e) {
+    } catch (ParseException | TokenException e) {
       return false;
     }
   }
