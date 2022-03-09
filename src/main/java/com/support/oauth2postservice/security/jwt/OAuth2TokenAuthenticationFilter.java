@@ -5,7 +5,6 @@ import com.support.oauth2postservice.service.RefreshTokenService;
 import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
-import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,8 +34,8 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
     setAuthenticationIfValid(idToken);
 
-    boolean isForwarded = forwardIfExpired(request, response);
-    if (isForwarded)
+    boolean isRedirected = redirectIfExpired(request, response);
+    if (isRedirected)
       return;
 
     chain.doFilter(request, response);
@@ -47,16 +46,15 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
       SecurityUtils.setAuthentication(oAuth2TokenVerifier.getAuthentication(idToken));
   }
 
-  private boolean forwardIfExpired(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  private boolean redirectIfExpired(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String idToken = TokenUtils.resolveIdToken(request);
     if (oAuth2TokenVerifier.isValid(idToken))
       return false;
 
     String refreshToken = getRefreshTokenFromIdToken(idToken);
-    request.getRequestDispatcher(
-        UriConstants.Mapping.RENEW_OAUTH2_TOKEN_AND_REDIRECT.replace("{registrationId}", "google") +
-            "?redirect_uri=" + request.getRequestURI() + "&refresh_token=" + refreshToken
-    ).forward(request, response);
+    String targetUri = String.format(
+        "/oauth2/google/renewal/redirect?redirect_uri=%s&refresh_token=%s", request.getRequestURI(), refreshToken);
+    response.sendRedirect(targetUri);
     return true;
   }
 
