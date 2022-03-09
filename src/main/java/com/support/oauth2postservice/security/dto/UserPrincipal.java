@@ -8,7 +8,6 @@ import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class UserPrincipal implements UserDetails {
   private final Collection<? extends GrantedAuthority> authorities;
 
   public static UserPrincipal from(Member member) {
-    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().toString()));
+    List<GrantedAuthority> authorities = Collections.singletonList(member.getRole());
     return UserPrincipal.of(member.getId(), member.getEmail(), authorities);
   }
 

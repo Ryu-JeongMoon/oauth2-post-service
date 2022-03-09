@@ -10,7 +10,6 @@ import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -48,7 +47,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         OidcIdToken.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
         Collections.emptyMap(),
         Collections.emptyMap(),
-        Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
+        Collections.singletonList(member.getRole())
     );
   }
 
@@ -73,7 +72,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         OidcIdToken.withTokenValue("").build(),
         Collections.emptyMap(),
         oAuth2User.getAttributes(),
-        Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
+        Collections.singletonList(member.getRole())
     );
   }
 
@@ -86,7 +85,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         oidcUser.getIdToken(),
         oidcUser.getClaims(),
         oidcUser.getAttributes(),
-        Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
+        Collections.singletonList(member.getRole())
     );
   }
 
