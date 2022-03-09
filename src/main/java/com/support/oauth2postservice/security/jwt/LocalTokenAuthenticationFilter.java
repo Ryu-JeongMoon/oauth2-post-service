@@ -55,7 +55,7 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
     Authentication authentication = tokenVerifier.getAuthentication(accessToken);
     TokenResponse tokenResponse = tokenFactory.create(authentication);
 
-    CookieUtils.setLocalTokenToBrowser(response, tokenResponse);
+    CookieUtils.addLocalTokenToBrowser(response, tokenResponse);
     SecurityUtils.setAuthentication(authentication);
   }
 }

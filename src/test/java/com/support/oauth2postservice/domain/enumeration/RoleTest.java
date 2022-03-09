@@ -9,9 +9,9 @@ class RoleTest {
 
   @Test
   @DisplayName("key 출력 확인")
-  void getKey() {
-    assertThat(Role.USER.getKey()).isEqualTo("ROLE_USER");
-    assertThat(Role.ADMIN.getKey()).isEqualTo("ROLE_ADMIN");
-    assertThat(Role.MANAGER.getKey()).isEqualTo("ROLE_MANAGER");
+  void getAuthority() {
+    assertThat(Role.USER.getAuthority()).isEqualTo("ROLE_USER");
+    assertThat(Role.ADMIN.getAuthority()).isEqualTo("ROLE_ADMIN");
+    assertThat(Role.MANAGER.getAuthority()).isEqualTo("ROLE_MANAGER");
   }
 }

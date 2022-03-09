@@ -19,10 +19,10 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CookieUtils {
 
-  public static void setLocalTokenToBrowser(HttpServletResponse response, TokenResponse tokenResponse) {
+  public static void addLocalTokenToBrowser(HttpServletResponse response, TokenResponse tokenResponse) {
     String accessToken = tokenResponse.getAccessToken();
     if (StringUtils.isNotBlank(accessToken)) {
-      CookieUtils.addCookie(
+      addCookie(
           response,
           TokenConstants.ACCESS_TOKEN,
           TokenConstants.BEARER_TYPE + accessToken,
@@ -31,7 +31,7 @@ public class CookieUtils {
 
     String refreshToken = tokenResponse.getRefreshToken();
     if (StringUtils.isNotBlank(refreshToken)) {
-      CookieUtils.addCookie(
+      addCookie(
           response,
           TokenConstants.REFRESH_TOKEN,
           refreshToken,
@@ -39,10 +39,10 @@ public class CookieUtils {
     }
   }
 
-  public static void setOAuth2TokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
+  public static void addOAuth2TokenToBrowser(HttpServletResponse response, OAuth2TokenResponse renewedTokenResponse) {
     String accessToken = renewedTokenResponse.getAccessToken();
     if (StringUtils.isNotBlank(accessToken)) {
-      CookieUtils.addCookie(
+      addCookie(
           response,
           TokenConstants.ACCESS_TOKEN,
           TokenConstants.BEARER_TYPE + accessToken,
@@ -51,7 +51,7 @@ public class CookieUtils {
 
     String oidcIdToken = renewedTokenResponse.getOidcIdToken();
     if (StringUtils.isNotBlank(oidcIdToken)) {
-      CookieUtils.addCookie(
+      addCookie(
           response,
           TokenConstants.ID_TOKEN,
           oidcIdToken,

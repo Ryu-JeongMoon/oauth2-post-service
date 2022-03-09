@@ -23,8 +23,8 @@ public class RoleHierarchyConfig {
   }
 
   private String getHierarchyFormat() {
-    return Role.ADMIN.getKey() + " > " + Role.MANAGER.getKey() + "\n" +
-        Role.MANAGER.getKey() + " > " + Role.USER.getKey();
+    return Role.ADMIN.getAuthority() + " > " + Role.MANAGER.getAuthority() + "\n" +
+        Role.MANAGER.getAuthority() + " > " + Role.USER.getAuthority();
   }
 }
 
