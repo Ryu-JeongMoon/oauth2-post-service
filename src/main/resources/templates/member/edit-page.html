@@ -1,71 +1,73 @@
 <!DOCTYPE html>
-<html lang='en' xmlns:th='http://www.thymeleaf.org'>
-<head th:replace='/fragments/header.html :: fragment-header'></head>
-<body>
-<div class='container'>
-  <form class='row g-3' th:object='${memberEditRequest}'>
-    <div class='col-12'>
-      <label class='form-label' for='id'>ID</label>
-      <input class='form-control' id='id' readonly th:field='${memberReadResponse.id}' th:id='id'>
-    </div>
-    <div class='col-12'>
-      <label class='form-label' for='email'>Email</label>
-      <input class='form-control' id='email' readonly th:field='${memberReadResponse.email}' th:id='email'>
-    </div>
-    <div class='col-12'>
-      <label class='form-label' for='nickname'>Nickname</label>
-      <input class='form-control' id='nickname' th:field='*{nickname}' th:id='nickname'>
-    </div>
-    <div class='col-12'>
-      <label class='form-label' for='password'>Password</label>
-      <input class='form-control' id='password' th:field='*{password}' th:id='password'>
-    </div>
-    <div class='col-12'>
-      <label class='form-label' for='role'>Role</label>
-      <select class='form-control dropdown-toggle' id='role' required th:placeholder='*{role}'>
-        <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
-                th:text='${eachRole.name()}'
-                th:selected='${eachRole == memberEditRequest.role}'></option>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
+      layout:decorate='~{layout}'>
 
-      </select>
+<th:block layout:fragment='contentFragment'>
+  <div class='container'>
+    <form class='row g-3' th:object='${memberEditRequest}'>
+      <div class='col-12'>
+        <label class='form-label' for='id'>ID</label>
+        <input class='form-control' id='id' readonly th:field='${memberReadResponse.id}' th:id='id'>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='email'>Email</label>
+        <input class='form-control' id='email' readonly th:field='${memberReadResponse.email}' th:id='email'>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='nickname'>Nickname</label>
+        <input class='form-control' id='nickname' th:field='*{nickname}' th:id='nickname'>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='password'>Password</label>
+        <input class='form-control' id='password' th:field='*{password}' th:id='password'>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='role'>Role</label>
+        <select class='form-control dropdown-toggle' id='role' required th:placeholder='*{role}'>
+          <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
+                  th:text='${eachRole.name()}'
+                  th:selected='${eachRole == memberEditRequest.role}'></option>
+
+        </select>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='status'>Status</label>
+        <select class='form-control' id='status' name='change-status' th:id='status'>
+          <option th:each='eachStatus : ${T(com.support.oauth2postservice.domain.enumeration.Status).values()}'
+                  th:text='${eachStatus.name()}'
+                  th:selected='${eachStatus == memberEditRequest.status}'></option>
+        </select>
+      </div>
+      <div class='col-12'>
+        <label class='form-label' for='auth-provider'>Auth-Provider</label>
+        <input class='form-control' id='auth-provider' readonly
+               th:field='${memberReadResponse.latestAuthProvider}' th:id='auth-provider'>
+      </div>
+    </form>
+    <div class='col-12 mt-4' style='text-align: center;'>
+      <button class='btn btn-primary' th:onclick='requestEdit()'>수정 요청</button>
     </div>
-    <div class='col-12'>
-      <label class='form-label' for='status'>Status</label>
-      <select class='form-control' id='status' name='change-status' th:id='status'>
-        <option th:each='eachStatus : ${T(com.support.oauth2postservice.domain.enumeration.Status).values()}'
-                th:text='${eachStatus.name()}'
-                th:selected='${eachStatus == memberEditRequest.status}'></option>
-      </select>
-    </div>
-    <div class='col-12'>
-      <label class='form-label' for='auth-provider'>Auth-Provider</label>
-      <input class='form-control' id='auth-provider' readonly
-             th:field='${memberReadResponse.latestAuthProvider}' th:id='auth-provider'>
-    </div>
-  </form>
-  <div class='col-12 mt-4' style='text-align: center;'>
-    <button class='btn btn-primary' th:onclick='requestEdit()'>수정 요청</button>
   </div>
-</div>
-</body>
+  <script>
+    function requestEdit() {
+      const api_with_id = '/members/edit-page';
+      const data = {
+        id: $('#id').val(),
+        nickname: $('#nickname').val(),
+        password: $('#password').val(),
+        role: $('#role').val(),
+        status: $('#status').val(),
+      };
 
-<script>
-  function requestEdit() {
-    const api_with_id = '/members/edit-page';
-    const data = {
-      id: $('#id').val(),
-      nickname: $('#nickname').val(),
-      password: $('#password').val(),
-      role: $('#role').val(),
-      status: $('#status').val(),
-    };
+      const patch_data = JSON.stringify(data);
 
-    const patch_data = JSON.stringify(data);
-
-    $.patch(
-      api_with_id, patch_data,
-      () => alert('성공'), () => alert('실패'),
-    );
-  }
-</script>
+      $.patch(
+        api_with_id, patch_data,
+        () => alert('성공'), () => alert('실패'),
+      );
+    }
+  </script>
+</th:block>
 </html>
