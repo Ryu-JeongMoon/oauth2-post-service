@@ -1,13 +1,17 @@
 package com.support.oauth2postservice.util;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,5 +43,33 @@ class SecurityUtilsTest {
     String email = SecurityUtils.getEmailFromCurrentUser();
 
     assertThat(email).isNotBlank();
+  }
+
+  @Test
+  @DisplayName("Authentication 반환 성공")
+  void getNullSafePrincipal() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    assertThat(authentication).isNotNull();
+  }
+
+  @Test
+  @DisplayName("Authentication 세팅 성공")
+  void setAuthentication() {
+    // given
+    Member admin = MemberTestHelper.createAdmin();
+    UserPrincipal principal = UserPrincipal.from(admin);
+
+    // when
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(principal, "", Collections.singletonList(Role.ADMIN));
+    SecurityUtils.setAuthentication(authenticationToken);
+
+    // then
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    assertThat(authentication).isNotNull();
+
+    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    assertThat(userPrincipal.getEmail()).isEqualTo(admin.getEmail());
   }
 }
