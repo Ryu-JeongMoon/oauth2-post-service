@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang='en' xmlns:th='http://www.thymeleaf.org'>
-<head th:replace='/fragments/header.html :: fragment-header'>
-  <title>Home</title>
-</head>
-<body>
-<div class='container'>
-  <h1>Hi</h1>
-  <br />
-  <h2 th:text='${#response.getHeader("Authorization")}'></h2>
-</div>
-</body>
+<html lang='en'
+      xmlns='http://www.w3.org/1999/xhtml'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
+      layout:decorate='~{layout}'>
 
-<script>
-</script>
+<th:block layout:fragment='contentFragment'>
+  <div class='container'>
+    <h1>Hi</h1>
+  </div>
+</th:block>
+<!--</body>-->
+
 </html>
