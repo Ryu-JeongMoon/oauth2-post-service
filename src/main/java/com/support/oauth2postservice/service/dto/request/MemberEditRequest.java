@@ -2,7 +2,10 @@ package com.support.oauth2postservice.service.dto.request;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import lombok.*;
+
+import javax.validation.constraints.Size;
 
 @Getter
 @ToString
@@ -11,8 +14,10 @@ public class MemberEditRequest {
 
   private String id;
 
+  @Size(max = ColumnConstants.Length.NICKNAME)
   private String nickname;
 
+  @Size(max = ColumnConstants.Length.DEFAULT_MAX)
   private String password;
 
   private Role role;

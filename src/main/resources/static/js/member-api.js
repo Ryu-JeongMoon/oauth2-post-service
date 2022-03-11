@@ -19,3 +19,18 @@ function requestEdit() {
 function moveToEditPage(memberId) {
   location.href = '/members/' + memberId;
 }
+
+function requestLogin() {
+  const api_with_id = '/members';
+
+  const data = {
+    email: $('#emailInput').val(),
+    password: $('#passwordInput').val(),
+  };
+
+  const patch_data = JSON.stringify(data);
+
+  $.post(api_with_id, patch_data,
+    () => alert('성공'), () => alert('로그인 실패~~!'),
+  );
+}

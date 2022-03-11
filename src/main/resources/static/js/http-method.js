@@ -6,6 +6,21 @@
     throw new Error('jQuery 라이브러리를 호출해야 사용 가능합니다.');
   }
 
+  $.post = function(api_with_id, put_data, success, fail) {
+    $.ajax({
+      method: 'POST',
+      url: api_with_id,
+      data: put_data,
+      contentType: 'application/json',
+    })
+      .then(
+        $.type(success) === 'function' ? success : function() {
+        },
+        $.type(fail) === 'function' ? fail : function() {
+        },
+      );
+  };
+
   if (!$.put) {
     $.put = function(api_with_id, put_data, success, fail) {
       $.ajax({
