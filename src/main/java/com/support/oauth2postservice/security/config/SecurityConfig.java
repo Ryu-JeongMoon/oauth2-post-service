@@ -5,6 +5,7 @@ import com.support.oauth2postservice.security.service.CustomOAuth2UserService;
 import com.support.oauth2postservice.security.service.CustomOidcUserService;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
+        .logout().disable()
         .formLogin().disable()
         .httpBasic().disable()
         .sessionManagement()
