@@ -50,24 +50,8 @@
       <button class='btn btn-primary' th:onclick='requestEdit()'>수정 요청</button>
     </div>
   </div>
-  <script>
-    function requestEdit() {
-      const api_with_id = '/members/edit-page';
-      const data = {
-        id: $('#id').val(),
-        nickname: $('#nickname').val(),
-        password: $('#password').val(),
-        role: $('#role').val(),
-        status: $('#status').val(),
-      };
-
-      const patch_data = JSON.stringify(data);
-
-      $.patch(
-        api_with_id, patch_data,
-        () => alert('성공'), () => alert('실패'),
-      );
-    }
-  </script>
+  <th:block layout:fragment='customScriptFragment'>
+    <script th:src='@{/js/member-api.js}' type='text/javascript'></script>
+  </th:block>
 </th:block>
 </html>
