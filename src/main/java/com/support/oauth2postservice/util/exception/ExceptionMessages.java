@@ -13,6 +13,7 @@ public class ExceptionMessages {
     public static final String ALREADY_LEFT = "이미 탈퇴한 회원입니다";
     public static final String ACCESS_DENIED = "요청 권한이 없습니다";
     public static final String PASSWORD_NOT_ENCODED = "비밀번호 암호화에 실패했습니다";
+    public static final String PASSWORD_NOT_VALID = "비밀번호가 맞지 않습니다";
   }
 
   public static class Post {

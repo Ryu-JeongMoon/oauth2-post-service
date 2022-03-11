@@ -6,8 +6,10 @@ import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,9 +56,16 @@ public class MemberService {
     Member member = memberRepository.findActive(memberEditRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
-    String encodedPassword = passwordEncoder.encode(memberEditRequest.getPassword());
-    member.changeToEncodedPassword(encodedPassword);
+    changePasswordIfValid(member, memberEditRequest.getPassword());
     member.changeBy(memberEditRequest.getNickname(), memberEditRequest.getRole(), memberEditRequest.getStatus());
+  }
+
+  private void changePasswordIfValid(Member member, String password) {
+    if (StringUtils.isBlank(password) || password.length() < ColumnConstants.Length.PASSWORD_MIN)
+      return;
+
+    String encodedPassword = passwordEncoder.encode(password);
+    member.changeToEncodedPassword(encodedPassword);
   }
 
   @Transactional
