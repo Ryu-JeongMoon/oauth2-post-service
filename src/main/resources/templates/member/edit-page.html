@@ -8,8 +8,7 @@
   <div class='container'>
     <form class='row g-3' th:object='${memberEditRequest}'>
       <div class='col-12'>
-        <label class='form-label' for='id'>ID</label>
-        <input class='form-control' id='id' readonly th:field='${memberReadResponse.id}' th:id='id'>
+        <input class='form-control' id='id' readonly th:field='${memberReadResponse.id}' th:id='id' hidden>
       </div>
       <div class='col-12'>
         <label class='form-label' for='email'>Email</label>
@@ -39,11 +38,6 @@
                   th:text='${eachStatus.name()}'
                   th:selected='${eachStatus == memberEditRequest.status}'></option>
         </select>
-      </div>
-      <div class='col-12'>
-        <label class='form-label' for='auth-provider'>Auth-Provider</label>
-        <input class='form-control' id='auth-provider' readonly
-               th:field='${memberReadResponse.latestAuthProvider}' th:id='auth-provider'>
       </div>
     </form>
     <div class='col-12 mt-4' style='text-align: center;'>
