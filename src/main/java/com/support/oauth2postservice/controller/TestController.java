@@ -31,6 +31,11 @@ public class TestController {
     return "home";
   }
 
+  @GetMapping("/index")
+  public String index() {
+    return "index";
+  }
+
   @GetMapping("/error-please")
   public void errorBomb() {
     throw new IllegalArgumentException("YAHOO ~~~~~");
@@ -62,5 +67,10 @@ public class TestController {
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public String adminOnly() {
     return "admin";
+  }
+
+  @GetMapping("/sec")
+  public String checkSec() {
+    return "sec";
   }
 }
