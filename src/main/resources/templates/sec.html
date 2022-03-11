@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang='en'
+      xmlns:th='http://www.thymeleaf.org'
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset='UTF-8'>
+  <title>Title</title>
+</head>
+<body>
+<h1 th:text='yaho'></h1>
+<p th:text='${#authentication.name}'></p>
+<p th:text='${#authentication.authorities}'></p>
+<p th:text='${#authentication.authenticated}'></p>
+<div sec:authentication='name'></div>
+</body>
+</html>
