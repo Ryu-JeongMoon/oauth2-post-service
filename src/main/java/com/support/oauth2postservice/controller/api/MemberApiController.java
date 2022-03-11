@@ -3,9 +3,11 @@ package com.support.oauth2postservice.controller.api;
 import com.support.oauth2postservice.service.MemberService;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ public class MemberApiController {
   private final MemberService memberService;
 
   @PostMapping(UriConstants.Mapping.MEMBERS)
+  @PreAuthorize(SpELConstants.ANONYMOUS_OR_ADMIN)
   public ResponseEntity<Void> join(@RequestBody @Valid MemberSignupRequest memberSignupRequest) {
     memberService.join(memberSignupRequest);
 
