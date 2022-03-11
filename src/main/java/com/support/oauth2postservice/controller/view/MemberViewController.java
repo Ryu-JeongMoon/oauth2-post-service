@@ -34,6 +34,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_SINGLE)
+  @PreAuthorize(SpELConstants.OWNER_OR_MANAGER_GOE)
   public String getMember(@PathVariable String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
@@ -42,6 +43,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MY_PAGE)
+  @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
     String id = SecurityUtils.getIdFromCurrentUser();
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
@@ -51,6 +53,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.EDIT_PAGE)
+  @PreAuthorize(SpELConstants.OWNER_OR_MANAGER_GOE)
   public String editPage(@RequestParam String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
