@@ -53,7 +53,6 @@ public class EllipticCurveVerifier implements TokenVerifier {
     try {
       return SignedJWT.parse(token);
     } catch (ParseException e) {
-      log.info("[FAILED] :: ELLIPTIC JWT PARSING FAILED => {}", e.getMessage());
       throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT);
     }
   }

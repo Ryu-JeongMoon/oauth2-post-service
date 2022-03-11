@@ -44,7 +44,6 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
     try {
       return JWT.decode(idToken);
     } catch (JWTDecodeException e) {
-      log.info("[FAILED] :: OAUTH2 JWT PARSING FAILED => {}", e.getMessage());
       throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT, e);
     }
   }
