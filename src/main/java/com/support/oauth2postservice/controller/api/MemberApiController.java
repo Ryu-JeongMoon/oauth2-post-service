@@ -32,6 +32,7 @@ public class MemberApiController {
   }
 
   @PatchMapping(UriConstants.Mapping.EDIT_PAGE)
+  @PreAuthorize("@checker.isOwner(#memberEditRequest.id) or " + SpELConstants.MANAGER_GOE)
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
     memberService.edit(memberEditRequest);
 
