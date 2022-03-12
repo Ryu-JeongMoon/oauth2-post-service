@@ -12,7 +12,25 @@ function requestEdit() {
 
   $.patch(
     api_with_id, patch_data,
-    () => alert('성공'), () => alert('실패'),
+    () => {
+      Swal.fire({
+        icon: 'success',
+        title: '수정 되었습니다',
+        text: '상세 페이지로 이동합니다',
+      }).then(() => {
+        setTimeout(() => history.back(), 100);
+      });
+
+    },
+    () => {
+      Swal.fire({
+        icon: 'error',
+        title: '수정할 수 없습니다',
+        text: '요청 권한이 없습니다',
+      }).then(() => {
+        setTimeout(() => history.back(), 100);
+      });
+    },
   );
 }
 
