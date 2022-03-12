@@ -12,6 +12,7 @@ import com.support.oauth2postservice.service.OAuth2TokenService;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import org.apache.commons.lang3.BooleanUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,7 @@ class OAuth2TokenApiControllerTest extends AbstractWebMvcTest {
   @SpyBean
   MockWebClientWrapper mockWebClientWrapper;
 
+  @Disabled
   @Nested
   @DisplayName("Access Token 요청")
   class AccessTokenRequestTest {

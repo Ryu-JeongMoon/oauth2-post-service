@@ -1,11 +1,17 @@
 package com.support.oauth2postservice.controller.view;
 
+import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.security.jwt.OAuth2TokenVerifier;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.service.OAuth2TokenService;
+import com.support.oauth2postservice.service.RefreshTokenService;
 import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +24,36 @@ import javax.servlet.http.HttpServletResponse;
 public class OAuth2TokenViewController {
 
   private final OAuth2TokenService oAuth2TokenService;
+  private final OAuth2TokenVerifier oAuth2TokenVerifier;
+  private final RefreshTokenService refreshTokenService;
+
+  @GetMapping(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN)
+  public String loginIfRefreshTokenNotExists(
+      @PathVariable String registrationId,
+      @RequestParam String code,
+      HttpServletResponse response) {
+
+    OAuth2TokenResponse oAuth2TokenResponse = oAuth2TokenService.getOAuth2Token(registrationId, code);
+    String oidcIdToken = oAuth2TokenResponse.getOidcIdToken();
+
+    Authentication authentication = oAuth2TokenVerifier.getAuthentication(oidcIdToken);
+    SecurityUtils.setAuthentication(authentication);
+    CookieUtils.addOAuth2TokenToBrowser(response, oAuth2TokenResponse);
+
+    OAuth2UserPrincipal principal = (OAuth2UserPrincipal) authentication.getPrincipal();
+    refreshTokenService.save(principal, oAuth2TokenResponse.getRefreshToken());
+
+    if (isUser(principal))
+      return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;
+    else
+      return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.MEMBERS;
+  }
+
+  private boolean isUser(OAuth2UserPrincipal principal) {
+    return principal.getAuthorities()
+        .stream()
+        .anyMatch(Role.USER::equals);
+  }
 
   @GetMapping(UriConstants.Mapping.RENEW_OAUTH2_TOKEN_AND_REDIRECT)
   public String renewAndRedirect(
