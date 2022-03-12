@@ -1,6 +1,7 @@
 package com.support.oauth2postservice.service.dto.response;
 
 import com.support.oauth2postservice.domain.entity.RefreshToken;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import lombok.*;
 
 @Getter
@@ -14,11 +15,14 @@ public class RefreshTokenResponse {
 
   private String tokenValue;
 
+  private AuthProvider authProvider;
+
   @Builder
-  public RefreshTokenResponse(String id, String memberId, String tokenValue) {
+  public RefreshTokenResponse(String id, String memberId, String tokenValue, AuthProvider authProvider) {
     this.id = id;
     this.memberId = memberId;
     this.tokenValue = tokenValue;
+    this.authProvider = authProvider;
   }
 
   public static RefreshTokenResponse from(RefreshToken refreshToken) {
@@ -26,6 +30,7 @@ public class RefreshTokenResponse {
         .id(refreshToken.getId())
         .memberId(refreshToken.getMember().getId())
         .tokenValue(refreshToken.getTokenValue())
+        .authProvider(refreshToken.getAuthProvider())
         .build();
   }
 }

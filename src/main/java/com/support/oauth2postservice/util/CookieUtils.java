@@ -26,7 +26,7 @@ public class CookieUtils {
           response,
           TokenConstants.ACCESS_TOKEN,
           TokenConstants.BEARER_TYPE + accessToken,
-          Times.ACCESS_TOKEN_EXPIRATION_SECONDS.getValue());
+          Times.COOKIE_EXPIRATION_SECONDS.getValue());
     }
 
     String refreshToken = tokenResponse.getRefreshToken();
@@ -35,7 +35,7 @@ public class CookieUtils {
           response,
           TokenConstants.REFRESH_TOKEN,
           refreshToken,
-          Times.REFRESH_TOKEN_EXPIRATION_SECONDS.getValue());
+          Times.COOKIE_EXPIRATION_SECONDS.getValue());
     }
   }
 
@@ -46,7 +46,7 @@ public class CookieUtils {
           response,
           TokenConstants.ACCESS_TOKEN,
           TokenConstants.BEARER_TYPE + accessToken,
-          Times.ACCESS_TOKEN_EXPIRATION_SECONDS.getValue());
+          Times.COOKIE_EXPIRATION_SECONDS.getValue());
     }
 
     String oidcIdToken = renewedTokenResponse.getOidcIdToken();
@@ -55,14 +55,8 @@ public class CookieUtils {
           response,
           TokenConstants.ID_TOKEN,
           oidcIdToken,
-          Times.ID_TOKEN_EXPIRATION_SECONDS.getValue());
+          Times.COOKIE_EXPIRATION_SECONDS.getValue());
     }
-  }
-
-  public static void clearTokenFromBrowser(HttpServletRequest request, HttpServletResponse response) {
-    deleteCookie(request, response, TokenConstants.ID_TOKEN);
-    deleteCookie(request, response, TokenConstants.ACCESS_TOKEN);
-    deleteCookie(request, response, TokenConstants.REFRESH_TOKEN);
   }
 
   public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {

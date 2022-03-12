@@ -16,11 +16,6 @@ public class OAuth2TokenApiController {
 
   private final OAuth2TokenService oAuth2TokenService;
 
-  @GetMapping(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN)
-  public OAuth2TokenResponse getOAuth2Token(@PathVariable String registrationId, @RequestParam String code) {
-    return oAuth2TokenService.getOAuth2Token(registrationId, code);
-  }
-
   @GetMapping(UriConstants.Mapping.VALIDATE_OAUTH2_TOKEN)
   public boolean validate(@RequestParam(TokenConstants.ID_TOKEN) String idToken) {
     return oAuth2TokenService.validate(idToken);

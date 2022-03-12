@@ -45,5 +45,7 @@ public class ColumnConstants {
 
     public static final String TOKEN_ID = "token_id";
     public static final String TOKEN_VALUE = "token_value";
+    public static final String AUTH_PROVIDER = "auth_provider";
+    public static final String EXPIRED_AT = "expired_at";
   }
 }

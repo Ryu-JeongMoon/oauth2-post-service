@@ -7,6 +7,7 @@ import com.support.oauth2postservice.security.jwt.TokenResponse;
 import com.support.oauth2postservice.service.dto.request.LoginRequest;
 import com.support.oauth2postservice.util.CookieUtils;
 import com.support.oauth2postservice.util.SecurityUtils;
+import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,6 +48,6 @@ public class AuthService {
 
   public void logout(HttpServletRequest request, HttpServletResponse response) {
     SecurityContextHolder.clearContext();
-    CookieUtils.clearTokenFromBrowser(request, response);
+    CookieUtils.deleteCookie(request, response, TokenConstants.ID_TOKEN);
   }
 }
