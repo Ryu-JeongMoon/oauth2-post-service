@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.util;
 
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
@@ -31,6 +32,23 @@ public class SecurityUtils {
       return ((UserPrincipal) principal).getEmail();
     else if (principal instanceof OAuth2UserPrincipal)
       return ((OAuth2UserPrincipal) principal).getEmail();
+
+    throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
+  }
+
+  public static Role getRoleFromCurrentUser() {
+    Object principal = getNullSafePrincipal();
+
+    if (principal instanceof UserPrincipal)
+      return ((UserPrincipal) principal).getAuthorities()
+          .stream()
+          .findAny()
+          .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE));
+    else if (principal instanceof OAuth2UserPrincipal)
+      return ((OAuth2UserPrincipal) principal).getAuthorities()
+          .stream()
+          .findAny()
+          .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE));
 
     throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
   }

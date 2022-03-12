@@ -4,6 +4,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.crypto.Ed25519Verifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -62,8 +62,8 @@ public class EllipticCurveVerifier implements TokenVerifier {
     JWTClaimsSet claimsSet = parse(accessToken).getJWTClaimsSet();
     String id = claimsSet.getStringClaim(TokenConstants.USER_ID);
     String email = claimsSet.getSubject();
-    List<SimpleGrantedAuthority> authorities =
-        Collections.singletonList(new SimpleGrantedAuthority(claimsSet.getStringClaim(TokenConstants.AUTHORITIES)));
+    String authority = claimsSet.getStringClaim(TokenConstants.AUTHORITIES);
+    List<Role> authorities = Collections.singletonList(Role.valueOfCaseInsensitively(authority));
 
     return UserPrincipal
         .of(id, email, authorities)

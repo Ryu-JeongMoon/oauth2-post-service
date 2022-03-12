@@ -1,18 +1,17 @@
 package com.support.oauth2postservice.security.dto;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Getter
 @ToString
@@ -22,14 +21,13 @@ public class UserPrincipal implements UserDetails {
   private final String id;
   private final String email;
   private final Status status;
-  private final Collection<? extends GrantedAuthority> authorities;
+  private final Collection<Role> authorities;
 
   public static UserPrincipal from(Member member) {
-    List<GrantedAuthority> authorities = Collections.singletonList(member.getRole());
-    return UserPrincipal.of(member.getId(), member.getEmail(), authorities);
+    return UserPrincipal.of(member.getId(), member.getEmail(), Collections.singletonList(member.getRole()));
   }
 
-  public static UserPrincipal of(String id, String email, Collection<? extends GrantedAuthority> authorities) {
+  public static UserPrincipal of(String id, String email, Collection<Role> authorities) {
     return new UserPrincipal(id, email, Status.ACTIVE, authorities);
   }
 
@@ -48,7 +46,7 @@ public class UserPrincipal implements UserDetails {
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<Role> getAuthorities() {
     return authorities;
   }
 
