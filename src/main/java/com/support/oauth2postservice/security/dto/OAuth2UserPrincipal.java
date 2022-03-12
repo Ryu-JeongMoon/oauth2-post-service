@@ -1,6 +1,7 @@
 package com.support.oauth2postservice.security.dto;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
@@ -33,7 +34,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
   private final OidcIdToken oidcIdToken;
   private final Map<String, Object> claims;
   private final Map<String, Object> attributes;
-  private final Collection<? extends GrantedAuthority> authorities;
+  private final Collection<Role> authorities;
 
   public static OAuth2UserPrincipal from(Member member) {
     return new OAuth2UserPrincipal(
@@ -103,7 +104,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<Role> getAuthorities() {
     return Collections.unmodifiableCollection(authorities);
   }
 
