@@ -1,12 +1,14 @@
 package com.support.oauth2postservice.domain.entity;
 
 import com.support.oauth2postservice.domain.BaseEntity;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,12 +27,22 @@ public class RefreshToken extends BaseEntity {
   private Member member;
 
   @EqualsAndHashCode.Include
-  @Column(name = ColumnConstants.Name.TOKEN_VALUE)
+  @Column(name = ColumnConstants.Name.TOKEN_VALUE, nullable = false)
   private String tokenValue;
 
+  @Column(name = ColumnConstants.Name.EXPIRED_AT)
+  private LocalDateTime expiredAt;
+
+  @EqualsAndHashCode.Include
+  @Enumerated(EnumType.STRING)
+  @Column(name = ColumnConstants.Name.AUTH_PROVIDER, length = ColumnConstants.Length.DEFAULT_STRING, nullable = false)
+  private AuthProvider authProvider;
+
   @Builder
-  public RefreshToken(Member member, String tokenValue) {
+  public RefreshToken(Member member, LocalDateTime expiredAt, String tokenValue, AuthProvider authProvider) {
     this.member = member;
+    this.expiredAt = expiredAt;
     this.tokenValue = tokenValue;
+    this.authProvider = authProvider;
   }
 }
