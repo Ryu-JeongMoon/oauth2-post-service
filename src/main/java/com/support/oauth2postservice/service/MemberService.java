@@ -61,8 +61,11 @@ public class MemberService {
   }
 
   private void changePasswordIfValid(Member member, String password) {
-    if (StringUtils.isBlank(password) || password.length() < ColumnConstants.Length.PASSWORD_MIN)
+    if (StringUtils.isBlank(password))
       return;
+
+    if (password.length() < ColumnConstants.Length.PASSWORD_MIN)
+      throw new IllegalArgumentException(ExceptionMessages.Member.PASSWORD_WRONG_FORMAT);
 
     String encodedPassword = passwordEncoder.encode(password);
     member.changeToEncodedPassword(encodedPassword);

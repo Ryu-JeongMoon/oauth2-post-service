@@ -99,7 +99,7 @@ public class Member extends BaseEntity {
       this.nickname = nickname;
 
     if (role != null)
-      this.changeRole(role);
+      this.role = role;
 
     if (status != null)
       this.status = status;
@@ -111,10 +111,6 @@ public class Member extends BaseEntity {
 
     this.leftAt = LocalDateTime.now();
     this.status = Status.INACTIVE;
-  }
-
-  public void changeRole(Role role) {
-    this.role = role;
   }
 
   public void changeLatestAuthProvider(AuthProvider latestAuthProvider) {

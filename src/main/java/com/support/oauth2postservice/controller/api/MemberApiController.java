@@ -1,12 +1,16 @@
 package com.support.oauth2postservice.controller.api;
 
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.service.MemberService;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
+import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +36,17 @@ public class MemberApiController {
   }
 
   @PatchMapping(UriConstants.Mapping.EDIT_PAGE)
-  @PreAuthorize("@checker.isOwner(#memberEditRequest.id) or " + SpELConstants.MANAGER_GOE)
+  @PreAuthorize("@checker.isOwner(#memberEditRequest.id) or " + SpELConstants.MANAGER_OR_ADMIN)
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
-    memberService.edit(memberEditRequest);
+    Role currentUserRole = SecurityUtils.getRoleFromCurrentUser();
+    throwIfNotAuthorized(currentUserRole, memberEditRequest.getRole());
 
+    memberService.edit(memberEditRequest);
     return ResponseEntity.ok().build();
+  }
+
+  private void throwIfNotAuthorized(Role currentUserRole, Role toBeChangedRole) {
+    if (currentUserRole.compareTo(toBeChangedRole) < 0)
+      throw new AccessDeniedException(ExceptionMessages.Member.ACCESS_DENIED);
   }
 }
