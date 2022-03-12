@@ -25,7 +25,7 @@ public class MemberViewController {
   private final MemberService memberService;
 
   @GetMapping(UriConstants.Mapping.MEMBERS)
-  @PreAuthorize(SpELConstants.MANAGER_GOE)
+  @PreAuthorize(SpELConstants.MANAGER_OR_ADMIN)
   public String getMembers(@Valid MemberSearchRequest memberSearchRequest, Model model) {
     Page<MemberReadResponse> memberReadResponses = memberService.searchByCondition(memberSearchRequest);
 
@@ -34,7 +34,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_SINGLE)
-  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_GOE)
+  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_OR_ADMIN)
   public String getMember(@PathVariable String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
@@ -43,8 +43,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MY_PAGE)
-//  @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
-  @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
+  @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
     String id = SecurityUtils.getIdFromCurrentUser();
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
@@ -54,7 +53,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.EDIT_PAGE)
-  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_GOE)
+  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_OR_ADMIN)
   public String editPage(@RequestParam String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
