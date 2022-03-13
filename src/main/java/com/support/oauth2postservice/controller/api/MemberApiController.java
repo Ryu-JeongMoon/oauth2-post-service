@@ -36,7 +36,7 @@ public class MemberApiController {
   }
 
   @PatchMapping(UriConstants.Mapping.EDIT_PAGE)
-  @PreAuthorize("@checker.isOwner(#memberEditRequest.id) or " + SpELConstants.MANAGER_OR_ADMIN)
+  @PreAuthorize("@checker.isAuthorized(#memberEditRequest.id)")
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
     Role currentUserRole = SecurityUtils.getRoleFromCurrentUser();
     throwIfNotAuthorized(currentUserRole, memberEditRequest.getRole());
