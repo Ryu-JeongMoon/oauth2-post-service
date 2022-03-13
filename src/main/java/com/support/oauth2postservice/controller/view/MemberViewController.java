@@ -34,7 +34,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_SINGLE)
-  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_OR_ADMIN)
+  @PreAuthorize("@checker.isAuthorized(#id)")
   public String getMember(@PathVariable String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
@@ -53,7 +53,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.EDIT_PAGE)
-  @PreAuthorize("@checker.isOwner(#id) or " + SpELConstants.MANAGER_OR_ADMIN)
+  @PreAuthorize("@checker.isAuthorized(#id)")
   public String editPage(@RequestParam String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 

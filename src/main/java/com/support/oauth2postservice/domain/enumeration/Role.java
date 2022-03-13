@@ -22,4 +22,8 @@ public enum Role implements GrantedAuthority {
   public String getAuthority() {
     return key;
   }
+
+  public boolean isSuperiorThan(Role role) {
+    return this.compareTo(role) >= 0;
+  }
 }
