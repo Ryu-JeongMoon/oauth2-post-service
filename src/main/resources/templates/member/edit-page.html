@@ -23,7 +23,7 @@
         <label class='form-label' for='password'>Password</label>
         <input class='form-control' id='password' th:field='*{password}' th:id='password'>
       </div>
-      <div class='col-12' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
+      <div class='col-12' sec:authorize='hasRole("ADMIN") or hasRole("MANAGER")'>
         <label class='form-label' for='role'>Role</label>
         <select class='form-control dropdown-toggle' id='role' required th:placeholder='*{role}'>
           <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
