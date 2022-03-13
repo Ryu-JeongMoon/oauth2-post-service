@@ -34,11 +34,9 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
     setAuthenticationIfValid(idToken);
 
-    boolean isRedirected = redirectIfExpired(request, response);
-    if (isRedirected)
-      return;
-
-    chain.doFilter(request, response);
+    boolean isForwarded = forwardIfExpired(request, response);
+    if (!isForwarded)
+      chain.doFilter(request, response);
   }
 
   private void setAuthenticationIfValid(String idToken) {
@@ -46,7 +44,7 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
       SecurityUtils.setAuthentication(oAuth2TokenVerifier.getAuthentication(idToken));
   }
 
-  private boolean redirectIfExpired(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  private boolean forwardIfExpired(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     String idToken = TokenUtils.resolveIdToken(request);
     if (oAuth2TokenVerifier.isValid(idToken))
       return false;
@@ -54,7 +52,7 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
     String refreshToken = getRefreshTokenFromIdToken(idToken);
     String targetUri = String.format(
         "/oauth2/google/renewal/redirect?redirect_uri=%s&refresh_token=%s", request.getRequestURI(), refreshToken);
-    response.sendRedirect(targetUri);
+    request.getRequestDispatcher(targetUri).forward(request, response);
     return true;
   }
 
