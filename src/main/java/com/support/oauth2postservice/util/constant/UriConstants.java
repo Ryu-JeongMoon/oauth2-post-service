@@ -17,9 +17,9 @@ public class UriConstants {
     public static final String LOGOUT = "/logout";
 
     public static final String MEMBERS = "/members";
-    public static final String MEMBERS_SINGLE = "/members/{id}";
-    public static final String MY_PAGE = "/members/my-page";
-    public static final String EDIT_PAGE = "/members/edit-page";
+    public static final String MEMBERS_DETAIL = "/members/{id}";
+    public static final String MEMBERS_EDIT = "/members/edit-page";
+    public static final String MEMBERS_MY_PAGE = "/members/my-page";
 
     public static final String ISSUE_GOOGLE_TOKEN = "/oauth2/google";
     public static final String ISSUE_OAUTH2_TOKEN = "/oauth2/{registrationId}";

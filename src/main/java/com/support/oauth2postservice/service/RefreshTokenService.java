@@ -47,16 +47,19 @@ public class RefreshTokenService {
   }
 
   @Transactional
-  public void save(OAuth2UserPrincipal principal, String tokenValue) {
+  public void saveOrUpdate(OAuth2UserPrincipal principal, String tokenValue) {
     Member member = memberRepository.findActiveByEmail(principal.getEmail())
         .orElseGet(() -> getNewlyRegisteredByPrincipal(principal));
 
-    RefreshToken refreshToken = RefreshToken.builder()
-        .member(member)
-        .tokenValue(tokenValue)
-        .expiredAt(LocalDateTime.now().plusYears(1))
-        .authProvider(member.getInitialAuthProvider())
-        .build();
+    RefreshToken refreshToken = refreshTokenRepository.findByEmail(member.getEmail())
+        .orElseGet(
+            () -> RefreshToken.builder()
+                .member(member)
+                .tokenValue(tokenValue)
+                .expiredAt(LocalDateTime.now().plusYears(1))
+                .authProvider(member.getInitialAuthProvider())
+                .build()
+        );
 
     refreshTokenRepository.save(refreshToken);
   }
