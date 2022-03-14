@@ -1,9 +1,11 @@
 package com.support.oauth2postservice.service.member;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.service.MemberService;
 import com.support.oauth2postservice.service.ServiceTest;
+import com.support.oauth2postservice.service.dto.request.MemberDeleteRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,16 +24,14 @@ import static org.mockito.Mockito.*;
 
 class MemberServiceTest extends ServiceTest {
 
-  private Member member;
-  private MemberSignupRequest userRequest;
-  private MemberReadResponse memberReadResponse;
+  private final Member member = MemberTestHelper.createUser();
+  private final MemberSignupRequest userRequest = MemberTestHelper.createUserRequest();
+  private final MemberReadResponse memberReadResponse = MemberReadResponse.from(member);
+  private final MemberDeleteRequest deleteRequest = MemberTestHelper.createDeleteRequest(USER_ID);
 
   @BeforeEach
   void setUp() {
-    member = MemberTestHelper.createUser();
     member.changeToEncodedPassword(passwordEncoder.encode(member.getPassword()));
-    userRequest = MemberTestHelper.createUserRequest();
-    memberReadResponse = MemberReadResponse.from(member);
     memberService = new MemberService(memberRepository, passwordEncoder);
   }
 
@@ -101,11 +101,23 @@ class MemberServiceTest extends ServiceTest {
   class LeaveTest {
 
     @Test
-    @DisplayName("탈퇴 성공")
-    void leave() {
+    @DisplayName("탈퇴 성공 - 유저 본인")
+    void leave_byOwner() {
       when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(member));
 
-      memberService.leave(USER_ID);
+      memberService.leave(Role.USER, deleteRequest);
+
+      assertThat(member.getLeftAt()).isNotNull();
+
+      verify(memberRepository, times(1)).findActive(USER_ID);
+    }
+
+    @Test
+    @DisplayName("탈퇴 성공 - 관리자")
+    void leave_byAdmin() {
+      when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(member));
+
+      memberService.leave(Role.ADMIN, deleteRequest);
 
       assertThat(member.getLeftAt()).isNotNull();
 
@@ -115,9 +127,9 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("탈퇴 실패 - 존재하지 않는 ID")
     void leave_failByWrongId() {
-      when(memberRepository.findActive(AdditionalMatchers.not(eq(USER_ID)))).thenThrow(IllegalArgumentException.class);
+      when(memberRepository.findActive(AdditionalMatchers.not(eq(MANAGER_ID)))).thenThrow(IllegalArgumentException.class);
 
-      assertThrows(IllegalArgumentException.class, () -> memberService.leave(MANAGER_ID));
+      assertThrows(IllegalArgumentException.class, () -> memberService.leave(Role.USER, deleteRequest));
 
       verify(memberRepository, times(1)).findActive(any());
     }
@@ -129,7 +141,22 @@ class MemberServiceTest extends ServiceTest {
 
       when(memberRepository.findActive(any())).thenReturn(Optional.of(member));
 
-      assertThrows(IllegalStateException.class, () -> memberService.leave(any()));
+      assertThrows(IllegalStateException.class, () -> memberService.leave(Role.USER, deleteRequest));
+    }
+
+    @Test
+    @DisplayName("탈퇴 실패 - 비밀번호 불일치")
+    void leave_failByEmptyAuthentication() {
+      when(memberRepository.findActive(any())).thenReturn(Optional.of(member));
+
+      MemberDeleteRequest deleteRequest = MemberDeleteRequest.builder()
+          .id("panda")
+          .password("WRONG PASSWORD")
+          .build();
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> memberService.leave(Role.USER, deleteRequest));
     }
   }
 }

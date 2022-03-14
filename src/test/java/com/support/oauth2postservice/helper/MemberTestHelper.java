@@ -1,7 +1,8 @@
 package com.support.oauth2postservice.helper;
 
-import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.service.dto.request.MemberDeleteRequest;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 
@@ -70,6 +71,13 @@ public class MemberTestHelper {
     return MemberEditRequest.builder()
         .nickname(USER_NICKNAME_AFTER_EDIT)
         .password(PASSWORD + PASSWORD)
+        .build();
+  }
+
+  public static MemberDeleteRequest createDeleteRequest(String memberId) {
+    return MemberDeleteRequest.builder()
+        .id(memberId)
+        .password(PASSWORD)
         .build();
   }
 }

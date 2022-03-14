@@ -1,7 +1,9 @@
 package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.service.dto.request.MemberDeleteRequest;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -72,9 +76,21 @@ public class MemberService {
   }
 
   @Transactional
-  public void leave(String memberId) {
-    memberRepository.findActive(memberId)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND))
-        .leave();
+  public void leave(Role roleFromCurrentUser, MemberDeleteRequest memberDeleteRequest) {
+    Optional<Member> probableMember = memberRepository.findActive(memberDeleteRequest.getId());
+
+    if (roleFromCurrentUser == Role.ADMIN) {
+      probableMember.ifPresent(Member::leave);
+      return;
+    }
+
+    probableMember
+        .ifPresent(
+            member -> {
+              if (passwordEncoder.matches(memberDeleteRequest.getPassword(), member.getPassword()))
+                member.leave();
+              else
+                throw new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
+            });
   }
 }

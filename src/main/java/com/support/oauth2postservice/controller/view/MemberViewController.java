@@ -33,7 +33,7 @@ public class MemberViewController {
     return "member/list";
   }
 
-  @GetMapping(UriConstants.Mapping.MEMBERS_SINGLE)
+  @GetMapping(UriConstants.Mapping.MEMBERS_DETAIL)
   @PreAuthorize("@checker.isAuthorized(#id)")
   public String getMember(@PathVariable String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
@@ -42,7 +42,7 @@ public class MemberViewController {
     return "member/my-page";
   }
 
-  @GetMapping(UriConstants.Mapping.MY_PAGE)
+  @GetMapping(UriConstants.Mapping.MEMBERS_MY_PAGE)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
     String id = SecurityUtils.getIdFromCurrentUser();
@@ -52,7 +52,7 @@ public class MemberViewController {
     return "member/my-page";
   }
 
-  @GetMapping(UriConstants.Mapping.EDIT_PAGE)
+  @GetMapping(UriConstants.Mapping.MEMBERS_EDIT)
   @PreAuthorize("@checker.isAuthorized(#id)")
   public String editPage(@RequestParam String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
