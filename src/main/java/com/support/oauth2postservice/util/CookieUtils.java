@@ -59,6 +59,11 @@ public class CookieUtils {
     }
   }
 
+  public static void clearTokenFromBrowser(HttpServletRequest request, HttpServletResponse response) {
+    deleteCookie(request, response, TokenConstants.ID_TOKEN);
+    deleteCookie(request, response, TokenConstants.ACCESS_TOKEN);
+  }
+
   public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
     Cookie[] cookies = request.getCookies();
     if (cookies == null || cookies.length == 0)
