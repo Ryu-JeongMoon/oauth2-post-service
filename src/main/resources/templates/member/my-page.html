@@ -34,13 +34,19 @@
       </div>
     </form>
     <div class='col-12 mt-4' style='text-align: center;'>
-      <button class='btn btn-primary' th:onclick='goToEditPage([[${memberReadResponse.id}]])'>수정</button>
+      <button class='btn btn-outline-primary' th:onclick='moveToEditPage([[${memberReadResponse.id}]])'>수정</button>
+      <button class='btn btn-outline-danger'
+              th:if='${memberReadResponse.role eq "ADMIN"}'
+              th:onclick='requestDeleteByAdmin()'>삭제
+      </button>
+      <button class='btn btn-outline-danger'
+              th:if='${memberReadResponse.role ne "ADMIN" and memberReadResponse.email eq #authentication.name}'
+              th:onclick='requestDeleteByOwner()'>삭제
+      </button>
     </div>
   </div>
-  <script>
-    function goToEditPage(id) {
-      location.href = '/members/edit-page?id=' + id;
-    }
-  </script>
+  <th:block layout:fragment='customScriptFragment'>
+    <script th:src='@{/js/member-api.js}' type='text/javascript'></script>
+  </th:block>
 </th:block>
 </html>

@@ -6,11 +6,11 @@
     throw new Error('jQuery 라이브러리를 호출해야 사용 가능합니다.');
   }
 
-  $.post = function(api_with_id, put_data, success, fail) {
+  $.post = function(api_url, post_data, success, fail) {
     $.ajax({
       method: 'POST',
-      url: api_with_id,
-      data: put_data,
+      url: api_url,
+      data: post_data,
       contentType: 'application/json',
     })
       .then(
@@ -22,10 +22,10 @@
   };
 
   if (!$.put) {
-    $.put = function(api_with_id, put_data, success, fail) {
+    $.put = function(api_url, put_data, success, fail) {
       $.ajax({
         method: 'PUT',
-        url: api_with_id,
+        url: api_url,
         data: put_data,
         contentType: 'application/json',
       })
@@ -40,10 +40,10 @@
 
 
   if (!$.patch) {
-    $.patch = function(api_with_id, patch_data, success, fail) {
+    $.patch = function(api_url, patch_data, success, fail) {
       $.ajax({
         method: 'PATCH',
-        url: api_with_id,
+        url: api_url,
         data: patch_data,
         contentType: 'application/json',
       })
@@ -58,10 +58,11 @@
 
 
   if (!$.delete) {
-    $.delete = function(api_with_id, success, fail) {
+    $.delete = function(api_url, delete_data, success, fail) {
       $.ajax({
         method: 'DELETE',
-        url: api_with_id,
+        url: api_url,
+        data: delete_data,
         dataType: 'json',
         contentType: 'application/json',
       })
