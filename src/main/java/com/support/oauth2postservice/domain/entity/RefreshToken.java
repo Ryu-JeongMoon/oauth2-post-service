@@ -26,7 +26,6 @@ public class RefreshToken extends BaseEntity {
   @JoinColumn(name = ColumnConstants.Name.MEMBER_ID)
   private Member member;
 
-  @EqualsAndHashCode.Include
   @Column(name = ColumnConstants.Name.TOKEN_VALUE, nullable = false)
   private String tokenValue;
 
@@ -44,5 +43,9 @@ public class RefreshToken extends BaseEntity {
     this.expiredAt = expiredAt;
     this.tokenValue = tokenValue;
     this.authProvider = authProvider;
+  }
+
+  public void changeTokenValue(String tokenValue) {
+    this.tokenValue = tokenValue;
   }
 }

@@ -1,3 +1,15 @@
+function requestLogin() {
+  const data = {
+    email: $('#emailInput').val(),
+    password: $('#passwordInput').val(),
+  };
+  const post_data = JSON.stringify(data);
+
+  $.post('/members', post_data,
+    () => alert('성공'), () => alert('로그인 실패~~!'),
+  );
+}
+
 function requestEdit() {
   if ($('#password').val().length > 0 && $('#password').val().length < 4) {
     Swal.fire({
@@ -8,7 +20,6 @@ function requestEdit() {
     return;
   }
 
-  const api_with_id = '/members/edit-page';
   const data = {
     id: $('#id').val(),
     nickname: $('#nickname').val(),
@@ -19,7 +30,7 @@ function requestEdit() {
   const patch_data = JSON.stringify(data);
 
   $.patch(
-    api_with_id, patch_data,
+    '/members/edit-page', patch_data,
     () => {
       Swal.fire({
         icon: 'success',
@@ -28,7 +39,6 @@ function requestEdit() {
       }).then(() => {
         setTimeout(() => history.back(), 100);
       });
-
     },
     () => {
       Swal.fire({
@@ -42,21 +52,83 @@ function requestEdit() {
   );
 }
 
-function moveToEditPage(memberId) {
-  location.href = '/members/' + memberId;
+function requestDelete(delete_data, failText) {
+  $.delete(
+    '/members/edit-page', delete_data,
+    () => {
+      Swal.fire({
+        icon: 'success',
+        title: '삭제 되었습니다',
+        text: '홈페이지로 이동합니다',
+      }).then(() => {
+        setTimeout(() => moveToHomePage(), 100);
+      });
+    },
+    () => {
+      Swal.fire({
+        icon: 'error',
+        title: '삭제할 수 없습니다',
+        text: failText,
+      }).then(() => {
+        setTimeout(() => history.back(), 100);
+      });
+    },
+  );
 }
 
-function requestLogin() {
-  const api_with_id = '/members';
+async function requestDeleteByOwner() {
+  const { value: passwordValue } = await Swal.fire({
+    icon: 'warning',
+    title: '비밀번호를 입력해주세요',
+    input: 'password',
+    showCancelButton: true,
+    inputPlaceHolder: '비밀번호를 입력해주세요',
+    inputAttributes: {
+      minlength: 4,
+      maxLength: 255,
+      autocapitalize: 'off',
+      autocorrect: 'off',
+    },
+    inputValidator: (value) => {
+      return new Promise((resolve) => {
+        if (value.length < 4)
+          resolve('비밀번호는 4자 이상 입력해야 합니다');
+        else
+          resolve();
+      });
+    },
+  });
+
+  if (!passwordValue)
+    return;
 
   const data = {
-    email: $('#emailInput').val(),
-    password: $('#passwordInput').val(),
+    id: $('#id').val(),
+    password: passwordValue,
   };
+  let delete_data = JSON.stringify(data);
 
-  const patch_data = JSON.stringify(data);
+  await requestDelete(delete_data, '비밀번호가 맞지 않습니다');
+}
 
-  $.post(api_with_id, patch_data,
-    () => alert('성공'), () => alert('로그인 실패~~!'),
-  );
+async function requestDeleteByAdmin() {
+  const data = {
+    id: $('#id').val(),
+    password: null
+  };
+  const delete_data = JSON.stringify(data);
+
+  await requestDelete(delete_data, '요청 권한이 없습니다');
+}
+
+function moveToHomePage() {
+  location.href = '/';
+}
+
+function moveToDetailPage(memberId) {
+  location.href = `/members/${memberId}`;
+}
+
+function moveToEditPage(memberId) {
+  location.href = `/members/edit-page?id=${memberId}`;
 }

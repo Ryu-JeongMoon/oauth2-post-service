@@ -7,6 +7,7 @@ import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,14 +54,6 @@ class MemberTest {
   }
 
   @Test
-  @DisplayName("개인정보 수정 성공")
-  void editInfo() {
-    user.changeBy("AAAA", null, null);
-
-    assertThat(user.getNickname()).isEqualTo("AAAA");
-  }
-
-  @Test
   @DisplayName("탈퇴 성공")
   void leave() {
     user.leave();
@@ -76,11 +69,32 @@ class MemberTest {
     assertThrows(IllegalStateException.class, () -> user.leave());
   }
 
-  @Test
-  @DisplayName("권한 변경 성공")
-  void changeRole() {
-    manager.changeBy(null, Role.USER, null);
+  @Nested
+  @DisplayName("개인정보 변경")
+  class editMemberInfoTest {
 
-    assertThat(manager.getRole()).isEqualTo(Role.USER);
+    @Test
+    @DisplayName("닉네임 변경 성공")
+    void editInfo() {
+      user.changeBy("AAAA", null, null);
+
+      assertThat(user.getNickname()).isEqualTo("AAAA");
+    }
+
+    @Test
+    @DisplayName("권한 변경 성공")
+    void changeRole() {
+      user.changeBy(null, Role.MANAGER, null);
+
+      assertThat(user.getRole()).isEqualTo(Role.MANAGER);
+    }
+
+    @Test
+    @DisplayName("활성 상태 변경 성공")
+    void changeStatus() {
+      user.changeBy(null, null, Status.INACTIVE);
+
+      assertThat(user.getStatus()).isEqualTo(Status.INACTIVE);
+    }
   }
 }

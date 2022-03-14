@@ -41,7 +41,7 @@ public class OAuth2TokenViewController {
     CookieUtils.addOAuth2TokenToBrowser(response, oAuth2TokenResponse);
 
     OAuth2UserPrincipal principal = (OAuth2UserPrincipal) authentication.getPrincipal();
-    refreshTokenService.save(principal, oAuth2TokenResponse.getRefreshToken());
+    refreshTokenService.saveOrUpdate(principal, oAuth2TokenResponse.getRefreshToken());
 
     if (isUser(principal))
       return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;
@@ -63,6 +63,10 @@ public class OAuth2TokenViewController {
       HttpServletResponse response) {
 
     OAuth2TokenResponse renewedTokenResponse = oAuth2TokenService.renew(registrationId, refreshToken);
+
+    String oidcIdToken = renewedTokenResponse.getOidcIdToken();
+    Authentication authentication = oAuth2TokenVerifier.getAuthentication(oidcIdToken);
+    SecurityUtils.setAuthentication(authentication);
 
     CookieUtils.addOAuth2TokenToBrowser(response, renewedTokenResponse);
     return UriConstants.Keyword.REDIRECT + redirectUri;

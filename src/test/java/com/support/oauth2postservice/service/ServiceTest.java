@@ -2,6 +2,7 @@ package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.PostRepository;
+import com.support.oauth2postservice.domain.repository.RefreshTokenRepository;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,4 +31,9 @@ public abstract class ServiceTest {
   protected MemberService memberService;
   @InjectMocks
   protected CustomUserDetailsService customUserDetailsService;
+
+  @Mock
+  protected RefreshTokenRepository refreshTokenRepository;
+  @InjectMocks
+  protected RefreshTokenService refreshTokenService;
 }
