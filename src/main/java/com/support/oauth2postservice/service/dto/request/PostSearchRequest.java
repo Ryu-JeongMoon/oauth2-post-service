@@ -29,11 +29,9 @@ public class PostSearchRequest extends PageAttributes {
   @Size(max = ColumnConstants.Length.SEARCH)
   private String content;
 
-  @Size(max = ColumnConstants.Length.SEARCH)
   private Status status;
 
   @PastOrPresent
-  @Size(max = ColumnConstants.Length.SEARCH)
   private LocalDateTime openedAt;
 
   @Builder
@@ -46,18 +44,6 @@ public class PostSearchRequest extends PageAttributes {
     this.openedAt = openedAt;
   }
 
-  @Getter
-  @RequiredArgsConstructor
-  private enum Keyword {
-    TITLE("title"),
-    STATUS("status"),
-    CONTENT("content"),
-    NICKNAME("nickname"),
-    OPENED_AT("openedAt");
-
-    private final String columnName;
-  }
-
   @Override
   protected QSort getQSort() {
     if (getSorts().isEmpty())
@@ -68,5 +54,17 @@ public class PostSearchRequest extends PageAttributes {
         .toArray(String[]::new);
 
     return QueryDslUtils.getQSort(getSorts(), QPost.post, keywords);
+  }
+
+  @Getter
+  @RequiredArgsConstructor
+  private enum Keyword {
+    TITLE("title"),
+    STATUS("status"),
+    CONTENT("content"),
+    NICKNAME("nickname"),
+    OPENED_AT("openedAt");
+
+    private final String columnName;
   }
 }
