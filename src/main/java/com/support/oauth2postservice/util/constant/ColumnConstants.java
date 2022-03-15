@@ -22,8 +22,8 @@ public class ColumnConstants {
 
   public static class Name {
 
-    public static final String CREATED_BY = "created_at";
-    public static final String CREATED_AT = "created_by";
+    public static final String CREATED_AT = "created_at";
+    public static final String CREATED_BY = "created_by";
     public static final String MODIFIED_AT = "modified_at";
     public static final String MODIFIED_BY = "modified_by";
 
