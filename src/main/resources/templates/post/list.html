@@ -6,37 +6,30 @@
       xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
-  <title>MEMBER LIST</title>
+  <title>POST LIST</title>
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
-        <h6 class='m-0 font-weight-bold text-primary'>MEMBER LIST</h6>
+        <h6 class='m-0 font-weight-bold text-primary'>POST LIST</h6>
       </div>
       <div class='card-body'>
         <div class='table-responsive'>
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th>id</th>
-              <th>email</th>
-              <th>nickname</th>
-              <th>role</th>
-              <th>status</th>
-              <th>auth-provider</th>
+              <th width='20%'>nickname</th>
+              <th width='40%'>title</th>
+              <th width='40%'>opened-at</th>
             </tr>
             </thead>
             <tbody>
-            <tr style='cursor: pointer' th:each='member : ${memberReadResponses}'
-                th:onclick='moveToDetailPage([[${member.id}]])'>
-              <td th:text='${member.id}'></td>
-              <td th:text='${member.email}'></td>
-              <td th:text='${member.nickname}'></td>
-              <td th:text='${member.role}'></td>
-              <td th:text='${member.status}'></td>
-              <td th:text='${member.latestAuthProvider}'></td>
+            <tr style='cursor: pointer' th:each='post : ${postReadResponses}'>
+              <td th:text='${post.nickname}'></td>
+              <td th:text='${post.title}'></td>
+              <td th:text='${post.openedAt}'></td>
             </tr>
             </tbody>
           </table>
@@ -45,7 +38,7 @@
     </div>
   </div>
   <th:block layout:fragment='customScriptFragment'>
-    <script th:src='@{/js/member-api.js}' type='text/javascript'></script>
+    <script th:src='@{/js/post-api.js}' type='text/javascript'></script>
   </th:block>
 </th:block>
 </html>
