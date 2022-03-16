@@ -34,7 +34,6 @@ public class ColumnConstants {
     public static final String INITIAL_AUTH_PROVIDER = "initial_auth_provider";
     public static final String LATEST_AUTH_PROVIDER = "latest_auth_provider";
     public static final String UNIQUE_EMAIL = "uk_member_email";
-    public static final String UNIQUE_NICKNAME = "uk_member_nickname";
 
     public static final String POST_ID = "post_id";
     public static final String TITLE = "title";
