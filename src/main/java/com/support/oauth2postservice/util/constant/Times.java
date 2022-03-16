@@ -15,7 +15,7 @@ public enum Times {
   ACCESS_TOKEN_EXPIRATION_MILLIS(1000 * 60 * 30),
   REFRESH_TOKEN_EXPIRATION_MILLIS(1000 * 60 * 60 * 24 * 7),
 
-  COOKIE_EXPIRATION_SECONDS( 60 * 60 * 24 * 365 + 60 * 60 * 9);
+  COOKIE_EXPIRATION_SECONDS(60 * 60 * 24 * 365 + 60 * 60 * 9);
 
   private final int value;
 
