@@ -37,7 +37,7 @@ public class MemberApiController {
   }
 
   @PatchMapping(UriConstants.Mapping.MEMBERS_EDIT)
-  @PreAuthorize("@checker.isAuthorized(#memberEditRequest.id)")
+  @PreAuthorize("@roleChecker.isAuthorized(#memberEditRequest.id)")
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
     Role currentUserRole = SecurityUtils.getRoleFromCurrentUser();
     throwIfNotAuthorized(currentUserRole, memberEditRequest.getRole());
@@ -52,7 +52,7 @@ public class MemberApiController {
   }
 
   @DeleteMapping(UriConstants.Mapping.MEMBERS_EDIT)
-  @PreAuthorize("@checker.isOwner(#memberDeleteRequest.id) or " + SpELConstants.ADMIN_ONLY)
+  @PreAuthorize("@roleChecker.isOwner(#memberDeleteRequest.id) or " + SpELConstants.ADMIN_ONLY)
   public ResponseEntity<Void> leave(
       @RequestBody @Valid MemberDeleteRequest memberDeleteRequest,
       HttpServletRequest request,

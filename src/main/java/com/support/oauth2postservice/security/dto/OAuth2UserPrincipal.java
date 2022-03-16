@@ -6,7 +6,6 @@ import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,19 +22,24 @@ import java.util.Map;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
-public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
+public class OAuth2UserPrincipal extends UserPrincipal implements OAuth2User, OidcUser {
 
   private static final String NOT_VALID_TOKEN_VALUE = "NOT_VALID";
 
-  private final String id;
-  private final String email;
-  private final Status status;
   private final OAuth2Token oAuth2Token;
   private final OidcIdToken oidcIdToken;
   private final Map<String, Object> claims;
   private final Map<String, Object> attributes;
-  private final Collection<Role> authorities;
+
+  public OAuth2UserPrincipal(String id, String email, Status status, OAuth2Token oAuth2Token, OidcIdToken oidcIdToken,
+                             Map<String, Object> claims, Map<String, Object> attributes, Collection<Role> authorities) {
+
+    super(id, email, status, authorities);
+    this.oAuth2Token = oAuth2Token;
+    this.oidcIdToken = oidcIdToken;
+    this.claims = claims;
+    this.attributes = attributes;
+  }
 
   public static OAuth2UserPrincipal from(Member member) {
     return new OAuth2UserPrincipal(
@@ -99,7 +103,7 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
     return new UsernamePasswordAuthenticationToken(
         this,
         "",
-        this.authorities
+        this.getAuthorities()
     );
   }
 
@@ -110,12 +114,12 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
   @Override
   public Collection<Role> getAuthorities() {
-    return Collections.unmodifiableCollection(authorities);
+    return Collections.unmodifiableCollection(super.getAuthorities());
   }
 
   @Override
   public String getName() {
-    return email;
+    return getEmail();
   }
 
   @Override

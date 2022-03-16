@@ -1,7 +1,6 @@
 package com.support.oauth2postservice.util;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
-import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.AccessLevel;
@@ -14,46 +13,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
 
-  public static String getIdFromCurrentUser() {
-    Object principal = getNullSafePrincipal();
-
-    if (principal instanceof UserPrincipal)
-      return ((UserPrincipal) principal).getId();
-    else if (principal instanceof OAuth2UserPrincipal)
-      return ((OAuth2UserPrincipal) principal).getId();
-
-    throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
-  }
-
-  public static String getEmailFromCurrentUser() {
-    Object principal = getNullSafePrincipal();
-
-    if (principal instanceof UserPrincipal)
-      return ((UserPrincipal) principal).getEmail();
-    else if (principal instanceof OAuth2UserPrincipal)
-      return ((OAuth2UserPrincipal) principal).getEmail();
-
-    throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
+  public static UserPrincipal getPrincipalFromCurrentUser() {
+    return getNullSafePrincipal();
   }
 
   public static Role getRoleFromCurrentUser() {
-    Object principal = getNullSafePrincipal();
-
-    if (principal instanceof UserPrincipal)
-      return ((UserPrincipal) principal).getAuthorities()
-          .stream()
-          .findAny()
-          .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE));
-    else if (principal instanceof OAuth2UserPrincipal)
-      return ((OAuth2UserPrincipal) principal).getAuthorities()
-          .stream()
-          .findAny()
-          .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE));
-
-    throw new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE);
+    return getNullSafePrincipal().getAuthorities()
+        .stream()
+        .findAny()
+        .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Common.ILLEGAL_STATE));
   }
 
-  private static Object getNullSafePrincipal() {
+  private static UserPrincipal getNullSafePrincipal() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (ObjectUtils.isEmpty(authentication))
       throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);
@@ -62,7 +33,7 @@ public class SecurityUtils {
     if (ObjectUtils.isEmpty(principal))
       throw new AuthenticationCredentialsNotFoundException(ExceptionMessages.Member.NOT_LOGIN);
 
-    return principal;
+    return (UserPrincipal) principal;
   }
 
   public static void setAuthentication(Authentication authentication) {

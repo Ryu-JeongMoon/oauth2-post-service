@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.controller.view;
 
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.service.MemberService;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
@@ -34,7 +35,7 @@ public class MemberViewController {
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_DETAIL)
-  @PreAuthorize("@checker.isAuthorized(#id)")
+  @PreAuthorize("@roleChecker.isAuthorized(#id)")
   public String getMember(@PathVariable String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
@@ -45,15 +46,15 @@ public class MemberViewController {
   @GetMapping(UriConstants.Mapping.MEMBERS_MY_PAGE)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
-    String id = SecurityUtils.getIdFromCurrentUser();
-    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
+    UserPrincipal currentUser = SecurityUtils.getPrincipalFromCurrentUser();
+    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(currentUser.getId());
 
     model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/my-page";
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_EDIT)
-  @PreAuthorize("@checker.isAuthorized(#id)")
+  @PreAuthorize("@roleChecker.isAuthorized(#id)")
   public String editPage(@RequestParam String id, Model model) {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 

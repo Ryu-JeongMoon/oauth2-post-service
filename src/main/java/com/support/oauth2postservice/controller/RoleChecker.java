@@ -3,6 +3,7 @@ package com.support.oauth2postservice.controller;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +12,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class Checker {
+public class RoleChecker {
 
   private final MemberRepository memberRepository;
 
   public boolean isOwner(String memberId) {
-    String idFromCurrentUser = SecurityUtils.getIdFromCurrentUser();
-    return StringUtils.equalsIgnoreCase(idFromCurrentUser, memberId);
+    UserPrincipal currentUser = SecurityUtils.getPrincipalFromCurrentUser();
+    return StringUtils.equalsIgnoreCase(currentUser.getId(), memberId);
   }
 
   public boolean isAuthorized(String memberId) {

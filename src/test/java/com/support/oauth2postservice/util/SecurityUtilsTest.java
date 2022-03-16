@@ -32,7 +32,7 @@ class SecurityUtilsTest {
   @Test
   @DisplayName("Id 반환 실패 - DB 저장 되기 전 ID 값은 Null")
   void getIdFromCurrentUser_failByEmptyId() {
-    String id = SecurityUtils.getIdFromCurrentUser();
+    String id = SecurityUtils.getPrincipalFromCurrentUser().getId();
 
     assertThat(id).isBlank();
   }
@@ -40,7 +40,7 @@ class SecurityUtilsTest {
   @Test
   @DisplayName("Email 반환 - ContextHolder 에 저장되어있는 값 반환")
   void getEmailFromCurrentUser() {
-    String email = SecurityUtils.getEmailFromCurrentUser();
+    String email = SecurityUtils.getPrincipalFromCurrentUser().getEmail();
 
     assertThat(email).isNotBlank();
   }
