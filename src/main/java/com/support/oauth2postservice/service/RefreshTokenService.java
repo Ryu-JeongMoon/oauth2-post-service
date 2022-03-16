@@ -2,14 +2,12 @@ package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.RefreshToken;
-import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.RefreshTokenRepository;
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +47,7 @@ public class RefreshTokenService {
   @Transactional
   public void saveOrUpdate(OAuth2UserPrincipal principal, String tokenValue) {
     Member member = memberRepository.findActiveByEmail(principal.getEmail())
-        .orElseGet(() -> getNewlyRegisteredByPrincipal(principal));
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     RefreshToken refreshToken = refreshTokenRepository.findByEmail(member.getEmail())
         .orElseGet(
@@ -62,19 +60,5 @@ public class RefreshTokenService {
         );
 
     refreshTokenRepository.save(refreshToken);
-  }
-
-  private Member getNewlyRegisteredByPrincipal(OAuth2UserPrincipal principal) {
-    String defaultRandomPassword = RandomStringUtils.randomAlphanumeric(10);
-    String encodedRandomPassword = passwordEncoder.encode(defaultRandomPassword);
-
-    Member member = Member.builder()
-        .email(principal.getEmail())
-        .nickname(principal.getNickName())
-        .password(encodedRandomPassword)
-        .initialAuthProvider(AuthProvider.GOOGLE)
-        .build();
-
-    return memberRepository.save(member);
   }
 }

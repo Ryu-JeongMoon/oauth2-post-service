@@ -10,7 +10,7 @@ public class TokenConstants {
   public static final String AUTHORIZATION_HEADER = "Authorization";
 
   public static final String LOCAL_TOKEN_ISSUER = "https://accounts.support.com";
-  public static final String OAUTH2_GOOGLE_TOKEN_ISSUER = "https://accounts.google.com";
+  public static final String GOOGLE_TOKEN_ISSUER = "https://accounts.google.com";
 
   public static final String CODE = "code";
   public static final String ERROR = "error";
@@ -27,6 +27,7 @@ public class TokenConstants {
   public static final String ACCESS_TOKEN = "access_token";
   public static final String REFRESH_TOKEN = "refresh_token";
 
+  public static final String NAME = "name";
   public static final String EMAIL = "email";
   public static final String USER_ID = "user_id";
   public static final String AUTHORITIES = "authorities";

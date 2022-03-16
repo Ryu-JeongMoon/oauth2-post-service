@@ -1,11 +1,13 @@
 package com.support.oauth2postservice.security.jwt;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.support.oauth2postservice.config.JpaTest;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.MockWebClientWrapper;
+import com.support.oauth2postservice.security.service.CustomOAuth2MemberService;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 
 import java.util.Base64;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -38,7 +42,7 @@ class GoogleOidcVerifierTest extends JpaTest {
     member.changeToEncodedPassword(encodedPassword);
     memberRepository.save(member);
 
-    googleOidcVerifier = new GoogleOidcVerifier(memberRepository, new MockWebClientWrapper());
+    googleOidcVerifier = new GoogleOidcVerifier(new MockWebClientWrapper(), new CustomOAuth2MemberService(memberRepository));
   }
 
   @Test
@@ -76,7 +80,7 @@ class GoogleOidcVerifierTest extends JpaTest {
   void isGoogleToken_failByWrongToken() {
     OidcIdToken oidcIdToken = OidcIdToken
         .withTokenValue("1")
-        .issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER)
+        .issuer(TokenConstants.GOOGLE_TOKEN_ISSUER)
         .build();
     String idToken = oidcIdToken.getTokenValue();
 
@@ -106,5 +110,21 @@ class GoogleOidcVerifierTest extends JpaTest {
     boolean validity = googleOidcVerifier.isValid("");
 
     assertFalse(validity);
+  }
+
+  @Test
+  @DisplayName("claims 형 변환")
+  void convertClaimToObject() {
+    DecodedJWT decodedJWT = JWT.decode(idToken);
+
+    Map<String, Claim> claims = decodedJWT.getClaims();
+    Map<String, Object> attributes = claims
+        .keySet()
+        .stream()
+        .collect(Collectors.toMap(key -> key, key -> claims.get(key).as(Object.class)));
+
+    String email = (String) attributes.get("email");
+
+    assertThat(email).isEqualTo(decodedJWT.getClaim("email").asString());
   }
 }
