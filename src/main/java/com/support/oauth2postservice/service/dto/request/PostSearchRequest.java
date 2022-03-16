@@ -49,8 +49,8 @@ public class PostSearchRequest extends PageAttributes {
     if (getSorts().isEmpty())
       return PageConstants.POST_SEARCH_DEFAULT_SORT;
 
-    String[] keywords = Arrays.stream(Keyword.values())
-        .map(Keyword::getColumnName)
+    String[] keywords = Arrays.stream(SortingColumn.values())
+        .map(SortingColumn::getColumnName)
         .toArray(String[]::new);
 
     return QueryDslUtils.getQSort(getSorts(), QPost.post, keywords);
@@ -58,7 +58,7 @@ public class PostSearchRequest extends PageAttributes {
 
   @Getter
   @RequiredArgsConstructor
-  private enum Keyword {
+  private enum SortingColumn {
     TITLE("title"),
     STATUS("status"),
     CONTENT("content"),

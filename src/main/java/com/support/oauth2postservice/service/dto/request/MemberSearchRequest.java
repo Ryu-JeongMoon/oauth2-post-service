@@ -34,18 +34,18 @@ public class MemberSearchRequest extends PageAttributes {
     this.role = role;
   }
 
-  private enum Keyword {
-    EMAIL,
-    ROLE,
-    NICKNAME
-  }
-
   @Override
   public QSort getQSort() {
     if (getSorts().isEmpty())
       return PageConstants.MEMBER_SEARCH_DEFAULT_SORT;
 
-    String[] keywords = EnumUtils.toStringArray(Keyword.values());
+    String[] keywords = EnumUtils.toStringArray(SortingColumn.values());
     return QueryDslUtils.getQSort(getSorts(), QMember.member, keywords);
+  }
+
+  private enum SortingColumn {
+    EMAIL,
+    ROLE,
+    NICKNAME
   }
 }
