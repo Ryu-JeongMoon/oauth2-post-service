@@ -8,8 +8,8 @@ import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.JpaConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -27,8 +27,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_EMAIL, columnNames = ColumnConstants.Name.EMAIL),
-    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_NICKNAME, columnNames = ColumnConstants.Name.NICKNAME)
+    @UniqueConstraint(name = ColumnConstants.Name.UNIQUE_EMAIL, columnNames = ColumnConstants.Name.EMAIL)
 })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Member extends BaseEntity {
@@ -88,14 +87,14 @@ public class Member extends BaseEntity {
    * 더 큰 사이즈의 암호화된 비밀번호를 얻을 수 있다
    */
   public void changeToEncodedPassword(String encodedPassword) {
-    if (!StringUtils.hasText(encodedPassword) || encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
+    if (StringUtils.isBlank(encodedPassword) || encodedPassword.length() != ColumnConstants.Length.ENCODED_PASSWORD)
       throw new IllegalArgumentException(ExceptionMessages.Member.PASSWORD_NOT_ENCODED);
 
     this.password = encodedPassword;
   }
 
   public void changeBy(String nickname, Role role, Status status) {
-    if (StringUtils.hasText(nickname))
+    if (StringUtils.isNotBlank(nickname))
       this.nickname = nickname;
 
     if (role != null)
