@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -27,6 +26,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
 
+  private static final String NOT_VALID_TOKEN_VALUE = "NOT_VALID";
+
   private final String id;
   private final String email;
   private final Status status;
@@ -41,11 +42,13 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         member.getId(),
         member.getEmail(),
         member.getStatus(),
-        Jwt.withTokenValue("NOT_VALID")
+        Jwt.withTokenValue(NOT_VALID_TOKEN_VALUE)
             .header(TokenConstants.BEARER_TYPE, TokenConstants.BEARER_TYPE)
-            .issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER)
+            .issuer(TokenConstants.GOOGLE_TOKEN_ISSUER)
             .build(),
-        OidcIdToken.withTokenValue("NOT_VALID").issuer(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER).build(),
+        OidcIdToken.withTokenValue(NOT_VALID_TOKEN_VALUE)
+            .issuer(TokenConstants.GOOGLE_TOKEN_ISSUER)
+            .build(),
         Collections.emptyMap(),
         Collections.emptyMap(),
         Collections.singletonList(member.getRole())
@@ -70,7 +73,9 @@ public class OAuth2UserPrincipal implements OAuth2User, OidcUser {
         member.getEmail(),
         member.getStatus(),
         oAuth2Token,
-        OidcIdToken.withTokenValue("").build(),
+        OidcIdToken.withTokenValue(NOT_VALID_TOKEN_VALUE)
+            .issuer(TokenConstants.GOOGLE_TOKEN_ISSUER)
+            .build(),
         Collections.emptyMap(),
         oAuth2User.getAttributes(),
         Collections.singletonList(member.getRole())

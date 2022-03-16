@@ -2,10 +2,13 @@ package com.support.oauth2postservice.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.support.oauth2postservice.domain.entity.Member;
-import com.support.oauth2postservice.domain.repository.MemberRepository;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
+import com.support.oauth2postservice.security.service.CustomOAuth2MemberService;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
@@ -15,13 +18,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class GoogleOidcVerifier implements OAuth2TokenVerifier {
 
-  private final MemberRepository memberRepository;
   private final WebClientWrappable webClientWrappable;
+  private final CustomOAuth2MemberService customOAuth2MemberService;
 
   @Override
   public boolean isValid(String token) {
@@ -31,10 +37,15 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
   @Override
   public Authentication getAuthentication(String idToken) {
     DecodedJWT decodedJWT = parse(idToken);
-    String email = decodedJWT.getClaim(TokenConstants.EMAIL).asString();
-    Member member = memberRepository.findActiveByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
+    Map<String, Claim> claims = decodedJWT.getClaims();
+    Map<String, Object> attributes = claims
+        .keySet()
+        .stream()
+        .collect(Collectors.toMap(key -> key, key -> claims.get(key).as(Object.class)));
+
+    OAuth2Attributes oAuth2Attributes = OAuth2Attributes.of(AuthProvider.GOOGLE.name(), attributes);
+    Member member = customOAuth2MemberService.getMember(AuthProvider.GOOGLE.name(), oAuth2Attributes);
     return OAuth2UserPrincipal
         .from(member)
         .toAuthentication();
@@ -52,7 +63,7 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
   public boolean isGoogleToken(String idToken) {
     try {
       DecodedJWT decodedJWT = parse(idToken);
-      return StringUtils.equalsIgnoreCase(TokenConstants.OAUTH2_GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
+      return StringUtils.equalsIgnoreCase(TokenConstants.GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
     } catch (TokenException e) {
       return false;
     }

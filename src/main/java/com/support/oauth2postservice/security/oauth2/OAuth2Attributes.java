@@ -34,7 +34,7 @@ public class OAuth2Attributes {
   }
 
   public static OAuth2Attributes of(String registrationId, Map<String, Object> attributes) {
-    return ATTRIBUTES_BY_PROVIDER.get(registrationId).apply(attributes);
+    return ATTRIBUTES_BY_PROVIDER.get(registrationId.toLowerCase()).apply(attributes);
   }
 
   private static OAuth2Attributes ofGoogleAttributes(Map<String, Object> attributes) {

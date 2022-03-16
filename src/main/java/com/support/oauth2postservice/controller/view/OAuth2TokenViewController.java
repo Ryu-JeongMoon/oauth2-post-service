@@ -37,11 +37,11 @@ public class OAuth2TokenViewController {
     String oidcIdToken = oAuth2TokenResponse.getOidcIdToken();
 
     Authentication authentication = oAuth2TokenVerifier.getAuthentication(oidcIdToken);
-    SecurityUtils.setAuthentication(authentication);
-    CookieUtils.addOAuth2TokenToBrowser(response, oAuth2TokenResponse);
-
     OAuth2UserPrincipal principal = (OAuth2UserPrincipal) authentication.getPrincipal();
     refreshTokenService.saveOrUpdate(principal, oAuth2TokenResponse.getRefreshToken());
+
+    SecurityUtils.setAuthentication(authentication);
+    CookieUtils.addOAuth2TokenToBrowser(response, oAuth2TokenResponse);
 
     if (isUser(principal))
       return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;
