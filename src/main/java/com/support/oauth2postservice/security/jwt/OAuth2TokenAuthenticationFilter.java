@@ -7,6 +7,7 @@ import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,6 +24,11 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
   private final RefreshTokenService refreshTokenService;
+
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    return StringUtils.startsWithAny(request.getRequestURI(), "/css", "/js", "/img", "/vendor");
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
