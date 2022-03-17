@@ -10,10 +10,8 @@ import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
 import com.support.oauth2postservice.security.service.CustomOAuth2MemberService;
 import com.support.oauth2postservice.util.constant.TokenConstants;
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import com.support.oauth2postservice.util.wrapper.WebClientWrappable;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GoogleOidcVerifier implements OAuth2TokenVerifier {
@@ -51,12 +48,8 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
         .toAuthentication();
   }
 
-  private DecodedJWT parse(String idToken) {
-    try {
-      return JWT.decode(idToken);
-    } catch (JWTDecodeException e) {
-      throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT, e);
-    }
+  private DecodedJWT parse(String idToken) throws JWTDecodeException {
+    return JWT.decode(idToken);
   }
 
   @Override
@@ -64,7 +57,7 @@ public class GoogleOidcVerifier implements OAuth2TokenVerifier {
     try {
       DecodedJWT decodedJWT = parse(idToken);
       return StringUtils.equalsIgnoreCase(TokenConstants.GOOGLE_TOKEN_ISSUER, decodedJWT.getIssuer());
-    } catch (TokenException e) {
+    } catch (JWTDecodeException e) {
       return false;
     }
   }
