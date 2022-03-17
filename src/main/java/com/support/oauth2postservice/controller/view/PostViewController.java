@@ -1,6 +1,7 @@
 package com.support.oauth2postservice.controller.view;
 
 import com.support.oauth2postservice.service.PostService;
+import com.support.oauth2postservice.service.dto.request.PostEditRequest;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import com.support.oauth2postservice.util.constant.SpELConstants;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.Valid;
 
@@ -30,8 +32,25 @@ public class PostViewController {
 
   @GetMapping(UriConstants.Mapping.POSTS_DETAIL)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
-  public String getPost() {
-
+  public String getPost(@PathVariable String id, Model model) {
+    PostReadResponse postReadResponse = postService.findActivePost(id);
+    model.addAttribute("postReadResponse", postReadResponse);
     return "post/detail";
+  }
+
+  @GetMapping(UriConstants.Mapping.POSTS_EDIT)
+  @PreAuthorize(SpELConstants.MANAGER_OR_ADMIN)
+  public String editPage(@PathVariable String id, Model model) {
+    PostReadResponse postReadResponse = postService.findActivePost(id);
+
+    PostEditRequest postEditRequest = PostEditRequest.builder()
+        .title(postReadResponse.getTitle())
+        .content(postReadResponse.getContent())
+        .openedAt(postReadResponse.getOpenedAt())
+        .build();
+
+    model.addAttribute("postEditRequest", postEditRequest);
+    model.addAttribute("postReadResponse", postReadResponse);
+    return "post/edit";
   }
 }

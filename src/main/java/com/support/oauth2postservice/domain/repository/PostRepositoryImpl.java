@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static com.support.oauth2postservice.domain.entity.QMember.member;
 import static com.support.oauth2postservice.domain.entity.QPost.post;
 import static com.support.oauth2postservice.util.QueryDslUtils.nullSafeBuilder;
 
@@ -30,8 +31,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     return Optional.ofNullable(
         queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
             .from(post)
-            .join(post.member)
+            .leftJoin(post.member, member)
             .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
+            .distinct()
             .fetchOne()
     );
   }
