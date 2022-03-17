@@ -6,7 +6,6 @@ import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {

@@ -7,10 +7,8 @@ import com.nimbusds.jwt.SignedJWT;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.constant.TokenConstants;
-import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
@@ -20,7 +18,6 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
-@Slf4j
 @Primary
 @Component
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
     try {
       SignedJWT signedJWT = parse(token);
       return signedJWT.verify(ed25519Verifier);
-    } catch (JOSEException | TokenException e) {
+    } catch (JOSEException | ParseException e) {
       return false;
     }
   }
@@ -44,17 +41,13 @@ public class EllipticCurveVerifier implements TokenVerifier {
       SignedJWT signedJWT = parse(accessToken);
       String issuer = signedJWT.getJWTClaimsSet().getIssuer();
       return StringUtils.equalsIgnoreCase(TokenConstants.LOCAL_TOKEN_ISSUER, issuer);
-    } catch (ParseException | TokenException e) {
+    } catch (ParseException e) {
       return false;
     }
   }
 
-  private SignedJWT parse(String token) {
-    try {
-      return SignedJWT.parse(token);
-    } catch (ParseException e) {
-      throw new TokenException(ExceptionMessages.Token.WRONG_FORMAT);
-    }
+  private SignedJWT parse(String token) throws ParseException {
+    return SignedJWT.parse(token);
   }
 
   @SneakyThrows(value = ParseException.class)
