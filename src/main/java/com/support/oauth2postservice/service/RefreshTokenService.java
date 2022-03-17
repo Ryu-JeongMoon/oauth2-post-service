@@ -8,7 +8,6 @@ import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +16,6 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
-
-  private static final Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
 
   private final MemberRepository memberRepository;
   private final RefreshTokenRepository refreshTokenRepository;
