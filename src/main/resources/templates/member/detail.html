@@ -2,7 +2,7 @@
 <html lang='en'
       xmlns:th='http://www.thymeleaf.org'
       xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
       layout:decorate='~{layout}'>
 
 <th:block layout:fragment='contentFragment'>
@@ -35,7 +35,9 @@
       </div>
     </form>
     <div class='col-12 mt-4' style='text-align: center;'>
-      <button class='btn btn-outline-primary' th:onclick='moveToEditPage([[${memberReadResponse.id}]])'>수정</button>
+      <button class='btn btn-outline-primary'
+              th:onclick='moveToEditPage([[${memberReadResponse.id}]])'>수정
+      </button>
       <button class='btn btn-outline-danger'
               sec:authorize='hasRole("ADMIN")'
               th:onclick='requestDeleteByAdmin()'>삭제

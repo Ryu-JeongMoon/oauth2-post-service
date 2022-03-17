@@ -40,7 +40,7 @@ public class MemberViewController {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
 
     model.addAttribute("memberReadResponse", memberReadResponse);
-    return "member/my-page";
+    return "member/detail";
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_MY_PAGE)
@@ -50,7 +50,7 @@ public class MemberViewController {
     MemberReadResponse memberReadResponse = memberService.findActiveMemberById(currentUser.getId());
 
     model.addAttribute("memberReadResponse", memberReadResponse);
-    return "member/my-page";
+    return "member/detail";
   }
 
   @GetMapping(UriConstants.Mapping.MEMBERS_EDIT)
@@ -66,6 +66,6 @@ public class MemberViewController {
 
     model.addAttribute("memberEditRequest", memberEditRequest);
     model.addAttribute("memberReadResponse", memberReadResponse);
-    return "member/edit-page";
+    return "member/edit";
   }
 }

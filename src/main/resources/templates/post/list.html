@@ -26,7 +26,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr style='cursor: pointer' th:each='post : ${postReadResponses}'>
+            <tr style='cursor: pointer' th:each='post : ${postReadResponses}'
+                th:onclick='moveToDetailPage([[${post.id}]])'>
               <td th:text='${post.nickname}'></td>
               <td th:text='${post.title}'></td>
               <td th:text='${post.openedAt}'></td>
