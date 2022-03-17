@@ -3,7 +3,7 @@ package com.support.oauth2postservice.aop;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class LogAspect {
 
-  @AfterReturning(SpELConstants.EXCEPTION_HANDLER_ONLY)
+  @After(SpELConstants.EXCEPTION_HANDLER_ONLY)
   public void logForException(JoinPoint joinPoint) {
     log.info("[SUPPORT-ERROR] :: method     -> {}", joinPoint.getSignature().toShortString());
     log.info("[SUPPORT-ERROR] :: arguments  -> {}", joinPoint.getArgs());
