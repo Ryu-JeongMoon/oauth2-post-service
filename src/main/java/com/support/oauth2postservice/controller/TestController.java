@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -72,5 +73,17 @@ public class TestController {
   @GetMapping("/sec")
   public String checkSec() {
     return "sec";
+  }
+
+  @GetMapping("/4xx")
+  public String error4xx(Model model) {
+    model.addAttribute("message", "yahoo");
+    return "error/4xx";
+  }
+
+  @GetMapping("/5xx")
+  public String error5xx(Model model) {
+    model.addAttribute("message", "panda");
+    return "error/5xx";
   }
 }
