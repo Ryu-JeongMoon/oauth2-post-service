@@ -20,6 +20,9 @@ public enum Role implements GrantedAuthority {
   }
 
   public boolean isSuperiorThan(Role role) {
+    if (role == null)
+      return true;
+
     return this.level >= role.level;
   }
 

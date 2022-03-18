@@ -43,7 +43,6 @@ public class AuthViewController {
   }
 
   @GetMapping(UriConstants.Mapping.LOGOUT)
-  @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String logout(HttpServletRequest request, HttpServletResponse response) {
     authService.logout(request, response);
     return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;

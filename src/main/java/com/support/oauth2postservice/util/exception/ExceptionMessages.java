@@ -10,6 +10,7 @@ public class ExceptionMessages {
   public static class Member {
     public static final String NOT_LOGIN = "로그인이 필요합니다";
     public static final String NOT_FOUND = "존재하지 않는 회원입니다";
+    public static final String NOT_LEFT = "탈퇴하지 않은 회원입니다";
     public static final String ALREADY_LEFT = "이미 탈퇴한 회원입니다";
     public static final String ACCESS_DENIED = "요청 권한이 없습니다";
     public static final String PASSWORD_NOT_ENCODED = "비밀번호 암호화에 실패했습니다";
