@@ -23,7 +23,7 @@ public class RoleChecker {
 
   public boolean isAuthorized(String memberId) {
     Role roleFromCurrentUser = SecurityUtils.getRoleFromCurrentUser();
-    Member member = memberRepository.findActive(memberId)
+    Member member = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     return roleFromCurrentUser.isSuperiorThan(member.getRole())

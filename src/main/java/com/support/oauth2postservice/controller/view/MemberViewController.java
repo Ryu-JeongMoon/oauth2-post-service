@@ -37,7 +37,7 @@ public class MemberViewController {
   @GetMapping(UriConstants.Mapping.MEMBERS_DETAIL)
   @PreAuthorize("@roleChecker.isAuthorized(#id)")
   public String getMember(@PathVariable String id, Model model) {
-    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
+    MemberReadResponse memberReadResponse = memberService.findResponseById(id);
 
     model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/detail";
@@ -47,7 +47,7 @@ public class MemberViewController {
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
     UserPrincipal currentUser = SecurityUtils.getPrincipalFromCurrentUser();
-    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(currentUser.getId());
+    MemberReadResponse memberReadResponse = memberService.findResponseById(currentUser.getId());
 
     model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/detail";
@@ -56,7 +56,7 @@ public class MemberViewController {
   @GetMapping(UriConstants.Mapping.MEMBERS_EDIT)
   @PreAuthorize("@roleChecker.isAuthorized(#id)")
   public String editPage(@RequestParam String id, Model model) {
-    MemberReadResponse memberReadResponse = memberService.findActiveMemberById(id);
+    MemberReadResponse memberReadResponse = memberService.findResponseById(id);
 
     MemberEditRequest memberEditRequest = MemberEditRequest.builder()
         .nickname(memberReadResponse.getNickname())

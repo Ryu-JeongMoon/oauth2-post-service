@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MemberRepositoryCustom {
 
-  Optional<MemberReadResponse> findActiveToResponse(String id);
+  Optional<MemberReadResponse> findResponseById(String id);
 
   Page<MemberReadResponse> search(MemberSearchRequest memberSearchRequest);
 }

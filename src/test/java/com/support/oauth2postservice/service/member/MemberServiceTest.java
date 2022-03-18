@@ -48,13 +48,13 @@ class MemberServiceTest extends ServiceTest {
   @Test
   @DisplayName("회원 정보 수정")
   void edit() {
-    when(memberRepository.findActive(any())).thenReturn(Optional.ofNullable(member));
+    when(memberRepository.findById(nullable(String.class))).thenReturn(Optional.ofNullable(member));
 
     memberService.edit(MemberTestHelper.createEditRequest());
 
     assertThat(member.getNickname()).isEqualTo(MemberTestHelper.USER_NICKNAME_AFTER_EDIT);
 
-    verify(memberRepository, times(1)).findActive(any());
+    verify(memberRepository, times(1)).findById((String) any());
   }
 
   @Nested
@@ -64,13 +64,13 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("ID 조회 성공")
     void findActiveMemberById() {
-      when(memberRepository.findActiveToResponse(USER_ID)).thenReturn(Optional.of(memberReadResponse));
+      when(memberRepository.findResponseById(USER_ID)).thenReturn(Optional.of(memberReadResponse));
 
-      MemberReadResponse memberReadResponse = memberService.findActiveMemberById(USER_ID);
+      MemberReadResponse memberReadResponse = memberService.findResponseById(USER_ID);
 
       assertThat(memberReadResponse.getEmail()).isEqualTo(member.getEmail());
 
-      verify(memberRepository, times(1)).findActiveToResponse(USER_ID);
+      verify(memberRepository, times(1)).findResponseById(USER_ID);
     }
 
     @Test
@@ -88,11 +88,11 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("조회 실패 - 존재하지 않는 회원")
     void findActiveMember_failByNonExistsMember() {
-      when(memberRepository.findActiveToResponse(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
+      when(memberRepository.findResponseById(USER_ID)).thenThrow(new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
 
-      assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findActiveMemberById(USER_ID));
+      assertThrows(JpaObjectRetrievalFailureException.class, () -> memberService.findResponseById(USER_ID));
 
-      verify(memberRepository, times(1)).findActiveToResponse(any());
+      verify(memberRepository, times(1)).findResponseById(any());
     }
   }
 
