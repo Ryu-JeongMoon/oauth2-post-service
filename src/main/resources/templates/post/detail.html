@@ -13,7 +13,9 @@
         <h5 class='card-title' th:text='${postReadResponse.title}'>title</h5>
         <p class='card-text' th:text='${postReadResponse.content}'>content</p>
       </div>
-      <div class='card-footer bg-transparent border-success' th:text='${postReadResponse.openedAt}'>Footer</div>
+      <div class='card-footer bg-transparent border-success'
+           th:text='${#temporals.format(postReadResponse.openedAt, "yyyy-MM-dd HH:mm:ss")}'>Footer
+      </div>
     </div>
   </div>
   <div class='col-12 mt-4' style='text-align: center;' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
