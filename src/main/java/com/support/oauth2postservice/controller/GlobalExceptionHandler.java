@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +19,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
   private final ObjectMapper objectMapper;
+
+  private static String getExceptionClass(Exception e) {
+    return e != null ? e.getClass().getName() : "";
+  }
+
+  @ExceptionHandler(value = AccessDeniedException.class)
+  public ResponseEntity<ExceptionResponse> forbiddenHandler(AccessDeniedException e) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
+  }
 
   @SneakyThrows(value = JsonProcessingException.class)
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
