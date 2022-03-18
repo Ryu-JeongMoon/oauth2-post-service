@@ -63,7 +63,6 @@
         method: 'DELETE',
         url: api_url,
         data: delete_data,
-        dataType: 'json',
         contentType: 'application/json',
       })
         .then(
