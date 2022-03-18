@@ -75,7 +75,11 @@
             Settings
           </a>
           <div class='dropdown-divider'></div>
-          <a class='dropdown-item' data-toggle='modal' href='#' data-target='#logoutModal'>
+          <a class='dropdown-item' href='/login' sec:authorize='isAnonymous()'>
+            <i class='fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400'></i>
+            Login
+          </a>
+          <a class='dropdown-item' data-toggle='modal' href='#' data-target='#logoutModal' sec:authorize='isAuthenticated()'>
             <i class='fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400'></i>
             Logout
           </a>
