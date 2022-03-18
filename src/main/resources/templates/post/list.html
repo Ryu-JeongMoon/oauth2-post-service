@@ -30,7 +30,7 @@
                 th:onclick='moveToDetailPage([[${post.id}]])'>
               <td th:text='${post.nickname}'></td>
               <td th:text='${post.title}'></td>
-              <td th:text='${post.openedAt}'></td>
+              <td th:text='${#temporals.format(post.openedAt, "yyyy-MM-dd HH:mm")}'></td>
             </tr>
             </tbody>
           </table>
