@@ -8,7 +8,7 @@
 <th:block layout:fragment='contentFragment'>
   <div class='container'>
     <form class='row g-3' th:object='${memberReadResponse}'>
-      <div class='col-12'>
+      <div class='col-12' hidden>
         <label class='form-label' for='id'>ID</label>
         <input class='form-control' id='id' readonly th:field='*{id}' th:id='id'>
       </div>
@@ -18,8 +18,7 @@
       </div>
       <div class='col-12'>
         <label class='form-label' for='nickname'>Nickname</label>
-        <input class='form-control' id='nickname' placeholder='1234 Main St' readonly th:field='*{nickname}'
-               th:id='nickname'>
+        <input class='form-control' id='nickname' readonly th:field='*{nickname}' th:id='nickname'>
       </div>
       <div class='col-12'>
         <label class='form-label' for='role'>Role</label>
@@ -40,10 +39,11 @@
       </button>
       <button class='btn btn-outline-danger'
               sec:authorize='hasRole("ADMIN")'
+              th:if='${memberReadResponse.email ne #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
               th:onclick='requestDeleteByAdmin()'>삭제
       </button>
       <button class='btn btn-outline-danger'
-              th:if='${memberReadResponse.role ne "ADMIN" and memberReadResponse.email eq #authentication.name}'
+              th:if='${memberReadResponse.email eq #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
               th:onclick='requestDeleteByOwner()'>삭제
       </button>
     </div>
