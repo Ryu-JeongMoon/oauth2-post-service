@@ -24,7 +24,7 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return StringUtils.startsWithAny(request.getRequestURI(), "/css", "/js", "/img", "/vendor");
+    return StringUtils.startsWithAny(request.getRequestURI(), "/css", "/js", "/img", "/vendor", "/logout");
   }
 
   @Override
