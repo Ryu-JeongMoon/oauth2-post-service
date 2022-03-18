@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
+  Optional<Member> findById(String id);
+
   @Query("select m from Member m where m.id = :id and m.status = 'ACTIVE'")
   Optional<Member> findActive(String id);
 

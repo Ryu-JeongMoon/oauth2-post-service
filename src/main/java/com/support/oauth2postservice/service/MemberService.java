@@ -27,8 +27,8 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
 
   @Transactional(readOnly = true)
-  public MemberReadResponse findActiveMemberById(String memberId) {
-    return memberRepository.findActiveToResponse(memberId)
+  public MemberReadResponse findResponseById(String memberId) {
+    return memberRepository.findResponseById(memberId)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
   }
 
@@ -57,7 +57,7 @@ public class MemberService {
     if (memberEditRequest == null)
       return;
 
-    Member member = memberRepository.findActive(memberEditRequest.getId())
+    Member member = memberRepository.findById(memberEditRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     changePasswordIfValid(member, memberEditRequest.getPassword());

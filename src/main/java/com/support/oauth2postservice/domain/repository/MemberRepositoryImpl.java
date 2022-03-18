@@ -3,7 +3,6 @@ package com.support.oauth2postservice.domain.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import com.support.oauth2postservice.service.dto.response.QMemberReadResponse;
@@ -26,13 +25,13 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<MemberReadResponse> findActiveToResponse(String id) {
+  public Optional<MemberReadResponse> findResponseById(String id) {
     return Optional.ofNullable(
         queryFactory.select(new QMemberReadResponse(
                 member.id, member.email, member.nickname, member.role, member.status, member.latestAuthProvider)
             )
             .from(member)
-            .where(member.status.eq(Status.ACTIVE).and(member.id.eq(id)))
+            .where(member.id.eq(id))
             .fetchOne()
     );
   }
