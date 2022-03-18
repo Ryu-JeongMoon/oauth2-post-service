@@ -52,8 +52,8 @@ function requestEdit() {
   );
 }
 
-function requestDelete(delete_data, failText) {
-  $.delete(
+async function requestDelete(delete_data, failText) {
+  await $.delete(
     '/members/edit-page', delete_data,
     () => {
       Swal.fire({
@@ -114,7 +114,7 @@ async function requestDeleteByOwner() {
 async function requestDeleteByAdmin() {
   const data = {
     id: $('#id').val(),
-    password: null
+    password: null,
   };
   const delete_data = JSON.stringify(data);
 
