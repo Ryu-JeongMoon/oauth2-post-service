@@ -101,7 +101,14 @@ public class Member extends BaseEntity {
       this.role = role;
 
     if (status != null)
-      this.status = status;
+      changeStatus(status);
+  }
+
+  private void changeStatus(Status status) {
+    if (status == Status.ACTIVE)
+      restore();
+    else
+      leave();
   }
 
   public void leave() {
@@ -110,6 +117,14 @@ public class Member extends BaseEntity {
 
     this.leftAt = LocalDateTime.now();
     this.status = Status.INACTIVE;
+  }
+
+  public void restore() {
+    if (this.leftAt == null)
+      throw new IllegalStateException(ExceptionMessages.Member.NOT_LEFT);
+
+    this.leftAt = null;
+    this.status = Status.ACTIVE;
   }
 
   public void changeLatestAuthProvider(AuthProvider latestAuthProvider) {
