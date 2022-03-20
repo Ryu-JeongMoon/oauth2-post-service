@@ -26,6 +26,13 @@ public enum Role implements GrantedAuthority {
     return this.level >= role.level;
   }
 
+  public boolean isInferiorThan(Role role) {
+    if (role == null)
+      return false;
+
+    return this.level < role.level;
+  }
+
   @Override
   public String getAuthority() {
     return key;

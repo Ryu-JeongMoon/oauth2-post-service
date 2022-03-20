@@ -37,14 +37,14 @@ public class MemberApiController {
   @PreAuthorize("@roleChecker.isAuthorized(#memberEditRequest.id)")
   public ResponseEntity<Void> edit(@RequestBody @Valid MemberEditRequest memberEditRequest) {
     Role currentUserRole = SecurityUtils.getRoleFromCurrentUser();
-    throwIfNotAuthorized(currentUserRole, memberEditRequest.getRole());
+    throwIfUnauthorized(currentUserRole, memberEditRequest.getRole());
 
     memberService.edit(memberEditRequest);
     return ResponseEntity.ok().build();
   }
 
-  private void throwIfNotAuthorized(Role currentUserRole, Role toBeChangedRole) {
-    if (!currentUserRole.isSuperiorThan(toBeChangedRole))
+  private void throwIfUnauthorized(Role currentUserRole, Role toBeChangedRole) {
+    if (currentUserRole.isInferiorThan(toBeChangedRole))
       throw new AjaxAccessDeniedException(ExceptionMessages.Member.ACCESS_DENIED);
   }
 
