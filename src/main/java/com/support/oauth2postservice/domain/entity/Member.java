@@ -120,9 +120,6 @@ public class Member extends BaseEntity {
   }
 
   public void restore() {
-    if (this.leftAt == null)
-      throw new IllegalStateException(ExceptionMessages.Member.NOT_LEFT);
-
     this.leftAt = null;
     this.status = Status.ACTIVE;
   }
