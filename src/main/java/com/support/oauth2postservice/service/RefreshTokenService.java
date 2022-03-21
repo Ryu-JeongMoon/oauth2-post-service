@@ -47,6 +47,7 @@ public class RefreshTokenService {
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     RefreshToken refreshToken = refreshTokenRepository.findByEmail(member.getEmail())
+        .map(token -> token.withTokenValue(tokenValue))
         .orElseGet(
             () -> RefreshToken.builder()
                 .member(member)
