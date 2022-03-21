@@ -8,7 +8,7 @@ public class UriConstants {
 
     public static final String TOKEN_REQUEST_URI = "https://oauth2.googleapis.com/token";
     public static final String TOKEN_CALLBACK_URI = "https://localhost:8443/oauth2/google";
-    public static final String VERIFICATION_URI = "https://oauth2.googleapis.com/tokeninfo";
+    public static final String VALIDATION_URI = "https://oauth2.googleapis.com/tokeninfo";
   }
 
   public static class Mapping {
