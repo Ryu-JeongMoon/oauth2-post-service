@@ -48,4 +48,9 @@ public class RefreshToken extends BaseEntity {
   public void changeTokenValue(String tokenValue) {
     this.tokenValue = tokenValue;
   }
+
+  public RefreshToken withTokenValue(String tokenValue) {
+    this.tokenValue = tokenValue;
+    return this;
+  }
 }
