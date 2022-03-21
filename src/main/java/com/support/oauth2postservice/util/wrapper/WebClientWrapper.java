@@ -26,7 +26,7 @@ public class WebClientWrapper implements WebClientWrappable {
 
   @Override
   public boolean validateByOidc(String idToken) {
-    return webClient.mutate().baseUrl(UriConstants.Full.VERIFICATION_URI).build()
+    return webClient.mutate().baseUrl(UriConstants.Full.VALIDATION_URI).build()
         .get()
         .uri(uriBuilder -> uriBuilder
             .queryParam(TokenConstants.ID_TOKEN, idToken)
