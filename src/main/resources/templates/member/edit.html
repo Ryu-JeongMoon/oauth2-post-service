@@ -9,40 +9,41 @@
   <div class='container'>
     <form class='row g-3' th:object='${memberEditRequest}'>
       <div class='col-12'>
-        <input class='form-control' id='id' readonly th:field='${memberReadResponse.id}' th:id='id' hidden>
+        <input class='form-control' readonly th:field='${memberReadResponse.id}' th:id='id' hidden>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='email'>Email</label>
+        <label class='form-label' for='email' th:text='#{label.member.email}'>Email</label>
         <input class='form-control' id='email' readonly th:field='${memberReadResponse.email}' th:id='email'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='nickname'>Nickname</label>
+        <label class='form-label' for='nickname' th:text='#{label.member.nickname}'>Nickname</label>
         <input class='form-control' id='nickname' th:field='*{nickname}' th:id='nickname'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='password'>Password</label>
+        <label class='form-label' for='nickname' th:text='#{label.member.password}'>Password</label>
         <input class='form-control' id='password' th:field='*{password}' th:id='password'>
       </div>
       <div class='col-12' sec:authorize='hasRole("ADMIN") or hasRole("MANAGER")'>
-        <label class='form-label' for='role'>Role</label>
+        <label class='form-label' for='role' th:text='#{label.member.role}'>Role</label>
         <select class='form-control dropdown-toggle' id='role' required th:placeholder='*{role}'>
           <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
-                  th:text='${eachRole.name()}'
+                  th:text='#{__${eachRole.name()}__}'
+                  th:value='${eachRole}'
                   th:selected='${eachRole == memberEditRequest.role}'></option>
-
         </select>
       </div>
       <div class='col-12' sec:authorize='hasRole("ADMIN")'>
-        <label class='form-label' for='status'>Status</label>
+        <label class='form-label' for='status' th:text='#{label.member.status}'>Status</label>
         <select class='form-control' id='status' name='change-status' th:id='status'>
           <option th:each='eachStatus : ${T(com.support.oauth2postservice.domain.enumeration.Status).values()}'
-                  th:text='${eachStatus.name()}'
+                  th:text='#{__${eachStatus.name()}__}'
+                  th:value='${eachStatus}'
                   th:selected='${eachStatus == memberEditRequest.status}'></option>
         </select>
       </div>
     </form>
     <div class='col-12 mt-4' style='text-align: center;'>
-      <button class='btn btn-outline-primary' th:onclick='requestEdit()'>수정 하기</button>
+      <button class='btn btn-outline-primary' th:onclick='requestEdit()' th:text='#{label.button.edit}'></button>
     </div>
   </div>
   <th:block layout:fragment='customScriptFragment'>

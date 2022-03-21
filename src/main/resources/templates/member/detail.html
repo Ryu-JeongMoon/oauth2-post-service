@@ -9,42 +9,46 @@
   <div class='container'>
     <form class='row g-3' th:object='${memberReadResponse}'>
       <div class='col-12' hidden>
-        <label class='form-label' for='id'>ID</label>
+        <label class='form-label' for='id' th:text='#{label.member.id}'>ID</label>
         <input class='form-control' id='id' readonly th:field='*{id}' th:id='id'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='email'>Email</label>
+        <label class='form-label' for='email' th:text='#{label.member.email}'>Email</label>
         <input class='form-control' id='email' readonly th:field='*{email}' th:id='email'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='nickname'>Nickname</label>
+        <label class='form-label' for='nickname' th:text='#{label.member.nickname}'>Nickname</label>
         <input class='form-control' id='nickname' readonly th:field='*{nickname}' th:id='nickname'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='role'>Role</label>
-        <input class='form-control' id='role' readonly th:field='*{role}' th:id='role' type='text'>
+        <label class='form-label' for='role' th:text='#{label.member.role}'>Role</label>
+        <input class='form-control' id='role' readonly th:value='#{__${memberReadResponse.role}__}' th:id='role'
+               type='text'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='status'>Status</label>
-        <input class='form-control' id='status' readonly th:field='*{status}' th:id='status'>
+        <label class='form-label' for='status' th:text='#{label.member.status}'>Status</label>
+        <input class='form-control' id='status' readonly th:value='#{__${memberReadResponse.status}__}' th:id='status'>
       </div>
       <div class='col-12'>
-        <label class='form-label' for='auth-provider'>Auth-Provider</label>
+        <label class='form-label' for='auth-provider' th:text='#{label.member.auth_provider}'>Auth-Provider</label>
         <input class='form-control' id='auth-provider' readonly th:field='*{latestAuthProvider}' th:id='auth-provider'>
       </div>
     </form>
     <div class='col-12 mt-4' style='text-align: center;'>
       <button class='btn btn-outline-primary'
-              th:onclick='moveToEditPage([[${memberReadResponse.id}]])'>수정
+              th:onclick='moveToEditPage([[${memberReadResponse.id}]])'
+              th:text='#{label.button.edit}'>
       </button>
       <button class='btn btn-outline-danger'
               sec:authorize='hasRole("ADMIN")'
               th:if='${memberReadResponse.email ne #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='requestDeleteByAdmin()'>삭제
+              th:onclick='requestDeleteByAdmin()'
+              th:text='#{label.button.delete}'>
       </button>
       <button class='btn btn-outline-danger'
               th:if='${memberReadResponse.email eq #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='requestDeleteByOwner()'>삭제
+              th:onclick='requestDeleteByOwner()'
+              th:text='#{label.button.delete}'>
       </button>
     </div>
   </div>
