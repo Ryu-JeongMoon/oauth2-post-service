@@ -77,13 +77,13 @@ public class TestController {
 
   @GetMapping("/4xx")
   public String error4xx(Model model) {
-    model.addAttribute("message", "yahoo");
+    model.addAttribute("message", "잘못된 요청이에요");
     return "error/4xx";
   }
 
   @GetMapping("/5xx")
   public String error5xx(Model model) {
-    model.addAttribute("message", "panda");
+    model.addAttribute("message", "서버에 이상이 있습니다\n잠시 후 다시 시도해주세요");
     return "error/5xx";
   }
 }
