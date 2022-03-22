@@ -1,10 +1,15 @@
 package com.support.oauth2postservice.helper;
 
 import com.support.oauth2postservice.domain.entity.Member;
+import com.support.oauth2postservice.domain.enumeration.AuthProvider;
 import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.dto.request.MemberDeleteRequest;
 import com.support.oauth2postservice.service.dto.request.MemberEditRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
+import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
+
+import java.util.UUID;
 
 public class MemberTestHelper {
 
@@ -78,6 +83,28 @@ public class MemberTestHelper {
     return MemberDeleteRequest.builder()
         .id(memberId)
         .password(PASSWORD)
+        .build();
+  }
+
+  public static MemberReadResponse createReadResponse(Member member) {
+    return MemberReadResponse.builder()
+        .id(member.getId())
+        .role(member.getRole())
+        .email(member.getEmail())
+        .status(member.getStatus())
+        .nickname(member.getNickname())
+        .latestAuthProvider(member.getLatestAuthProvider())
+        .build();
+  }
+
+  public static MemberReadResponse createDefaultResponse() {
+    return MemberReadResponse.builder()
+        .id(UUID.randomUUID().toString())
+        .role(Role.USER)
+        .email(USER_EMAIL)
+        .status(Status.ACTIVE)
+        .nickname(USER_NICKNAME)
+        .latestAuthProvider(AuthProvider.GOOGLE)
         .build();
   }
 }
