@@ -51,7 +51,7 @@ public class MemberTestHelper {
         .build();
   }
 
-  public static MemberSignupRequest createUserRequest() {
+  public static MemberSignupRequest createUserSignupRequest() {
     return MemberSignupRequest.builder()
         .nickname(USER_NICKNAME)
         .email(USER_EMAIL)
@@ -59,7 +59,7 @@ public class MemberTestHelper {
         .build();
   }
 
-  public static MemberSignupRequest createManagerRequest() {
+  public static MemberSignupRequest createManagerSignupRequest() {
     return MemberSignupRequest.builder()
         .nickname(MANAGER_NICKNAME)
         .email(MANGER_EMAIL)

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 class MemberServiceTest extends ServiceTest {
 
   private final Member member = MemberTestHelper.createUser();
-  private final MemberSignupRequest userRequest = MemberTestHelper.createUserRequest();
+  private final MemberSignupRequest userRequest = MemberTestHelper.createUserSignupRequest();
   private final MemberReadResponse memberReadResponse = MemberReadResponse.from(member);
   private final MemberDeleteRequest deleteRequest = MemberTestHelper.createDeleteRequest(USER_ID);
 
