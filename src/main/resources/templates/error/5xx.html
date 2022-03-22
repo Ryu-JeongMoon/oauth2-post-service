@@ -16,17 +16,16 @@
 <body>
 <div class='container-fluid'>
   <div class='text-center'>
-    <h2 class='text-center mt-5'><span class='material-icons'>error</span><br />
-      서버에 이상이 있어요<br />
-      잠시 후 다시 시도해주세요
+    <h2 class='text-center mt-5'>
+      <span class='material-icons'>error</span><br />
+      <div th:text='${message}'></div>
     </h2>
-    <div th:text='${message}'></div>
     <br /><br />
     <div th:if='${message eq "이미 탈퇴한 회원입니다"}'>
-      <a href='/logout' class='text-center mt-2'>메인으로 돌아가기</a>
+      <a href='/logout' class='text-center mt-2' th:text='#{label.link.main}'></a>
     </div>
     <div th:unless='${message eq "이미 탈퇴한 회원입니다"}'>
-      <a href='/' class='text-center mt-2'>메인으로 돌아가기</a>
+      <a href='/' class='text-center mt-2' th:text='#{label.link.main}'></a>
     </div>
     <br /><br />
 

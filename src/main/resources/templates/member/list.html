@@ -6,26 +6,26 @@
       xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
-  <title>MEMBER LIST</title>
+  <title th:text='#{label.member-list}'>MEMBER LIST</title>
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
-        <h6 class='m-0 font-weight-bold text-primary'>MEMBER LIST</h6>
+        <h6 class='m-0 font-weight-bold text-primary' th:text='#{label.member-list}'>MEMBER LIST</h6>
       </div>
       <div class='card-body'>
         <div class='table-responsive'>
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th>id</th>
-              <th>email</th>
-              <th>nickname</th>
-              <th>role</th>
-              <th>status</th>
-              <th>auth-provider</th>
+              <th th:text='#{label.member.id}'>id</th>
+              <th th:text='#{label.member.email}'>email</th>
+              <th th:text='#{label.member.nickname}'>nickname</th>
+              <th th:text='#{label.member.role}'>role</th>
+              <th th:text='#{label.member.status}'>status</th>
+              <th th:text='#{label.member.auth_provider}'>auth-provider</th>
             </tr>
             </thead>
             <tbody>
