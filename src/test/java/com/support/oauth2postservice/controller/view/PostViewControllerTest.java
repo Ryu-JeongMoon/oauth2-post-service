@@ -118,7 +118,7 @@ class PostViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("성공")
     void getPost() throws Exception {
-      when(postService.findActivePost(any())).thenReturn(postReadResponse);
+      when(postService.findById(any())).thenReturn(postReadResponse);
 
       mockMvc.perform(
               get(UriConstants.Mapping.POSTS_DETAIL.replace("{id}", "1"))
@@ -149,7 +149,7 @@ class PostViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("성공")
     void editPage() throws Exception {
-      when(postService.findActivePost(any())).thenReturn(postReadResponse);
+      when(postService.findById(any())).thenReturn(postReadResponse);
 
       mockMvc.perform(
               get(UriConstants.Mapping.POSTS_EDIT.replace("{id}", "1"))
@@ -164,7 +164,7 @@ class PostViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("실패 - 존재하지 않는 게시글")
     void editPage_failByNotExistsId() throws Exception {
-      when(postService.findActivePost(eq("1"))).thenThrow(IllegalArgumentException.class);
+      when(postService.findById(eq("1"))).thenThrow(IllegalArgumentException.class);
 
       mockMvc.perform(
               get(UriConstants.Mapping.POSTS_EDIT.replace("{id}", "1"))
