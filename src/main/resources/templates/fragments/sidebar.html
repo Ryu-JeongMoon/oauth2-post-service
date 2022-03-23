@@ -51,6 +51,19 @@
     <!-- Heading -->
     <div class='sidebar-heading' th:text='#{label.post}'></div>
 
+    <!-- Nav Item - List -->
+    <li class='nav-item'>
+      <a class='nav-link' href='/posts'>
+        <i class='fas fa-fw fa-table'></i>
+        <span th:text='#{label.list}'>List</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class='sidebar-divider'>
+
+    <!-- Heading -->
+    <div class='sidebar-heading' th:text='#{page}'></div>
+
     <!-- Nav Item - Pages Collapse Menu -->
     <li class='nav-item'>
       <a class='nav-link collapsed' href='#' data-toggle='collapse' data-target='#collapsePages'
@@ -65,13 +78,6 @@
           <a class='collapse-item' href='/5xx' th:text='#{server.error-page}'>Server Error Page</a>
         </div>
       </div>
-    </li>
-
-    <!-- Nav Item - Charts -->
-    <li class='nav-item'>
-      <a class='nav-link' href='/posts'>
-        <i class='fas fa-fw fa-table'></i>
-        <span th:text='#{label.list}'>List</span></a>
     </li>
 
     <!-- Divider -->

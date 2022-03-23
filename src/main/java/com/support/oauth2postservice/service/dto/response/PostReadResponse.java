@@ -20,13 +20,17 @@ public class PostReadResponse {
 
   private LocalDateTime openedAt;
 
+  private LocalDateTime modifiedAt;
+
   @Builder
   @QueryProjection
-  public PostReadResponse(String id, String nickname, String title, String content, LocalDateTime openedAt) {
+  public PostReadResponse(String id, String nickname, String title, String content,
+                          LocalDateTime openedAt, LocalDateTime modifiedAt) {
     this.id = id;
     this.nickname = nickname;
     this.title = title;
     this.content = content;
     this.openedAt = openedAt;
+    this.modifiedAt = modifiedAt;
   }
 }

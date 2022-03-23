@@ -29,7 +29,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   @Override
   public Optional<PostReadResponse> findActiveToResponse(String id) {
     return Optional.ofNullable(
-        queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
+        queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt))
             .from(post)
             .leftJoin(post.member, member)
             .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
@@ -43,7 +43,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     Pageable pageable = postSearchRequest.getPageable();
 
     JPQLQuery<PostReadResponse> query = queryFactory
-        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt))
+        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt))
         .from(post)
         .join(post.member)
         .where(getConditionFrom(postSearchRequest));
