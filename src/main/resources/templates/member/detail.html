@@ -22,12 +22,12 @@
       </div>
       <div class='col-12'>
         <label class='form-label' for='role' th:text='#{label.member.role}'>Role</label>
-        <input class='form-control' id='role' readonly th:value='#{__${memberReadResponse.role}__}' th:id='role'
+        <input class='form-control' id='role' readonly th:id='role' th:value='#{__${memberReadResponse.role}__}'
                type='text'>
       </div>
       <div class='col-12'>
         <label class='form-label' for='status' th:text='#{label.member.status}'>Status</label>
-        <input class='form-control' id='status' readonly th:value='#{__${memberReadResponse.status}__}' th:id='status'>
+        <input class='form-control' id='status' readonly th:id='status' th:value='#{__${memberReadResponse.status}__}'>
       </div>
       <div class='col-12'>
         <label class='form-label' for='auth-provider' th:text='#{label.member.auth_provider}'>Auth-Provider</label>
@@ -42,12 +42,12 @@
       <button class='btn btn-outline-danger'
               sec:authorize='hasRole("ADMIN")'
               th:if='${memberReadResponse.email ne #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='requestDeleteByAdmin()'
-              th:text='#{label.button.delete}'>
+              th:onclick='deleteByAdmin()'
+              th:text='#{label.button.inactivate}'>
       </button>
       <button class='btn btn-outline-danger'
               th:if='${memberReadResponse.email eq #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='requestDeleteByOwner()'
+              th:onclick='deleteByOwner()'
               th:text='#{label.button.delete}'>
       </button>
     </div>
