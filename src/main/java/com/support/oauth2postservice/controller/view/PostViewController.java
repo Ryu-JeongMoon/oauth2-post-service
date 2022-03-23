@@ -1,9 +1,11 @@
 package com.support.oauth2postservice.controller.view;
 
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.service.PostService;
 import com.support.oauth2postservice.service.dto.request.PostEditRequest;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,8 @@ public class PostViewController {
   @GetMapping(UriConstants.Mapping.POSTS)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String getPosts(@Valid PostSearchRequest searchRequest, Model model) {
-    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest);
+    Role roleFromCurrentUser = SecurityUtils.getRoleFromCurrentUser();
+    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest, roleFromCurrentUser);
     model.addAttribute("postReadResponses", postReadResponses);
     return "post/list";
   }

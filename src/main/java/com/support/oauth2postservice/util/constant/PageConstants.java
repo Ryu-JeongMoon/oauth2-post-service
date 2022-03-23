@@ -8,7 +8,7 @@ import org.springframework.data.querydsl.QSort;
 
 public class PageConstants {
 
-  public static final int DEFAULT_PAGE_SIZE = 10;
+  public static final int DEFAULT_PAGE_SIZE = 50;
   public static final int DEFAULT_PAGE_NUMBER = 0;
   public static final QSort POST_SEARCH_DEFAULT_SORT = QSort.by(new OrderSpecifier<>(Order.DESC, QPost.post.openedAt));
   public static final QSort MEMBER_SEARCH_DEFAULT_SORT = QSort.by(new OrderSpecifier<>(Order.DESC, QMember.member.createdAt));

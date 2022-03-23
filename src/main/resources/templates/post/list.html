@@ -6,23 +6,23 @@
       xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
-  <title>POST LIST</title>
+  <title th:text='#{label.post-list}'>POST LIST</title>
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
-        <h6 class='m-0 font-weight-bold text-primary'>POST LIST</h6>
+        <h6 class='m-0 font-weight-bold text-primary' th:text='#{label.post-list}'>POST LIST</h6>
       </div>
       <div class='card-body'>
         <div class='table-responsive'>
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th width='20%'>nickname</th>
-              <th width='40%'>title</th>
-              <th width='40%'>opened-at</th>
+              <th width='20%' th:text='#{label.member.nickname}'>nickname</th>
+              <th width='40%' th:text='#{label.post.title}'>title</th>
+              <th width='40%' th:text='#{label.post.opened-at}'>opened-at</th>
             </tr>
             </thead>
             <tbody>
@@ -34,6 +34,14 @@
             </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      <div class='pagination' th:if='${postReadResponses.totalPages > 0}'>
+        <div th:each='pageNumber : ${#numbers.sequence(1, postReadResponses.totalPages)}'>
+          <a th:href='@{/posts(page=${pageNumber} - 1)}'
+             th:text='${pageNumber}'
+             th:class='${pageNumber == postReadResponses.number + 1} ? active'>
+          </a>
         </div>
       </div>
     </div>

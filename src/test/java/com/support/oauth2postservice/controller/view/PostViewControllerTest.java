@@ -3,8 +3,10 @@ package com.support.oauth2postservice.controller.view;
 import com.support.oauth2postservice.controller.AbstractWebMvcTest;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
+import com.support.oauth2postservice.helper.WithMockCustomUser;
 import com.support.oauth2postservice.security.config.JwtSecurityConfig;
 import com.support.oauth2postservice.security.config.SecurityConfig;
 import com.support.oauth2postservice.security.jwt.LocalTokenAuthenticationFilter;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -24,7 +27,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         OAuth2ClientAutoConfiguration.class, OAuth2ResourceServerAutoConfiguration.class
     }
 )
+@Import(DefaultWebSecurityExpressionHandler.class)
 class PostViewControllerTest extends AbstractWebMvcTest {
 
   @MockBean
@@ -68,7 +77,11 @@ class PostViewControllerTest extends AbstractWebMvcTest {
 
     @Test
     @DisplayName("검색 조건 없는 조회")
+    @WithMockCustomUser(role = Role.ADMIN)
     void getPosts() throws Exception {
+      PageImpl<PostReadResponse> readResponses = new PageImpl<>(Collections.singletonList(postReadResponse));
+      Mockito.when(postService.searchByCondition(any(), any())).thenReturn(readResponses);
+
       mockMvc.perform(
               get(UriConstants.Mapping.POSTS)
           )
@@ -81,7 +94,11 @@ class PostViewControllerTest extends AbstractWebMvcTest {
 
     @Test
     @DisplayName("검색 조건 있는 조회")
+    @WithMockCustomUser(role = Role.ADMIN)
     void getPosts_successBySearchRequest() throws Exception {
+      PageImpl<PostReadResponse> readResponses = new PageImpl<>(Collections.singletonList(postReadResponse));
+      Mockito.when(postService.searchByCondition(any(), any())).thenReturn(readResponses);
+
       mockMvc.perform(
               get(UriConstants.Mapping.POSTS)
                   .queryParam("content", "panda")

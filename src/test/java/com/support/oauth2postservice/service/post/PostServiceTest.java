@@ -2,6 +2,7 @@ package com.support.oauth2postservice.service.post;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
@@ -50,7 +51,7 @@ class PostServiceTest extends ServiceTest {
     when(postRepository.search(any()))
         .thenReturn(new PageImpl<>(Collections.singletonList(postReadResponse)));
 
-    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest);
+    Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest, Role.ADMIN);
 
     assertThat(postReadResponses.getTotalElements()).isEqualTo(1);
   }
@@ -60,7 +61,7 @@ class PostServiceTest extends ServiceTest {
   void searchByCondition_returnByDefaultPageSize() {
     assertDoesNotThrow(
         () -> postService.searchByCondition(
-            PostSearchRequest.builder().build())
+            PostSearchRequest.builder().build(), Role.ADMIN)
     );
   }
 

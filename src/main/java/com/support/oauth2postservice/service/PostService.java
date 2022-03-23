@@ -2,6 +2,8 @@ package com.support.oauth2postservice.service;
 
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
+import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.PostRepository;
 import com.support.oauth2postservice.service.dto.request.PostCreateRequest;
@@ -22,7 +24,10 @@ public class PostService {
   private final MemberRepository memberRepository;
 
   @Transactional(readOnly = true)
-  public Page<PostReadResponse> searchByCondition(PostSearchRequest condition) {
+  public Page<PostReadResponse> searchByCondition(PostSearchRequest condition, Role roleFromCurrentUser) {
+    if (roleFromCurrentUser.isInferiorThan(Role.MANAGER))
+      condition.changeStatus(Status.ACTIVE);
+
     return postRepository.search(condition);
   }
 

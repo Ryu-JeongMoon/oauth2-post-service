@@ -3,6 +3,7 @@ package com.support.oauth2postservice.controller;
 import com.support.oauth2postservice.service.PostService;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
+import com.support.oauth2postservice.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -45,8 +46,7 @@ public class TestController {
   @GetMapping("/post")
   @ResponseBody
   public Page<PostReadResponse> postTest(PostSearchRequest postSearchRequest) {
-    log.info("postSearchRequest = {}", postSearchRequest);
-    return postService.searchByCondition(postSearchRequest);
+    return postService.searchByCondition(postSearchRequest, SecurityUtils.getRoleFromCurrentUser());
   }
 
   @GetMapping("/user-only")

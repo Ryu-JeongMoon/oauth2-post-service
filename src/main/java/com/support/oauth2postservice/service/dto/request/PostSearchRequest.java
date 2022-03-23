@@ -56,6 +56,10 @@ public class PostSearchRequest extends PageAttributes {
     return QueryDslUtils.getQSort(getSorts(), QPost.post, keywords);
   }
 
+  public void changeStatus(Status status) {
+    this.status = status;
+  }
+
   @Getter
   @RequiredArgsConstructor
   private enum SortingColumn {
