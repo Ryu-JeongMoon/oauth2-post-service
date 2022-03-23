@@ -1,6 +1,5 @@
 package com.support.oauth2postservice.helper;
 
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.service.dto.request.PostCreateRequest;
@@ -38,11 +37,10 @@ public class PostTestHelper {
         .build();
   }
 
-  public static PostEditRequest getEditRequest(Status status) {
+  public static PostEditRequest getEditRequest() {
     return PostEditRequest.builder()
         .title(TITLE)
         .content(CONTENT)
-        .status(status)
         .openedAt(OPENED_AT)
         .closedAt(CLOSED_AT)
         .build();

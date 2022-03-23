@@ -36,7 +36,7 @@ public class PostViewController {
   @GetMapping(UriConstants.Mapping.POSTS_DETAIL)
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String getPost(@PathVariable String id, Model model) {
-    PostReadResponse postReadResponse = postService.findActivePost(id);
+    PostReadResponse postReadResponse = postService.findById(id);
     model.addAttribute("postReadResponse", postReadResponse);
     return "post/detail";
   }
@@ -44,7 +44,7 @@ public class PostViewController {
   @GetMapping(UriConstants.Mapping.POSTS_EDIT)
   @PreAuthorize(SpELConstants.MANAGER_OR_ADMIN)
   public String editPage(@PathVariable String id, Model model) {
-    PostReadResponse postReadResponse = postService.findActivePost(id);
+    PostReadResponse postReadResponse = postService.findById(id);
 
     PostEditRequest postEditRequest = PostEditRequest.builder()
         .title(postReadResponse.getTitle())

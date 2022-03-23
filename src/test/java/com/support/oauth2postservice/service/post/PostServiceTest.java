@@ -3,7 +3,6 @@ package com.support.oauth2postservice.service.post;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.domain.enumeration.Role;
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.helper.PostTestHelper;
 import com.support.oauth2postservice.service.PostService;
@@ -68,15 +67,15 @@ class PostServiceTest extends ServiceTest {
   @Test
   @DisplayName("조회 성공")
   void findActivePost() {
-    when(postRepository.findActiveToResponse(PostTestHelper.ID))
+    when(postRepository.findResponseById(PostTestHelper.ID))
         .thenReturn(Optional.of(postReadResponse));
 
-    PostReadResponse result = postService.findActivePost(PostTestHelper.ID);
+    PostReadResponse result = postService.findById(PostTestHelper.ID);
 
     assertThat(result.getTitle()).isEqualTo(post.getTitle());
 
     verify(postRepository, times(1))
-        .findActiveToResponse(PostTestHelper.ID);
+        .findResponseById(PostTestHelper.ID);
   }
 
   @Test
@@ -84,14 +83,14 @@ class PostServiceTest extends ServiceTest {
   void findActivePost_failByWrongId() {
     String nonExistId = "NO";
 
-    when(postRepository.findActiveToResponse(nonExistId))
+    when(postRepository.findResponseById(nonExistId))
         .thenThrow(IllegalArgumentException.class);
 
     assertThrows(IllegalArgumentException.class,
-        () -> postService.findActivePost(nonExistId));
+        () -> postService.findById(nonExistId));
 
     verify(postRepository, times(1))
-        .findActiveToResponse(nonExistId);
+        .findResponseById(nonExistId);
   }
 
   @Test
@@ -121,11 +120,11 @@ class PostServiceTest extends ServiceTest {
   @Test
   @DisplayName("수정 성공")
   void edit() {
-    PostEditRequest editRequest = PostTestHelper.getEditRequest(Status.INACTIVE);
+    PostEditRequest editRequest = PostTestHelper.getEditRequest();
     Post updateSource = editRequest.toEntity();
     Post mockedPost = mock(Post.class);
 
-    when(postRepository.findActive(PostTestHelper.ID))
+    when(postRepository.findById(PostTestHelper.ID))
         .thenReturn(Optional.of(mockedPost));
 
     postService.edit(PostTestHelper.ID, editRequest);
@@ -137,7 +136,7 @@ class PostServiceTest extends ServiceTest {
   @Test
   @DisplayName("수정 실패 - 존재하지 않는 게시글 번호")
   void edit_failByNonExistPost() {
-    PostEditRequest editRequest = PostTestHelper.getEditRequest(Status.INACTIVE);
+    PostEditRequest editRequest = PostTestHelper.getEditRequest();
 
     assertThrows(IllegalArgumentException.class,
         () -> postService.edit(PostTestHelper.ID, editRequest));

@@ -65,7 +65,7 @@ class PostRepositoryTest extends JpaTest {
   @Test
   @DisplayName("ReadResponse 형태 직접 조회")
   void findActiveToResponse() {
-    boolean isPostPresent = postRepository.findActiveToResponse(POST_ID).isPresent();
+    boolean isPostPresent = postRepository.findResponseById(POST_ID).isPresent();
 
     assertThat(isPostPresent).isTrue();
   }
@@ -86,7 +86,7 @@ class PostRepositoryTest extends JpaTest {
   @DisplayName("조건 검색 - 날짜 조건 검색 결과 없음")
   void searchNoResultByNotMatchedCondition() {
     PostSearchRequest searchRequest = PostSearchRequest.builder()
-        .openedAt(PostTestHelper.CLOSED_AT)
+        .openedAt(PostTestHelper.OPENED_AT)
         .build();
 
     Page<PostReadResponse> result = postRepository.search(searchRequest);

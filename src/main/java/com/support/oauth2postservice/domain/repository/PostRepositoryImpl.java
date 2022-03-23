@@ -3,7 +3,6 @@ package com.support.oauth2postservice.domain.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import com.support.oauth2postservice.service.dto.response.QPostReadResponse;
@@ -27,12 +26,14 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Optional<PostReadResponse> findActiveToResponse(String id) {
+  public Optional<PostReadResponse> findResponseById(String id) {
     return Optional.ofNullable(
-        queryFactory.select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt))
+        queryFactory.select(new QPostReadResponse(
+                post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt, post.status
+            ))
             .from(post)
             .leftJoin(post.member, member)
-            .where(post.status.eq(Status.ACTIVE).and(post.id.eq(id)))
+            .where(post.id.eq(id))
             .distinct()
             .fetchOne()
     );
@@ -43,7 +44,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     Pageable pageable = postSearchRequest.getPageable();
 
     JPQLQuery<PostReadResponse> query = queryFactory
-        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt))
+        .select(new QPostReadResponse(
+            post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt, post.status
+        ))
         .from(post)
         .join(post.member)
         .where(getConditionFrom(postSearchRequest));
@@ -56,6 +59,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .and(nullSafeBuilder(() -> post.title.contains(request.getTitle())))
         .and(nullSafeBuilder(() -> post.content.contains(request.getContent())))
         .and(nullSafeBuilder(() -> post.status.eq(request.getStatus())))
-        .and(nullSafeBuilder(() -> post.openedAt.after(request.getOpenedAt())));
+        .and(nullSafeBuilder(() -> post.openedAt.before(request.getOpenedAt())));
   }
 }

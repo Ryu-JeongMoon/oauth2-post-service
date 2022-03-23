@@ -3,7 +3,6 @@ package com.support.oauth2postservice.service;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.domain.enumeration.Role;
-import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.PostRepository;
 import com.support.oauth2postservice.service.dto.request.PostCreateRequest;
@@ -26,14 +25,14 @@ public class PostService {
   @Transactional(readOnly = true)
   public Page<PostReadResponse> searchByCondition(PostSearchRequest condition, Role roleFromCurrentUser) {
     if (roleFromCurrentUser.isInferiorThan(Role.MANAGER))
-      condition.changeStatus(Status.ACTIVE);
+      condition.setDefaultOptionsForUser();
 
     return postRepository.search(condition);
   }
 
   @Transactional(readOnly = true)
-  public PostReadResponse findActivePost(String postId) {
-    return postRepository.findActiveToResponse(postId)
+  public PostReadResponse findById(String postId) {
+    return postRepository.findResponseById(postId)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND));
   }
 
@@ -51,7 +50,7 @@ public class PostService {
     if (postEditRequest == null)
       return;
 
-    Post post = postRepository.findActive(postId)
+    Post post = postRepository.findById(postId)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Post.NOT_FOUND));
 
     Post updateSource = postEditRequest.toEntity();

@@ -26,7 +26,7 @@ class PagingHelperTest extends JpaTest {
     PageRequest pageRequest = PageRequest.of(50, 100, Sort.by(Sort.Direction.ASC, ColumnConstants.Name.TITLE));
 
     JPQLQuery<PostReadResponse> query = queryFactory
-        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt))
+        .select(new QPostReadResponse(post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt, post.status))
         .from(post)
         .join(post.member);
 

@@ -63,15 +63,11 @@ public class Post extends BaseEntity {
   }
 
   public void close() {
-    changeStatus(Status.INACTIVE);
+    this.status = Status.INACTIVE;
   }
 
   public void reopen() {
-    changeStatus(Status.ACTIVE);
-  }
-
-  private void changeStatus(Status status) {
-    this.status = status;
+    this.status = Status.ACTIVE;
   }
 
   public void changeFrom(Post source) {

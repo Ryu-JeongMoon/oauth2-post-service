@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PostRepositoryCustom {
 
-  Optional<PostReadResponse> findActiveToResponse(String id);
+  Optional<PostReadResponse> findResponseById(String id);
 
   Page<PostReadResponse> search(PostSearchRequest searchCondition);
 }
