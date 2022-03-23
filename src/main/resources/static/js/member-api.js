@@ -52,7 +52,7 @@ function requestEdit() {
   );
 }
 
-async function requestDelete(delete_data, failText) {
+async function deleteMember(delete_data, failText) {
   await $.delete(
     '/members/edit-page', delete_data,
     () => {
@@ -76,7 +76,7 @@ async function requestDelete(delete_data, failText) {
   );
 }
 
-async function requestDeleteByOwner() {
+async function deleteByOwner() {
   const { value: passwordValue } = await Swal.fire({
     icon: 'warning',
     title: '비밀번호를 입력해주세요',
@@ -108,17 +108,17 @@ async function requestDeleteByOwner() {
   };
   let delete_data = JSON.stringify(data);
 
-  await requestDelete(delete_data, '비밀번호가 맞지 않습니다');
+  await deleteMember(delete_data, '비밀번호가 맞지 않습니다');
 }
 
-async function requestDeleteByAdmin() {
+async function deleteByAdmin() {
   const data = {
     id: $('#id').val(),
     password: null,
   };
   const delete_data = JSON.stringify(data);
 
-  await requestDelete(delete_data, '요청 권한이 없습니다');
+  await deleteMember(delete_data, '요청 권한이 없습니다');
 }
 
 function moveToHomePage() {
