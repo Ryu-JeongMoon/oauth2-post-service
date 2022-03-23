@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
   @Query("select p from Post p where p.id = :id and p.status = 'INACTIVE'")
   Optional<Post> findInactive(String id);
+
+  Optional<Post> findById(String id);
 }

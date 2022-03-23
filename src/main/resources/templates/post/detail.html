@@ -16,12 +16,28 @@
       <div class='card-footer bg-transparent border-success'
            th:text='${#temporals.format(postReadResponse.openedAt, "yyyy-MM-dd HH:mm:ss")}'>Footer
       </div>
+      <div class='card-footer bg-transparent' th:if='${postReadResponse.openedAt ne postReadResponse.modifiedAt}'
+           th:text='${#temporals.format(postReadResponse.modifiedAt, "yyyy-MM-dd HH:mm:ss ")} + #{label.post.edited}'>
+        Footer
+      </div>
     </div>
   </div>
-  <div class='col-12 mt-4' style='text-align: center;' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
-    <button class='btn btn-outline-primary'>수정</button>
-    <button class='btn btn-outline-danger'>삭제</button>
+  <div class='col-12 mt-4' sec:authorize='hasAnyRole("ADMIN", "MANAGER")' style='text-align: center;'>
+    <button class='btn btn-outline-primary'
+            th:onclick='moveToEditPage([[${postReadResponse.id}]])'
+            th:text='#{label.button.edit}'>수정
+    </button>
+    <button class='btn btn-outline-danger' th:if='${postReadResponse.status.name() eq "ACTIVE"}'
+            th:onclick='closePost([[${postReadResponse.id}]])'
+            th:text='#{label.button.inactivate}'>비활성
+    </button>
+    <button class='btn btn-outline-info' th:if='${postReadResponse.status.name() eq "INACTIVE"}'
+            th:onclick='reopenPost([[${postReadResponse.id}]])'
+            th:text='#{label.button.activate}'>활성</button>
   </div>
+  <th:block layout:fragment='customScriptFragment'>
+    <script th:src='@{/js/post-api.js}' type='text/javascript'></script>
+  </th:block>
 </th:block>
 
 </html>

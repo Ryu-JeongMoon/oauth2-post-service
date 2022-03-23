@@ -56,8 +56,9 @@ public class PostSearchRequest extends PageAttributes {
     return QueryDslUtils.getQSort(getSorts(), QPost.post, keywords);
   }
 
-  public void changeStatus(Status status) {
-    this.status = status;
+  public void setDefaultOptionsForUser() {
+    this.status = Status.ACTIVE;
+    this.openedAt = LocalDateTime.now();
   }
 
   @Getter
