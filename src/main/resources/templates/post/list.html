@@ -36,15 +36,24 @@
           </table>
         </div>
       </div>
-      <div class='pagination' th:if='${postReadResponses.totalPages > 0}'>
-        <div th:each='pageNumber : ${#numbers.sequence(1, postReadResponses.totalPages)}'>
-          <a th:href='@{/posts(page=${pageNumber} - 1)}'
-             th:text='${pageNumber}'
-             th:class='${pageNumber == postReadResponses.number + 1} ? active'>
-          </a>
-        </div>
-      </div>
     </div>
+    <nav style='text-align: center;' class='mb-4'>
+      <ul class='pagination justify-content-center'
+          th:with='pageable=${postReadResponses.pageable}, totalPages=${postReadResponses.totalPages}'>
+        <li class='page-item' th:classappend='${!pageable.hasPrevious()} ? disabled'>
+          <a class='page-link' href='#'
+             th:href="${pageable.hasPrevious() ? '?page=' + (pageable.previousOrFirst()) : ''}">&laquo;</a>
+        </li>
+        <li th:each='num: ${#numbers.sequence(1, totalPages)}' class='page-item'
+            th:classappend='${pageable.pageNumber eq num} ? active'>
+          <a class='page-link' href='#' th:href='@{/posts(page=${num}-1)}' th:text='${num}'></a>
+        </li>
+        <li class='page-item' th:classappend='${!pageable.hasPrevious()} ? disabled'>
+          <a class='page-link'
+             th:href='${pageable.next().pageNumber < totalPages ? "/posts(page=${pageable.next()})" : ""}'>&raquo;</a>
+        </li>
+      </ul>
+    </nav>
   </div>
   <th:block layout:fragment='customScriptFragment'>
     <script th:src='@{/js/post-api.js}' type='text/javascript'></script>

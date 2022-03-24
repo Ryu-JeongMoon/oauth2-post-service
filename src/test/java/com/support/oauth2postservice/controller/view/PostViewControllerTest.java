@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.web.util.NestedServletException;
 
@@ -79,7 +80,8 @@ class PostViewControllerTest extends AbstractWebMvcTest {
     @DisplayName("검색 조건 없는 조회")
     @WithMockCustomUser(role = Role.ADMIN)
     void getPosts() throws Exception {
-      PageImpl<PostReadResponse> readResponses = new PageImpl<>(Collections.singletonList(postReadResponse));
+      PageImpl<PostReadResponse> readResponses = new PageImpl<>(
+          Collections.singletonList(postReadResponse), PageRequest.of(0, 10), 10);
       Mockito.when(postService.searchByCondition(any(), any())).thenReturn(readResponses);
 
       mockMvc.perform(
@@ -96,7 +98,8 @@ class PostViewControllerTest extends AbstractWebMvcTest {
     @DisplayName("검색 조건 있는 조회")
     @WithMockCustomUser(role = Role.ADMIN)
     void getPosts_successBySearchRequest() throws Exception {
-      PageImpl<PostReadResponse> readResponses = new PageImpl<>(Collections.singletonList(postReadResponse));
+      PageImpl<PostReadResponse> readResponses = new PageImpl<>(
+          Collections.singletonList(postReadResponse), PageRequest.of(0, 10), 10);
       Mockito.when(postService.searchByCondition(any(), any())).thenReturn(readResponses);
 
       mockMvc.perform(
