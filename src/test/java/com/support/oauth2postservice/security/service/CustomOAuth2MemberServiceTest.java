@@ -13,13 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.access.AccessDeniedException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
@@ -64,7 +63,7 @@ class CustomOAuth2MemberServiceTest {
     attributes.put("name", inactiveMember.getNickname());
     OAuth2Attributes oAuth2Attributes = OAuth2Attributes.of("google", attributes);
 
-    assertThrows(AccessDeniedException.class,
+    assertThrows(IllegalStateException.class,
         () -> customOAuth2MemberService.getMember("google", oAuth2Attributes));
   }
 }

@@ -8,7 +8,6 @@ import com.support.oauth2postservice.security.oauth2.OAuth2Attributes;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityListeners;
@@ -34,7 +33,7 @@ public class CustomOAuth2MemberService implements OAuth2MemberService {
 
   private void throwIfInactive(Member member) {
     if (Status.INACTIVE.equals(member.getStatus()))
-      throw new AccessDeniedException(ExceptionMessages.Member.ALREADY_LEFT);
+      throw new IllegalStateException(ExceptionMessages.Member.ALREADY_LEFT);
   }
 
   private Member getNewlyRegistered(String registrationId, OAuth2Attributes oAuth2Attributes) {
