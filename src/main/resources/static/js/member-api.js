@@ -59,9 +59,9 @@ async function deleteMember(delete_data, failText) {
       Swal.fire({
         icon: 'success',
         title: '삭제 되었습니다',
-        text: '홈페이지로 이동합니다',
+        text: '목록 페이지로 이동합니다',
       }).then(() => {
-        setTimeout(() => moveToHomePage(), 100);
+        setTimeout(() => history.back(), 100);
       });
     },
     () => {
