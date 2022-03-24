@@ -5,6 +5,10 @@
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
       layout:decorate='~{layout}'>
 
+<th:block layout:fragment='titleFragment'>
+  <title th:text='#{label.member-detail}'>MEMBER DETAIL</title>
+</th:block>
+
 <th:block layout:fragment='contentFragment'>
   <div class='container'>
     <form class='row g-3' th:object='${memberReadResponse}'>

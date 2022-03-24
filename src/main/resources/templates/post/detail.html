@@ -5,6 +5,10 @@
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
       layout:decorate='~{layout}'>
 
+<th:block layout:fragment='titleFragment'>
+  <title th:text='#{label.post-detail}'>POST DETAIL</title>
+</th:block>
+
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
     <div class='card border-success container-fluid' style='max-width: 80%;'>
