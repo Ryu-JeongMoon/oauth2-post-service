@@ -5,6 +5,10 @@
       xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
       layout:decorate='~{layout}'>
 
+<th:block layout:fragment='titleFragment'>
+  <title th:text='#{label.home}'>HOME</title>
+</th:block>
+
 <th:block layout:fragment='contentFragment'>
   <div class='container'>
     <h1>어서오세유</h1>
