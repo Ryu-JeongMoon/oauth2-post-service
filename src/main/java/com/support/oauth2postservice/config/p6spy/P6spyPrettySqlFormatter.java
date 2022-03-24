@@ -41,12 +41,11 @@ public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
       callStackBuilder.append("\n\t\t").append(order++).append(". ").append(callStack.pop());
     }
 
-    String message = new StringBuilder()
-        .append("\n\n\tConnection ID: ").append(connectionId)
-        .append("\n\tExecution Time: ").append(elapsed).append(" ms")
-        .append("\n\tCall Stack (number 1 is entry point): ").append(callStackBuilder)
-        .append("\n----------------------------------------------------------------------------------------------------")
-        .toString();
+    String message =
+        "\n\n\tConnection ID: " + connectionId +
+            "\n\tExecution Time: " + elapsed + " ms" +
+            "\n\tCall Stack (number 1 is entry point): " + callStackBuilder +
+            "\n----------------------------------------------------------------------------------------------------";
 
     return sqlFormat(sql, category, message);
   }
@@ -69,17 +68,17 @@ public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
       }
     }
 
-    String finalSql = sql;
+    final String finalSql = sql.toUpperCase();
     CompletableFuture.runAsync(() -> {
       File file = new File(String.format(QUERY_FILE_NAME, LocalDate.now()));
       try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))) {
         bufferedWriter.write(LocalDateTime.now().format(FORMATTER));
-        bufferedWriter.write(finalSql.toUpperCase() + "\n");
+        bufferedWriter.write(finalSql + message + "\n");
       } catch (IOException e) {
         log.error("[SUPPORT-ERROR] :: exception {}", e);
       }
     });
 
-    return "\n" + sql.toUpperCase() + message;
+    return "\n" + finalSql + message;
   }
 }
