@@ -2,6 +2,10 @@ package com.support.oauth2postservice.util.constant;
 
 public class UriConstants {
 
+  public static final CharSequence[] SHOULD_NOT_FILTER_URL_PREFIX = {
+      "/css", "/js", "/img", "/vendor", "/logout"
+  };
+
   public static class Full {
     public static final String BASE_URL = "https://localhost:8443";
     public static final String MY_PAGE = "https://localhost:8443/members/my-page";

@@ -3,6 +3,7 @@ package com.support.oauth2postservice.security.jwt;
 import com.support.oauth2postservice.util.CookieUtils;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
+import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return StringUtils.startsWithAny(request.getRequestURI(), "/css", "/js", "/img", "/vendor", "/logout");
+    return StringUtils.startsWithAny(request.getRequestURI(), UriConstants.SHOULD_NOT_FILTER_URL_PREFIX);
   }
 
   @Override
