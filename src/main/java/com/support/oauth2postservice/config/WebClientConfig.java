@@ -24,12 +24,12 @@ import java.time.Duration;
 public class WebClientConfig {
 
   private static final int DEFAULT_TIMEOUT_SECONDS = 5;
-  private static final int MAX_IN_MEMORY_SIZE = 1024 * 1024 * 50;
+  private static final int MAX_BYTE_COUNT = 1024 * 1024 * 50;
 
   @Bean
   public WebClient webClient() {
     ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE))
+        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(MAX_BYTE_COUNT))
         .build();
 
     exchangeStrategies
