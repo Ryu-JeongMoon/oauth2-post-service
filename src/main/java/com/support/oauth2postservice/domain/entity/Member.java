@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  * 애플리케이션 자체 로그인의 경우 LOCAL, 그 외 각 벤더의 이름을 나타낸다<br/><br/>
  * InitialAuthProvider - 신규 유입 통계를 확인하기 위해 초기 진입점 표현<br/>
  * LatestAuthProvider - 로그인 방식이 달라질 때 현재 인증 제공자 표현<br/>
- * 각각의 처리를 담당하는 CustomUserDetailsService, CustomOAuth2USerService 에서 변경 된다<br/>
+ * 각각의 처리를 담당하는 CustomUserDetailsService, CustomOAuth2MemberService 에서 변경 된다<br/>
  * 가입 후 로그인 이력이 없다면 LatestAuthProvider 는 null 로 초기화 된다
  */
 @Entity
