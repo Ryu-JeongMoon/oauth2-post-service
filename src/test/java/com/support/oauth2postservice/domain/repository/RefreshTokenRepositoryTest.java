@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.domain.repository;
 
-import com.support.oauth2postservice.config.JpaTest;
+import com.support.oauth2postservice.config.AbstractDataJpaTest;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.RefreshToken;
 import com.support.oauth2postservice.domain.enumeration.AuthProvider;
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class RefreshTokenRepositoryTest extends JpaTest {
+class RefreshTokenRepositoryTest extends AbstractDataJpaTest {
 
   @Autowired
   RefreshTokenRepository refreshTokenRepository;

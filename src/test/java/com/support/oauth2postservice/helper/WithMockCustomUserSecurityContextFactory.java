@@ -1,6 +1,5 @@
 package com.support.oauth2postservice.helper;
 
-import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

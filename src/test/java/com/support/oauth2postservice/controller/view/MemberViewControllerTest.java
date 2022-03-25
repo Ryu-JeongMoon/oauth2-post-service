@@ -2,6 +2,7 @@ package com.support.oauth2postservice.controller.view;
 
 import com.support.oauth2postservice.controller.AbstractWebMvcTest;
 import com.support.oauth2postservice.helper.MemberTestHelper;
+import com.support.oauth2postservice.helper.PageableTestHelper;
 import com.support.oauth2postservice.helper.PrincipalTestHelper;
 import com.support.oauth2postservice.security.config.JwtSecurityConfig;
 import com.support.oauth2postservice.security.config.SecurityConfig;
@@ -34,6 +35,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -85,6 +87,30 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     };
   }
 
+  @Test
+  @DisplayName("수정 페이지 조회")
+  void editPage() throws Exception {
+    Mockito.when(memberService.findResponseById(anyString())).thenReturn(readResponse);
+
+    EntityExchangeResult<byte[]> result = webTestClient.get()
+        .uri(uriBuilder -> uriBuilder
+            .path(UriConstants.Mapping.MEMBERS_EDIT)
+            .queryParam("id", "1")
+            .build())
+        .exchange()
+        .expectStatus().is2xxSuccessful()
+        .expectBody().returnResult();
+
+    MockMvcWebTestClient.resultActionsFor(result)
+        .andDo(print())
+        .andExpectAll(
+            status().isOk(),
+            model().attributeExists("memberEditRequest"),
+            model().attributeExists("memberReadResponse"),
+            view().name("member/edit")
+        );
+  }
+
   @Nested
   @DisplayName("회원 목록 조회")
   class GetMembersTest {
@@ -92,7 +118,8 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("검색 조건 없는 조회")
     void getMembers() throws Exception {
-      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(Collections.singletonList(readResponse));
+      List<MemberReadResponse> result = Collections.singletonList(readResponse);
+      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(result, PageableTestHelper.createDefault(), result.size());
       Mockito.when(memberService.searchByCondition(any())).thenReturn(readResponses);
 
       mockMvc.perform(
@@ -109,7 +136,8 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("검색 조건 있는 조회")
     void getMembers_successWithSearchRequest() throws Exception {
-      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(Collections.singletonList(readResponse));
+      List<MemberReadResponse> result = Collections.singletonList(readResponse);
+      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(result, PageableTestHelper.createDefault(), result.size());
       Mockito.when(memberService.searchByCondition(any())).thenReturn(readResponses);
 
       mockMvc.perform(
@@ -127,16 +155,17 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("검색 조건 있는 조회 - WebTestClient 이용")
     void getMembers_successWithSearchRequestByWebTestClient() throws Exception {
-      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(Collections.singletonList(readResponse));
+      List<MemberReadResponse> result = Collections.singletonList(readResponse);
+      PageImpl<MemberReadResponse> readResponses = new PageImpl<>(result, PageableTestHelper.createDefault(), result.size());
       Mockito.when(memberService.searchByCondition(any())).thenReturn(readResponses);
 
-      EntityExchangeResult<byte[]> result = webTestClient.get()
+      EntityExchangeResult<byte[]> exchangeResult = webTestClient.get()
           .uri(UriConstants.Mapping.MEMBERS)
           .exchange()
           .expectStatus().is2xxSuccessful()
           .expectBody().returnResult();
 
-      MockMvcWebTestClient.resultActionsFor(result)
+      MockMvcWebTestClient.resultActionsFor(exchangeResult)
           .andExpectAll(
               model().attributeExists("memberReadResponses"),
               view().name("member/list")
@@ -225,29 +254,5 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
           .andDo(print())
           .andExpect(status().isBadRequest());
     }
-  }
-
-  @Test
-  @DisplayName("수정 페이지 조회")
-  void editPage() throws Exception {
-    Mockito.when(memberService.findResponseById(anyString())).thenReturn(readResponse);
-
-    EntityExchangeResult<byte[]> result = webTestClient.get()
-        .uri(uriBuilder -> uriBuilder
-            .path(UriConstants.Mapping.MEMBERS_EDIT)
-            .queryParam("id", "1")
-            .build())
-        .exchange()
-        .expectStatus().is2xxSuccessful()
-        .expectBody().returnResult();
-
-    MockMvcWebTestClient.resultActionsFor(result)
-        .andDo(print())
-        .andExpectAll(
-            status().isOk(),
-            model().attributeExists("memberEditRequest"),
-            model().attributeExists("memberReadResponse"),
-            view().name("member/edit")
-        );
   }
 }

@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.domain.post.repository;
 
-import com.support.oauth2postservice.config.JpaTest;
+import com.support.oauth2postservice.config.AbstractDataJpaTest;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.Post;
 import com.support.oauth2postservice.helper.MemberTestHelper;
@@ -22,7 +22,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PostRepositoryTest extends JpaTest {
+class PostRepositoryTest extends AbstractDataJpaTest {
 
   private Post post;
   private Member member;

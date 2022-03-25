@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 
 @DataJpaTest
 @Import(TestConfig.class)
-public class JpaTest {
+public class AbstractDataJpaTest {
 
   protected static String USER_ID;
   protected static String MANAGER_ID;

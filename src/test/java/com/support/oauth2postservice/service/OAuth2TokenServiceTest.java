@@ -22,13 +22,6 @@ import static org.mockito.Mockito.*;
 @Import(OAuth2Config.class)
 class OAuth2TokenServiceTest extends ServiceTest {
 
-  @Mock
-  WebClientWrappable webClientWrappable;
-  @Mock
-  ClientRegistrationRepository clientRegistrationRepository;
-  @InjectMocks
-  OAuth2TokenService oAuth2TokenService;
-
   private final ClientRegistration testClientRegistration = ClientRegistration.withRegistrationId("panda")
       .tokenUri("panda")
       .clientId("panda")
@@ -38,6 +31,13 @@ class OAuth2TokenServiceTest extends ServiceTest {
       .authorizationUri("panda")
       .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
       .build();
+
+  @Mock
+  WebClientWrappable webClientWrappable;
+  @Mock
+  ClientRegistrationRepository clientRegistrationRepository;
+  @InjectMocks
+  OAuth2TokenService oAuth2TokenService;
 
   @Nested
   @DisplayName("토큰 검증")

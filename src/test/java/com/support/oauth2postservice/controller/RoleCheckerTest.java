@@ -1,6 +1,6 @@
 package com.support.oauth2postservice.controller;
 
-import com.support.oauth2postservice.config.JpaTest;
+import com.support.oauth2postservice.config.AbstractDataJpaTest;
 import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-class RoleCheckerTest extends JpaTest {
+class RoleCheckerTest extends AbstractDataJpaTest {
 
   Member member;
   RoleChecker roleChecker;
