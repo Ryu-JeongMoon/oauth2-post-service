@@ -1,7 +1,7 @@
 package com.support.oauth2postservice.util;
 
 import com.querydsl.jpa.JPQLQuery;
-import com.support.oauth2postservice.config.JpaTest;
+import com.support.oauth2postservice.config.AbstractDataJpaTest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import com.support.oauth2postservice.service.dto.response.QPostReadResponse;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Sort;
 
 import static com.support.oauth2postservice.domain.entity.QPost.post;
 
-class PagingHelperTest extends JpaTest {
+class PagingHelperTest extends AbstractDataJpaTest {
 
   @Autowired
   protected PagingHelper pagingHelper;
