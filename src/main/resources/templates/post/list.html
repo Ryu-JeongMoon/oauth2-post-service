@@ -37,23 +37,41 @@
         </div>
       </div>
     </div>
+
+    <!-- Pagination -->
     <nav style='text-align: center;' class='mb-4'>
       <ul class='pagination justify-content-center'
-          th:with='pageable=${postReadResponses.pageable}, totalPages=${postReadResponses.totalPages}'>
-        <li class='page-item' th:classappend='${!pageable.hasPrevious()} ? disabled'>
-          <a class='page-link' href='#'
-             th:href="${pageable.hasPrevious() ? '?page=' + (pageable.previousOrFirst()) : ''}">&laquo;</a>
+          th:with='start=${T(Math).floor(postReadResponses.number / 5) * 5 + 1},
+                   last=${start + 4 < postReadResponses.totalPages ? start + 4 : postReadResponses.totalPages}'>
+        <li class='page-item'>
+          <a class='page-link' th:href='@{/posts(page=0)}' aria-label='First'>
+            <span aria-hidden='true'>First</span>
+          </a>
         </li>
-        <li th:each='num: ${#numbers.sequence(1, totalPages)}' class='page-item'
-            th:classappend='${pageable.pageNumber eq num} ? active'>
-          <a class='page-link' href='#' th:href='@{/posts(page=${num}-1)}' th:text='${num}'></a>
+        <li class='page-item' th:class='|${postReadResponses.isFirst()} ? disabled|'>
+          <a th:href="${postReadResponses.isFirst()} ? '#' : @{/posts(page=${postReadResponses.number - 1})}"
+             class='page-link' aria-label='Previous'>
+            <span aria-hidden='true'>&laquo;</span>
+          </a>
         </li>
-        <li class='page-item' th:classappend='${!pageable.hasPrevious()} ? disabled'>
-          <a class='page-link'
-             th:href='${pageable.next().pageNumber < totalPages ? "/posts(page=${pageable.next()})" : ""}'>&raquo;</a>
+        <li th:each='page : ${#numbers.sequence(start, last)}'
+            th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
+          <a th:href='@{/posts(page=${page}-1)}' class='page-link' th:text='${page}'></a>
+        </li>
+        <li class='page-item' th:class='|${postReadResponses.isLast()} ? disabled|'>
+          <a th:href="${postReadResponses.isLast()} ? '#' : @{/posts(page=${postReadResponses.number + 1})}"
+             class='page-link' aria-label='Next'>
+            <span aria-hidden='true'>&raquo;</span>
+          </a>
+        </li>
+        <li class='page-item'>
+          <a class='page-link' th:href='@{/posts(page=${postReadResponses.totalPages} - 1)}' aria-label='Last'>
+            <span aria-hidden='true'>Last</span>
+          </a>
         </li>
       </ul>
     </nav>
+
   </div>
   <th:block layout:fragment='customScriptFragment'>
     <script th:src='@{/js/post-api.js}' type='text/javascript'></script>

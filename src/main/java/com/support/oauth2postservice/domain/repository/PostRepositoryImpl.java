@@ -29,7 +29,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   public Optional<PostReadResponse> findResponseById(String id) {
     return Optional.ofNullable(
         queryFactory.select(new QPostReadResponse(
-                post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt, post.status
+                post.id, post.member.nickname, post.title, post.content, post.openedAt, post.createdAt, post.modifiedAt, post.status
             ))
             .from(post)
             .leftJoin(post.member, member)
@@ -45,7 +45,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     JPQLQuery<PostReadResponse> query = queryFactory
         .select(new QPostReadResponse(
-            post.id, post.member.nickname, post.title, post.content, post.openedAt, post.modifiedAt, post.status
+            post.id, post.member.nickname, post.title, post.content, post.openedAt, post.createdAt, post.modifiedAt, post.status
         ))
         .from(post)
         .join(post.member)
