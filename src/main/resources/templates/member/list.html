@@ -43,6 +43,41 @@
         </div>
       </div>
     </div>
+
+    <!-- Pagination -->
+    <nav style='text-align: center;' class='mb-4'>
+      <ul class='pagination justify-content-center'
+          th:with='start=${T(Math).floor(memberReadResponses.number / 5) * 5 + 1},
+                   last=${start + 4 < memberReadResponses.totalPages ? start + 4 : memberReadResponses.totalPages}'>
+        <li class='page-item'>
+          <a class='page-link' th:href='@{/members(page=0)}' aria-label='First'>
+            <span aria-hidden='true'>First</span>
+          </a>
+        </li>
+        <li class='page-item' th:class='|${memberReadResponses.isFirst()} ? disabled|'>
+          <a th:href="${memberReadResponses.isFirst()} ? '#' : @{/members(page=${memberReadResponses.number - 1})}"
+             class='page-link' aria-label='Previous'>
+            <span aria-hidden='true'>&laquo;</span>
+          </a>
+        </li>
+        <li th:each='page : ${#numbers.sequence(start, last)}'
+            th:classappend="${page == memberReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
+          <a th:href='@{/members(page=${page}-1)}' class='page-link' th:text='${page}'></a>
+        </li>
+        <li class='page-item' th:class='|${memberReadResponses.isLast()} ? disabled|'>
+          <a th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 1})}"
+             class='page-link' aria-label='Next'>
+            <span aria-hidden='true'>&raquo;</span>
+          </a>
+        </li>
+        <li class='page-item'>
+          <a class='page-link' th:href='@{/members(page=${memberReadResponses.totalPages} - 1)}' aria-label='Last'>
+            <span aria-hidden='true'>Last</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
   </div>
   <th:block layout:fragment='customScriptFragment'>
     <script th:src='@{/js/member-api.js}' type='text/javascript'></script>
