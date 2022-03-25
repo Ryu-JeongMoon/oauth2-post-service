@@ -5,7 +5,6 @@ import com.support.oauth2postservice.helper.MemberTestHelper;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.jwt.EllipticCurveFactory;
 import com.support.oauth2postservice.security.jwt.EllipticCurveVerifier;
-import com.support.oauth2postservice.security.jwt.TokenException;
 import com.support.oauth2postservice.security.jwt.TokenResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
