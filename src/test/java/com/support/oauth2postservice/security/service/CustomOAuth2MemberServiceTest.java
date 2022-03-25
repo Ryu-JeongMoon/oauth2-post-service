@@ -24,13 +24,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class})
 class CustomOAuth2MemberServiceTest {
 
+  private final Member member = MemberTestHelper.createUser();
+  private final Member inactiveMember = MemberTestHelper.createUser();
   @Mock
   MemberRepository memberRepository;
   @InjectMocks
   CustomOAuth2MemberService customOAuth2MemberService;
-
-  private final Member member = MemberTestHelper.createUser();
-  private final Member inactiveMember = MemberTestHelper.createUser();
 
   @BeforeEach
   void setUp() {
