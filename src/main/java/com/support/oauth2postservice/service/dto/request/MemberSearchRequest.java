@@ -48,8 +48,8 @@ public class MemberSearchRequest extends PageAttributes {
 
     List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
 
-    String[] keywords = EnumUtils.toStringArray(SortingColumn.values());
-    return QueryDslUtils.getQSort(columnsAndDirections, QMember.member, keywords);
+    String[] sortingColumns = EnumUtils.toStringArray(SortingColumn.values());
+    return QueryDslUtils.getQSort(columnsAndDirections, QMember.member, sortingColumns);
   }
 
   private enum SortingColumn {

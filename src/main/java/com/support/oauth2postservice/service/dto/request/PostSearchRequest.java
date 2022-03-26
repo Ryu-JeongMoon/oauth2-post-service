@@ -58,11 +58,11 @@ public class PostSearchRequest extends PageAttributes {
 
     List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
 
-    String[] keywords = Arrays.stream(SortingColumn.values())
+    String[] sortingColumns = Arrays.stream(SortingColumn.values())
         .map(SortingColumn::getColumnName)
         .toArray(String[]::new);
 
-    return QueryDslUtils.getQSort(columnsAndDirections, QPost.post, keywords);
+    return QueryDslUtils.getQSort(columnsAndDirections, QPost.post, sortingColumns);
   }
 
   public void setDefaultOptionsForUser() {
