@@ -6,12 +6,16 @@ import com.support.oauth2postservice.domain.entity.QMember;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.util.EnumUtils;
 import com.support.oauth2postservice.util.QueryDslUtils;
+import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import lombok.*;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @ToString
@@ -36,11 +40,16 @@ public class MemberSearchRequest extends PageAttributes {
 
   @Override
   public QSort getQSort() {
-    if (getSorts().isEmpty())
+    String[] sorts = getSorts();
+    String[] orders = getOrders();
+
+    if (sorts.length == 0)
       return PageConstants.MEMBER_SEARCH_DEFAULT_SORT;
 
+    List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
+
     String[] keywords = EnumUtils.toStringArray(SortingColumn.values());
-    return QueryDslUtils.getQSort(getSorts(), QMember.member, keywords);
+    return QueryDslUtils.getQSort(columnsAndDirections, QMember.member, keywords);
   }
 
   private enum SortingColumn {

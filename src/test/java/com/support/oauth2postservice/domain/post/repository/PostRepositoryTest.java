@@ -8,7 +8,6 @@ import com.support.oauth2postservice.helper.PostTestHelper;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
 import com.support.oauth2postservice.util.constant.PageConstants;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -136,7 +134,8 @@ class PostRepositoryTest extends AbstractDataJpaTest {
 
     // when
     PostSearchRequest searchRequest = PostSearchRequest.builder().build();
-    searchRequest.setSorts(Collections.singletonList(Pair.of(PageConstants.Column.OPENED_AT, Sort.Direction.ASC)));
+    searchRequest.setSorts(new String[]{PageConstants.Column.OPENED_AT});
+    searchRequest.setOrders(new String[]{Sort.Direction.ASC.name()});
     searchRequest.setPage(0);
     searchRequest.setSize(5);
 
