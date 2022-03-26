@@ -5,15 +5,19 @@ import com.support.oauth2postservice.domain.PageAttributes;
 import com.support.oauth2postservice.domain.entity.QPost;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.QueryDslUtils;
+import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import lombok.*;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;
 
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @ToString
@@ -46,14 +50,19 @@ public class PostSearchRequest extends PageAttributes {
 
   @Override
   protected QSort getQSort() {
-    if (getSorts().isEmpty())
+    String[] sorts = getSorts();
+    String[] orders = getOrders();
+
+    if (sorts.length == 0)
       return PageConstants.POST_SEARCH_DEFAULT_SORT;
 
-    String[] keywords = Arrays.stream(SortingColumn.values())
+    List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
+
+    String[] sortingColumns = Arrays.stream(SortingColumn.values())
         .map(SortingColumn::getColumnName)
         .toArray(String[]::new);
 
-    return QueryDslUtils.getQSort(getSorts(), QPost.post, keywords);
+    return QueryDslUtils.getQSort(columnsAndDirections, QPost.post, sortingColumns);
   }
 
   public void setDefaultOptionsForUser() {
@@ -67,7 +76,7 @@ public class PostSearchRequest extends PageAttributes {
     TITLE("title"),
     STATUS("status"),
     CONTENT("content"),
-    NICKNAME("nickname"),
+    NICKNAME("member.nickname"),
     OPENED_AT("openedAt");
 
     private final String columnName;

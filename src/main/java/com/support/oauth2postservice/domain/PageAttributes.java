@@ -5,14 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.querydsl.QSort;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +18,9 @@ public abstract class PageAttributes {
 
   protected int size = PageConstants.DEFAULT_PAGE_SIZE;
 
-  protected List<Pair<String, Sort.Direction>> sorts = new ArrayList<>();
+  protected String[] sorts = new String[]{};
+
+  protected String[] orders = new String[]{};
 
   public Pageable getPageable() {
     return QPageRequest.of(getPage(), getSize(), getQSort());
