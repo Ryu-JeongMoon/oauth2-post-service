@@ -3,7 +3,7 @@ package com.support.oauth2postservice.util.constant;
 public class UriConstants {
 
   public static final CharSequence[] SHOULD_NOT_FILTER_URL_PREFIX = {
-      "/css", "/js", "/img", "/vendor", "/logout"
+      "/css", "/js", "/img", "/vendor", "/logout", "/swagger-ui", "/swagger-resources", "/v2"
   };
 
   public static class Full {

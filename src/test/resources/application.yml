@@ -12,6 +12,10 @@ spring:
         ddl-auto: create-drop
         dialect: org.hibernate.dialect.H2Dialect
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   redis:
     port: 6379
     host: localhost
