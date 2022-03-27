@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 @RequiredArgsConstructor
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring()
-        .antMatchers("/favicon.io", "/css/**", "/js/**", "/vendor/**", "/img/**");
+        .antMatchers("/favicon.io", "/css/**", "/js/**", "/vendor/**", "/img/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**");
   }
 
   @Override
