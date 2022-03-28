@@ -11,6 +11,8 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,22 +56,17 @@ public class SwaggerConfig {
   }
 
   private Set<String> getConsumeContentTypes() {
-    Set<String> consumes = new HashSet<>();
-    consumes.add(MediaType.APPLICATION_JSON_VALUE);
-    consumes.add(MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-    return consumes;
+    return new HashSet<>(Collections.singletonList(MediaType.APPLICATION_JSON_VALUE));
   }
 
   private Set<String> getProduceContentTypes() {
-    Set<String> produces = new HashSet<>();
-    produces.add(MediaType.APPLICATION_JSON_VALUE);
-    return produces;
+    return new HashSet<>(Arrays.asList(MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE, MediaType.TEXT_PLAIN_VALUE));
   }
 
   private ApiInfo getApiInfo() {
     return new ApiInfoBuilder()
-        .title("API")
         .version("1.0")
+        .title("OAUTH2-SUPPORT API")
         .description("[OAuth2-Support] API")
         .contact(new Contact("OAuth2 Support Swagger", UriConstants.Full.BASE_URL, "panda@gmail.com"))
         .build();
