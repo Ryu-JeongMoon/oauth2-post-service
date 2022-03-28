@@ -8,6 +8,8 @@ import com.support.oauth2postservice.util.QueryDslUtils;
 import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
+import com.support.oauth2postservice.util.constant.RegexpConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.Sort;
@@ -25,17 +27,22 @@ import java.util.List;
 public class PostSearchRequest extends PageAttributes {
 
   @Size(max = ColumnConstants.Length.SEARCH)
+  @Schema(description = "닉네임", example = "panda")
   private String nickname;
 
   @Size(max = ColumnConstants.Length.SEARCH)
+  @Schema(description = "제목", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
   private String title;
 
   @Size(max = ColumnConstants.Length.SEARCH)
+  @Schema(description = "내용", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
   private String content;
 
+  @Schema(description = "상태", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
   private Status status;
 
   @PastOrPresent
+  @Schema(description = "게시일", example = "2020-03-09 13:13:13")
   private LocalDateTime openedAt;
 
   @Builder
