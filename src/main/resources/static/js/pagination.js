@@ -13,9 +13,6 @@
       'autoWidth': false,
       'responsive': true,
       'ordering': true,
-      'orderFixed': {
-        'pre': [2, 'desc'],
-      },
       'processing': true,
       'pagingType': 'first_last_numbers',
       'lengthMenu': [100, 50, 25, 10],
