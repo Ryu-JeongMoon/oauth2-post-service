@@ -49,14 +49,14 @@
           </a>
         </li>
         <li class='page-item' th:class='|${postReadResponses.isFirst()} ? disabled|'>
-          <a th:href="${postReadResponses.isFirst()} ? '#' : @{/posts(page=${postReadResponses.number - 1})}"
+          <a th:href="${postReadResponses.isFirst()} ? '#' : @{/posts(page=${postReadResponses.number})}"
              class='page-link' aria-label='Previous'>
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
         <li th:each='page : ${#numbers.sequence(start, last)}'
             th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
-          <a th:href='@{/posts(page=${page}-1)}' class='page-link' th:text='${page}'></a>
+          <a th:href='@{/posts(page=${page})}' class='page-link' th:text='${page}'></a>
         </li>
         <li class='page-item' th:class='|${postReadResponses.isLast()} ? disabled|'>
           <a th:href="${postReadResponses.isLast()} ? '#' : @{/posts(page=${postReadResponses.number + 1})}"
@@ -65,7 +65,7 @@
           </a>
         </li>
         <li class='page-item'>
-          <a class='page-link' th:href='@{/posts(page=${postReadResponses.totalPages} - 1)}' aria-label='Last'>
+          <a class='page-link' th:href='@{/posts(page=${postReadResponses.totalPages})}' aria-label='Last'>
             <span aria-hidden='true'>Last</span>
           </a>
         </li>

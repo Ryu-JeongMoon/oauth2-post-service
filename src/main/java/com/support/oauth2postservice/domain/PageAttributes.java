@@ -23,7 +23,8 @@ public abstract class PageAttributes {
   protected String[] orders = new String[]{};
 
   public Pageable getPageable() {
-    return QPageRequest.of(getPage(), getSize(), getQSort());
+    int page = getPage() > 1 ? getPage() - 1 : PageConstants.DEFAULT_PAGE_NUMBER;
+    return QPageRequest.of(page, getSize(), getQSort());
   }
 
   protected abstract QSort getQSort();
