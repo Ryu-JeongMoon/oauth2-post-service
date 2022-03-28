@@ -31,6 +31,7 @@ public class ColumnConstants {
     public static final String EMAIL = "email";
     public static final String LEFT_AT = "left_at";
     public static final String NICKNAME = "nickname";
+    public static final String PASSWORD = "password";
     public static final String INITIAL_AUTH_PROVIDER = "initial_auth_provider";
     public static final String LATEST_AUTH_PROVIDER = "latest_auth_provider";
     public static final String UNIQUE_EMAIL = "uk_member_email";
