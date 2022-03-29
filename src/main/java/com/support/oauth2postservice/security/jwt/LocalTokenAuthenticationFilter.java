@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +27,8 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return Arrays.stream(UriConstants.SHOULD_NOT_FILTER_URL_PATTERN)
+    return UriConstants.SHOULD_NOT_FILTER_URL_PATTERN
+        .stream()
         .anyMatch(pattern -> ANT_PATH_MATCHER.match(pattern, request.getRequestURI()));
   }
 

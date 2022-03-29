@@ -29,7 +29,8 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return Arrays.stream(UriConstants.SHOULD_NOT_FILTER_URL_PATTERN)
+    return UriConstants.SHOULD_NOT_FILTER_URL_PATTERN
+        .stream()
         .anyMatch(pattern -> ANT_PATH_MATCHER.match(pattern, request.getRequestURI()));
   }
 
