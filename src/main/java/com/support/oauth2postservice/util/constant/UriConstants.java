@@ -1,10 +1,13 @@
 package com.support.oauth2postservice.util.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class UriConstants {
 
-  public static final CharSequence[] SHOULD_NOT_FILTER_URL_PREFIX = {
-      "/css", "/js", "/img", "/vendor", "/logout", "/swagger-ui", "/swagger-resources", "/v2"
-  };
+  public static final List<String> SHOULD_NOT_FILTER_URL_PATTERN = Arrays.asList(
+      "/css/**", "/js/**", "/img/**", "/vendor/**", "/logout/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**"
+  );
 
   public static class Full {
     public static final String BASE_URL = "https://localhost:8443";
