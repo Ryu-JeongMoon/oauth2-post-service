@@ -21,8 +21,8 @@ class OAuth2TokenAuthenticationFilterTest {
   };
   public static final List<String> SHOULD_NOT_FILTER_URL_PATTERN_LIST = Arrays.asList(SHOULD_NOT_FILTER_URL_PATTERN_ARRAY);
 
-  @EnabledOnOs({OS.MAC, OS.WINDOWS})
   @Test
+  @EnabledOnOs({OS.MAC, OS.WINDOWS})
   @DisplayName("경로 비교 속도 실험 - startsWithAny << AntPathMatcher & Array << List")
   void compare() {
     String uri = "/vendor";

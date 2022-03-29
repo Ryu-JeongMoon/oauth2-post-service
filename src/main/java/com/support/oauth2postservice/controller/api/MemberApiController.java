@@ -8,7 +8,7 @@ import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
-import com.support.oauth2postservice.util.exception.AjaxAccessDeniedException;
+import com.support.oauth2postservice.util.exception.AjaxUnauthorizedException;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class MemberApiController {
 
   private void throwIfUnauthorized(Role currentUserRole, Role toBeChangedRole) {
     if (currentUserRole.isInferiorThan(toBeChangedRole))
-      throw new AjaxAccessDeniedException(ExceptionMessages.Member.ACCESS_DENIED);
+      throw new AjaxUnauthorizedException(ExceptionMessages.Member.ACCESS_DENIED);
   }
 
   @DeleteMapping(UriConstants.Mapping.MEMBERS_EDIT)
