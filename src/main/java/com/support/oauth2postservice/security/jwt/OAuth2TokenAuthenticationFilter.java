@@ -7,8 +7,8 @@ import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -24,9 +25,12 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
   private final RefreshTokenService refreshTokenService;
 
+  private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
+
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return StringUtils.startsWithAny(request.getRequestURI(), UriConstants.SHOULD_NOT_FILTER_URL_PREFIX);
+    return Arrays.stream(UriConstants.SHOULD_NOT_FILTER_URL_PATTERN)
+        .anyMatch(pattern -> ANT_PATH_MATCHER.match(pattern, request.getRequestURI()));
   }
 
   @Override
