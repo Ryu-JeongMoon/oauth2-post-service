@@ -117,7 +117,7 @@ class MemberApiControllerTest extends AbstractWebMvcTest {
       Authentication authentication = userPrincipal.toAuthentication();
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      MemberEditRequest editRequest = MemberTestHelper.createEditRequest();
+      MemberEditRequest editRequest = MemberTestHelper.createDefaultEditRequest();
       String jsonRequest = objectMapper.writeValueAsString(editRequest);
 
       mockMvc.perform(
@@ -130,8 +130,8 @@ class MemberApiControllerTest extends AbstractWebMvcTest {
 
     @Test
     @DisplayName("404 실패 - UserPrincipal 부적합")
-    void edit_failByUserPrinciapl() throws Exception {
-      MemberEditRequest editRequest = MemberTestHelper.createEditRequest();
+    void edit_failByUserPrincipal() throws Exception {
+      MemberEditRequest editRequest = MemberTestHelper.createDefaultEditRequest();
       String jsonRequest = objectMapper.writeValueAsString(editRequest);
 
       mockMvc.perform(

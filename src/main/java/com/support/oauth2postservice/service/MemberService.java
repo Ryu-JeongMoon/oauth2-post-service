@@ -84,13 +84,11 @@ public class MemberService {
       return;
     }
 
-    probableMember
-        .ifPresent(
-            member -> {
-              if (passwordEncoder.matches(memberDeleteRequest.getPassword(), member.getPassword()))
-                member.leave();
-              else
-                throw new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
-            });
+    probableMember.ifPresent(
+        member -> {
+          if (!passwordEncoder.matches(memberDeleteRequest.getPassword(), member.getPassword()))
+            throw new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
+          member.leave();
+        });
   }
 }
