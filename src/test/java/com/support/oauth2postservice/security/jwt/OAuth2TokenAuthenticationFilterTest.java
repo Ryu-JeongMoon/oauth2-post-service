@@ -3,6 +3,8 @@ package com.support.oauth2postservice.security.jwt;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.Arrays;
@@ -19,6 +21,7 @@ class OAuth2TokenAuthenticationFilterTest {
   };
   public static final List<String> SHOULD_NOT_FILTER_URL_PATTERN_LIST = Arrays.asList(SHOULD_NOT_FILTER_URL_PATTERN_ARRAY);
 
+  @EnabledOnOs({OS.MAC, OS.WINDOWS})
   @Test
   @DisplayName("경로 비교 속도 실험 - startsWithAny << AntPathMatcher & Array << List")
   void compare() {
