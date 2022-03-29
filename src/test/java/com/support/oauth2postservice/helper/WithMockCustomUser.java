@@ -12,5 +12,7 @@ public @interface WithMockCustomUser {
 
   String username() default "username";
 
+  String id() default "5766fe00-f4c5-443e-a41e-f0c42869fef7";
+
   Role role() default Role.USER;
 }

@@ -72,8 +72,17 @@ public class MemberTestHelper {
         .build();
   }
 
-  public static MemberEditRequest createEditRequest() {
+  public static MemberEditRequest createDefaultEditRequest() {
     return MemberEditRequest.builder()
+        .id(UUID.randomUUID().toString())
+        .nickname(USER_NICKNAME_AFTER_EDIT)
+        .password(PASSWORD + PASSWORD)
+        .build();
+  }
+
+  public static MemberEditRequest createSpecificEditRequest(String memberId) {
+    return MemberEditRequest.builder()
+        .id(memberId)
         .nickname(USER_NICKNAME_AFTER_EDIT)
         .password(PASSWORD + PASSWORD)
         .build();

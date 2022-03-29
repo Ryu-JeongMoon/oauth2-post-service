@@ -50,7 +50,7 @@ class MemberServiceTest extends ServiceTest {
   void edit() {
     when(memberRepository.findById(nullable(String.class))).thenReturn(Optional.ofNullable(member));
 
-    memberService.edit(MemberTestHelper.createEditRequest());
+    memberService.edit(MemberTestHelper.createDefaultEditRequest());
 
     assertThat(member.getNickname()).isEqualTo(MemberTestHelper.USER_NICKNAME_AFTER_EDIT);
 
