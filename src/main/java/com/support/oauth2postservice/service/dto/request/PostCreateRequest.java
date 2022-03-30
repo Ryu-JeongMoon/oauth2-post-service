@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class PostCreateRequest {
 
   @NotBlank
-  private String nickname;
+  private String memberId;
 
   @NotBlank
   private String title;
@@ -33,12 +33,18 @@ public class PostCreateRequest {
   private LocalDateTime closedAt;
 
   @Builder
-  public PostCreateRequest(String nickname, String title, String content, LocalDateTime openedAt, LocalDateTime closedAt) {
-    this.nickname = nickname;
+  public PostCreateRequest(String memberId, String title, String content, LocalDateTime openedAt, LocalDateTime closedAt) {
+    this.memberId = memberId;
     this.title = title;
     this.content = content;
     this.openedAt = openedAt;
     this.closedAt = closedAt;
+  }
+
+  public static PostCreateRequest withMemberId(String memberId) {
+    return PostCreateRequest.builder()
+        .memberId(memberId)
+        .build();
   }
 
   public Post toEntity(Member member) {

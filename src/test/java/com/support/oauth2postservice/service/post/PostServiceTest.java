@@ -98,7 +98,7 @@ class PostServiceTest extends ServiceTest {
   void write() {
     PostCreateRequest createRequest = PostTestHelper.getCreateRequest("panda");
 
-    when(memberRepository.findActiveByNickname(createRequest.getNickname()))
+    when(memberRepository.findActiveById(createRequest.getMemberId()))
         .thenReturn(Optional.of(member));
 
     postService.write(createRequest);
@@ -109,7 +109,7 @@ class PostServiceTest extends ServiceTest {
   }
 
   @Test
-  @DisplayName("작성 실패 - 존재하지 않는 회원 이름")
+  @DisplayName("작성 실패 - 존재하지 않는 회원 아이디")
   void write_failByNonExistMember() {
     PostCreateRequest createRequest = PostTestHelper.getCreateRequest("panda");
 

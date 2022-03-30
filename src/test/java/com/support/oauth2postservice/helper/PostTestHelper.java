@@ -27,9 +27,9 @@ public class PostTestHelper {
         .build();
   }
 
-  public static PostCreateRequest getCreateRequest(String nickname) {
+  public static PostCreateRequest getCreateRequest(String memberId) {
     return PostCreateRequest.builder()
-        .nickname(nickname)
+        .memberId(memberId)
         .title(TITLE)
         .content(CONTENT)
         .openedAt(OPENED_AT)
