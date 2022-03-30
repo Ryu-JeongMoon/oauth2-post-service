@@ -103,35 +103,35 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("탈퇴 성공 - 유저 본인")
     void leave_byOwner() {
-      when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(member));
+      when(memberRepository.findActiveById(USER_ID)).thenReturn(Optional.of(member));
 
       memberService.leave(Role.USER, deleteRequest);
 
       assertThat(member.getLeftAt()).isNotNull();
 
-      verify(memberRepository, times(1)).findActive(USER_ID);
+      verify(memberRepository, times(1)).findActiveById(USER_ID);
     }
 
     @Test
     @DisplayName("탈퇴 성공 - 관리자")
     void leave_byAdmin() {
-      when(memberRepository.findActive(USER_ID)).thenReturn(Optional.of(member));
+      when(memberRepository.findActiveById(USER_ID)).thenReturn(Optional.of(member));
 
       memberService.leave(Role.ADMIN, deleteRequest);
 
       assertThat(member.getLeftAt()).isNotNull();
 
-      verify(memberRepository, times(1)).findActive(USER_ID);
+      verify(memberRepository, times(1)).findActiveById(USER_ID);
     }
 
     @Test
     @DisplayName("탈퇴 실패 - 존재하지 않는 ID")
     void leave_failByWrongId() {
-      when(memberRepository.findActive(AdditionalMatchers.not(eq(MANAGER_ID)))).thenThrow(IllegalArgumentException.class);
+      when(memberRepository.findActiveById(AdditionalMatchers.not(eq(MANAGER_ID)))).thenThrow(IllegalArgumentException.class);
 
       assertThrows(IllegalArgumentException.class, () -> memberService.leave(Role.USER, deleteRequest));
 
-      verify(memberRepository, times(1)).findActive(any());
+      verify(memberRepository, times(1)).findActiveById(any());
     }
 
     @Test
@@ -139,7 +139,7 @@ class MemberServiceTest extends ServiceTest {
     void leave_failByAlreadyLeft() {
       member.leave();
 
-      when(memberRepository.findActive(any())).thenReturn(Optional.of(member));
+      when(memberRepository.findActiveById(any())).thenReturn(Optional.of(member));
 
       assertThrows(IllegalStateException.class, () -> memberService.leave(Role.USER, deleteRequest));
     }
@@ -147,7 +147,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     @DisplayName("탈퇴 실패 - 비밀번호 불일치")
     void leave_failByEmptyAuthentication() {
-      when(memberRepository.findActive(any())).thenReturn(Optional.of(member));
+      when(memberRepository.findActiveById(any())).thenReturn(Optional.of(member));
 
       MemberDeleteRequest deleteRequest = MemberDeleteRequest.builder()
           .id("panda")

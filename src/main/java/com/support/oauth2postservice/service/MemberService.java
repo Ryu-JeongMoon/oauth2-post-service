@@ -77,7 +77,7 @@ public class MemberService {
 
   @Transactional
   public void leave(Role roleFromCurrentUser, MemberDeleteRequest memberDeleteRequest) {
-    Optional<Member> probableMember = memberRepository.findActive(memberDeleteRequest.getId());
+    Optional<Member> probableMember = memberRepository.findActiveById(memberDeleteRequest.getId());
 
     if (roleFromCurrentUser == Role.ADMIN) {
       probableMember.ifPresent(Member::leave);

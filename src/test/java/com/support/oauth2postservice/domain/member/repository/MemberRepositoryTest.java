@@ -37,7 +37,7 @@ class MemberRepositoryTest extends AbstractDataJpaTest {
   @Test
   @DisplayName("EntityListener 작동 확인")
   void entityListener() {
-    Member member = memberRepository.findActive(USER_ID)
+    Member member = memberRepository.findActiveById(USER_ID)
         .orElseGet(() -> Member.builder().build());
 
     assertThat(member.getCreatedAt()).isNotNull();
@@ -47,17 +47,17 @@ class MemberRepositoryTest extends AbstractDataJpaTest {
   @Test
   @DisplayName("활성 상태 회원 조회 - PK")
   void findActiveMember() {
-    assertThat(memberRepository.findActive(USER_ID).isPresent()).isTrue();
+    assertThat(memberRepository.findActiveById(USER_ID).isPresent()).isTrue();
   }
 
   @Test
   @DisplayName("비활성 상태 회원 조회")
   void findInactiveMember() {
-    Member member = memberRepository.findActive(USER_ID)
+    Member member = memberRepository.findActiveById(USER_ID)
         .orElseGet(() -> Member.builder().build());
     member.leave();
 
-    boolean isMemberPresent = memberRepository.findActive(member.getId()).isPresent();
+    boolean isMemberPresent = memberRepository.findActiveById(member.getId()).isPresent();
     assertThat(isMemberPresent).isFalse();
   }
 
