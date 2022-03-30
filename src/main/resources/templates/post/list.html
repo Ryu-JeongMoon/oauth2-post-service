@@ -3,6 +3,7 @@
       layout:decorate='~{layout}'
       xmlns='http://www.w3.org/1999/xhtml'
       xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
       xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
@@ -11,6 +12,11 @@
 
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
+    <div class='pagination' style='margin: auto' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
+      <button class='btn btn-outline-primary mb-1' style='margin: auto'
+              th:text='#{label.button.write}'
+              th:onclick='moveToWritePage()'>WRITING</button>
+    </div>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
         <h6 class='m-0 font-weight-bold text-primary' th:text='#{label.post-list}'>POST LIST</h6>
@@ -26,10 +32,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr style='cursor: pointer' th:each='post : ${postReadResponses}'
-                th:onclick='moveToDetailPage([[${post.id}]])'>
-              <td th:text='${post.nickname}'></td>
-              <td th:text='${post.title}'></td>
+            <tr style='cursor: pointer' th:each='post : ${postReadResponses}'>
+              <td th:text='${post.nickname}' th:onclick='moveToPostByNicknamePage([[${post.nickname}]])'></td>
+              <td th:text='${post.title}' th:onclick='moveToDetailPage([[${post.id}]])'></td>
               <td th:text='${#temporals.format(post.openedAt, "yyyy-MM-dd HH:mm")}'></td>
             </tr>
             </tbody>
