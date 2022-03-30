@@ -31,6 +31,7 @@ public class UriConstants {
     public static final String POSTS = "/posts";
     public static final String POSTS_DETAIL = "/posts/{id}";
     public static final String POSTS_EDIT = "/posts/edit-page/{id}";
+    public static final String POSTS_WRITE_PAGE = "/posts/write-page";
 
     public static final String ISSUE_GOOGLE_TOKEN = "/oauth2/google";
     public static final String ISSUE_OAUTH2_TOKEN = "/oauth2/{registrationId}";

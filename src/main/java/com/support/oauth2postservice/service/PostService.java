@@ -38,7 +38,7 @@ public class PostService {
 
   @Transactional
   public void write(PostCreateRequest postCreateRequest) {
-    Member member = memberRepository.findActiveByNickname(postCreateRequest.getNickname())
+    Member member = memberRepository.findActiveById(postCreateRequest.getMemberId())
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     Post post = postCreateRequest.toEntity(member);
