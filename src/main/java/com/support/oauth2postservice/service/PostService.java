@@ -47,7 +47,7 @@ public class PostService {
 
   @Transactional
   public void edit(String postId, PostEditRequest postEditRequest) {
-    if (postEditRequest == null)
+    if (postEditRequest == null || PostEditRequest.empty().equals(postEditRequest))
       return;
 
     Post post = postRepository.findById(postId)
