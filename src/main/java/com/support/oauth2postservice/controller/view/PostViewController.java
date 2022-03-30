@@ -2,6 +2,7 @@ package com.support.oauth2postservice.controller.view;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.service.PostService;
+import com.support.oauth2postservice.service.dto.request.PostCreateRequest;
 import com.support.oauth2postservice.service.dto.request.PostEditRequest;
 import com.support.oauth2postservice.service.dto.request.PostSearchRequest;
 import com.support.oauth2postservice.service.dto.response.PostReadResponse;
@@ -39,6 +40,14 @@ public class PostViewController {
     PostReadResponse postReadResponse = postService.findById(id);
     model.addAttribute("postReadResponse", postReadResponse);
     return "post/detail";
+  }
+
+  @GetMapping(UriConstants.Mapping.POSTS_WRITE_PAGE)
+  @PreAuthorize(SpELConstants.MANAGER_OR_ADMIN)
+  public String writePage(Model model) {
+    String memberId = SecurityUtils.getPrincipalFromCurrentUser().getId();
+    model.addAttribute("postCreateRequest", PostCreateRequest.withMemberId(memberId));
+    return "post/write";
   }
 
   @GetMapping(UriConstants.Mapping.POSTS_EDIT)
