@@ -2,8 +2,10 @@ package com.support.oauth2postservice.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bouncycastle.util.Arrays;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -14,9 +16,13 @@ import java.util.stream.IntStream;
 public class SortUtils {
 
   public static List<Pair<String, Sort.Direction>> getPairs(String[] sorts, String[] orders) {
-    return IntStream.range(0, Math.min(sorts.length, orders.length))
+    if (ArrayUtils.getLength(sorts) > ArrayUtils.getLength(orders))
+      orders = Arrays.append(orders, "");
+
+    final String[] finalOrders = orders;
+    return IntStream.range(0, sorts.length)
         .mapToObj(i -> {
-          String order = orders[i];
+          String order = finalOrders[i];
           Sort.Direction direction = Sort.Direction.DESC;
           if (StringUtils.isNotBlank(order) && StringUtils.equalsIgnoreCase(order, Sort.Direction.ASC.name()))
             direction = Sort.Direction.ASC;

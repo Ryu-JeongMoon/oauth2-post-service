@@ -3,6 +3,7 @@ package com.support.oauth2postservice.controller.view;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
 import com.support.oauth2postservice.security.jwt.OAuth2TokenVerifier;
+import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
 import com.support.oauth2postservice.service.OAuth2TokenService;
 import com.support.oauth2postservice.service.RefreshTokenService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -26,12 +28,16 @@ public class OAuth2TokenViewController {
   private final OAuth2TokenService oAuth2TokenService;
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
   private final RefreshTokenService refreshTokenService;
+  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
   @GetMapping(UriConstants.Mapping.ISSUE_OAUTH2_TOKEN)
   public String loginIfRefreshTokenNotExists(
       @PathVariable String registrationId,
       @RequestParam String code,
+      HttpServletRequest request,
       HttpServletResponse response) {
+
+    httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
 
     OAuth2TokenResponse oAuth2TokenResponse = oAuth2TokenService.getOAuth2Token(registrationId, code);
     String oidcIdToken = oAuth2TokenResponse.getOidcIdToken();
