@@ -30,6 +30,7 @@ public class PostViewController {
   public String getPosts(@Valid PostSearchRequest searchRequest, Model model) {
     Role roleFromCurrentUser = SecurityUtils.getRoleFromCurrentUser();
     Page<PostReadResponse> postReadResponses = postService.searchByCondition(searchRequest, roleFromCurrentUser);
+    model.addAttribute("postSearchRequest", searchRequest);
     model.addAttribute("postReadResponses", postReadResponses);
     return "post/list";
   }

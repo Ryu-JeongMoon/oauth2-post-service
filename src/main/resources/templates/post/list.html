@@ -11,12 +11,23 @@
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
-  <div class='container-fluid'>
-    <div class='pagination' style='margin: auto' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
-      <button class='btn btn-outline-primary mb-1' style='margin: auto'
-              th:text='#{label.button.write}'
-              th:onclick='moveToWritePage()'>WRITING</button>
-    </div>
+  <div class='container-fluid' style='max-width: 80%'>
+    <nav class='navbar navbar-search bg-light'>
+      <form class='form-inline' id='search-form' onsubmit='return false' style='float: right; margin: auto'>
+        <select class='form-control form-select' id='column' name='column'>
+          <option
+            th:each='eachColumn : ${T(com.support.oauth2postservice.service.dto.request.PostSearchRequest.SortingColumn).values()}'
+            th:text='#{__${eachColumn.name()}__}'
+            th:value='${eachColumn}'
+          ></option>
+        </select>
+        <input class='form-control mr-sm-2' id='keyword' type='text' placeholder='Search' aria-label='Search'>
+        <button class='btn btn-outline-primary my-2 my-sm-0' id='search-button' style='margin: auto' type='button'
+                th:onclick='search()'>
+          Search
+        </button>
+      </form>
+    </nav>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
         <h6 class='m-0 font-weight-bold text-primary' th:text='#{label.post-list}'>POST LIST</h6>
@@ -26,15 +37,15 @@
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th width='20%' th:text='#{label.member.nickname}'>nickname</th>
               <th width='40%' th:text='#{label.post.title}'>title</th>
+              <th width='20%' th:text='#{label.member.nickname}'>nickname</th>
               <th width='40%' th:text='#{label.post.opened-at}'>opened-at</th>
             </tr>
             </thead>
             <tbody>
             <tr style='cursor: pointer' th:each='post : ${postReadResponses}'>
-              <td th:text='${post.nickname}' th:onclick='moveToPostByNicknamePage([[${post.nickname}]])'></td>
               <td th:text='${post.title}' th:onclick='moveToDetailPage([[${post.id}]])'></td>
+              <td th:text='${post.nickname}' th:onclick='moveToPostByNicknamePage([[${post.nickname}]])'></td>
               <td th:text='${#temporals.format(post.openedAt, "yyyy-MM-dd HH:mm")}'></td>
             </tr>
             </tbody>
@@ -45,11 +56,18 @@
 
     <!-- Pagination -->
     <nav style='text-align: center;' class='mb-4'>
+      <div class='justify-content-center' style='float:right; margin: auto;'
+           sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
+        <button class='btn btn-outline-primary' style='margin: auto'
+                th:text='#{label.button.write}'
+                th:onclick='moveToWritePage()'>WRITING
+        </button>
+      </div>
       <ul class='pagination justify-content-center'
           th:with='start=${T(Math).floor(postReadResponses.number / 5) * 5 + 1},
                    last=${start + 4 < postReadResponses.totalPages ? start + 4 : postReadResponses.totalPages}'>
         <li class='page-item'>
-          <a class='page-link' th:href='@{/posts(page=0)}' aria-label='First'>
+          <a class='page-link' th:href='@{/posts(page=1)}' aria-label='First'>
             <span aria-hidden='true'>First</span>
           </a>
         </li>
@@ -59,13 +77,14 @@
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
-        <li th:each='page : ${#numbers.sequence(start, last)}'
+        <li th:each='page : ${#numbers.sequence(start, last)}' th:if='${page ne 0}'
             th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
           <a th:href='@{/posts(page=${page})}' class='page-link' th:text='${page}'></a>
         </li>
         <li class='page-item' th:class='|${postReadResponses.isLast()} ? disabled|'>
-          <a th:href="${postReadResponses.isLast()} ? '#' : @{/posts(page=${postReadResponses.number + 1})}"
-             class='page-link' aria-label='Next'>
+          <a
+            th:href="${postReadResponses.isLast()} ? '#' : @{/posts(page=${postReadResponses.number + 2})}"
+            class='page-link' aria-label='Next'>
             <span aria-hidden='true'>&raquo;</span>
           </a>
         </li>

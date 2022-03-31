@@ -141,3 +141,41 @@ async function reopenPost(postId) {
     },
   );
 }
+
+function search() {
+  const queryString = setQueryStringParams();
+  console.log('queryString', queryString);
+
+  location.href = `/posts?${queryString}`;
+}
+
+function setQueryStringParams() {
+  const column = $('#column').val().toLowerCase();
+  const keyword = $('#keyword').val();
+
+  const queryParams = {};
+  queryParams[column] = keyword;
+
+  if (!location.search)
+    return formToQueryString(queryParams);
+
+  new URLSearchParams(location.search)
+    .forEach((key, value) => {
+      queryParams[key] = value;
+    });
+  return formToQueryString(queryParams);
+}
+
+function formToQueryString(queryParams) {
+  return Object.entries(queryParams)
+    .map(k => `${encodeURIComponent(k[0])}=${encodeURIComponent(k[1])}`)
+    .join('&');
+}
+
+window.onload = function() {
+  document.querySelector('#keyword')
+    .addEventListener('keydown', (e) => {
+      if (e.key === 'Enter')
+        return search();
+    });
+};
