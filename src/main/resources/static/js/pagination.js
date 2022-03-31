@@ -7,15 +7,13 @@
 
   $(function() {
     $('#dataTable').DataTable({
-      'paging': true,
-      'searching': true,
-      'info': true,
+      'info': false,
+      'paging': false,
+      'ordering': false,
+      'searching': false,
       'autoWidth': false,
       'responsive': true,
-      'ordering': true,
       'processing': true,
-      'pagingType': 'first_last_numbers',
-      'lengthMenu': [100, 50, 25, 10],
     });
   });
 
