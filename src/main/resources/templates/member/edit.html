@@ -10,7 +10,7 @@
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
-  <div class='container'>
+  <div class='container' style='max-width: 30%'>
     <form class='row g-3' id='form' autocomplete='off' th:object='${memberEditRequest}'>
       <div class='col-12'>
         <input class='form-control' readonly th:field='${memberReadResponse.id}' th:id='id' hidden>
@@ -19,16 +19,16 @@
         <label class='form-label' for='email' th:text='#{label.member.email}'>Email</label>
         <input class='form-control' id='email' readonly th:field='${memberReadResponse.email}' th:id='email'>
       </div>
-      <div class='col-12 form-check'>
+      <div class='col-12'>
         <label class='form-label' for='nickname' th:text='#{label.member.nickname}'>Nickname</label>
         <input class='form-control' id='nickname' autocomplete='off' th:field='*{nickname}' th:id='nickname'>
       </div>
-      <div class='col-12 form-check'>
+      <div class='col-12'>
         <label class='form-label' for='password' th:text='#{label.member.password}'>Password</label>
         <input class='form-control' id='password' type='password' autocomplete='off' th:field='*{password}'
                th:id='password'>
       </div>
-      <div class='col-12 form-check' sec:authorize='hasRole("ADMIN") or hasRole("MANAGER")'>
+      <div class='col-12' sec:authorize='hasRole("ADMIN") or hasRole("MANAGER")'>
         <label class='form-label' for='role' th:text='#{label.member.role}'>Role</label>
         <select class='form-control form-select dropdown-toggle' id='role' required th:placeholder='*{role}'>
           <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
@@ -37,7 +37,7 @@
                   th:selected='${eachRole == memberEditRequest.role}'></option>
         </select>
       </div>
-      <div class='col-12 form-check' sec:authorize='hasRole("ADMIN")'>
+      <div class='col-12' sec:authorize='hasRole("ADMIN")'>
         <label class='form-label' for='status' th:text='#{label.member.status}'>Status</label>
         <select class='form-control form-select' id='status' name='change-status' th:id='status'>
           <option th:each='eachStatus : ${T(com.support.oauth2postservice.domain.enumeration.Status).values()}'

@@ -10,7 +10,7 @@
 </th:block>
 
 <th:block layout:fragment='contentFragment'>
-  <div class='container-fluid'>
+  <div class='container-fluid' style='max-width: 80%'>
     <div class='card shadow mb-4'>
       <div class='card-header py-3'>
         <h6 class='m-0 font-weight-bold text-primary' th:text='#{label.member-list}'>MEMBER LIST</h6>
@@ -65,7 +65,7 @@
           <a th:href='@{/members(page=${page})}' class='page-link' th:text='${page}'></a>
         </li>
         <li class='page-item' th:class='|${memberReadResponses.isLast()} ? disabled|'>
-          <a th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 1})}"
+          <a th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 2})}"
              class='page-link' aria-label='Next'>
             <span aria-hidden='true'>&raquo;</span>
           </a>

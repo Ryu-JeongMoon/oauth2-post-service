@@ -11,16 +11,18 @@
 
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
-    <div class='card border-success container-fluid' style='max-width: 80%;'>
-      <div class='card-header bg-transparent border-success' th:text='${postReadResponse.nickname}'>Header</div>
-      <div class='card-body text-success'>
-        <h5 class='card-title' th:text='${postReadResponse.title}'>title</h5>
-        <p class='card-text' th:text='${postReadResponse.content}'>content</p>
+    <div class='card border-dark container-fluid' style='max-width: 60%;'>
+      <label for='title' class='col-form-label' th:text='#{label.post.title}'></label>
+      <div class='card-header bg-transparent border-dark' id='title' th:text='${postReadResponse.title}'>title</div>
+      <label for='content' class='col-form-label' th:text='#{label.post.content}'></label>
+      <div class='card-body text-dark'>
+        <h5 class='card-title' id='content' th:text='${postReadResponse.content}'>content</h5>
+        <p class='card-text' style='float: right' th:text='${postReadResponse.nickname}'>nickname</p>
       </div>
       <th:block th:with='openedAt=${#temporals.format(postReadResponse.openedAt, "yyyy-MM-dd HH:mm:ss")},
                          modifiedAt=${#temporals.format(postReadResponse.modifiedAt, "yyyy-MM-dd HH:mm:ss ")},
                          createdAt=${#temporals.format(postReadResponse.createdAt, "yyyy-MM-dd HH:mm:ss ")}'>
-        <div class='card-footer bg-transparent border-success'
+        <div class='card-footer bg-transparent border-dark'
              th:text='${openedAt}'>Footer
         </div>
         <div class='card-footer bg-transparent' th:if='${createdAt ne modifiedAt}'
