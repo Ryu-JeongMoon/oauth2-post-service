@@ -16,10 +16,7 @@ import java.util.stream.IntStream;
 public class SortUtils {
 
   public static List<Pair<String, Sort.Direction>> getPairs(String[] sorts, String[] orders) {
-    if (ArrayUtils.getLength(sorts) > ArrayUtils.getLength(orders))
-      orders = Arrays.append(orders, "");
-
-    final String[] finalOrders = orders;
+    String[] finalOrders = getOrdersIfShorterThanSorts(sorts, orders);
     return IntStream.range(0, sorts.length)
         .mapToObj(i -> {
           String order = finalOrders[i];
@@ -29,5 +26,17 @@ public class SortUtils {
           return Pair.of(sorts[i], direction);
         })
         .collect(Collectors.toList());
+  }
+
+  private static String[] getOrdersIfShorterThanSorts(String[] sorts, String[] orders) {
+    if (ArrayUtils.getLength(sorts) > ArrayUtils.getLength(orders)) {
+      int differenceOfLength = ArrayUtils.getLength(sorts) - ArrayUtils.getLength(orders);
+
+      for (int i = 0; i < differenceOfLength; i++) {
+        orders = Arrays.append(orders, "");
+      }
+    }
+
+    return orders;
   }
 }
