@@ -52,7 +52,7 @@ public class UserPrincipal implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return Status.ACTIVE.equals(status);
+    return Status.ACTIVE == status;
   }
 
   @Override
