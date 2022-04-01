@@ -40,27 +40,26 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    setAuthenticationIfValid(accessToken);
-
-    reissueIfExpired(req, resp);
+    if (!setAuthenticationIfValid(accessToken))
+      reissueIfExpired(req, resp);
 
     fc.doFilter(req, resp);
   }
 
-  private void setAuthenticationIfValid(String accessToken) {
-    if (tokenVerifier.isValid(accessToken))
+  private boolean setAuthenticationIfValid(String accessToken) {
+    boolean isValid = tokenVerifier.isValid(accessToken);
+    if (isValid)
       SecurityUtils.setAuthentication(tokenVerifier.getAuthentication(accessToken));
+
+    return isValid;
   }
 
   private void reissueIfExpired(HttpServletRequest request, HttpServletResponse response) {
-    String accessToken = TokenUtils.resolveAccessToken(request);
-    if (tokenVerifier.isValid(accessToken))
-      return;
-
     String refreshToken = TokenUtils.resolveRefreshToken(request);
     if (!tokenVerifier.isValid(refreshToken))
       return;
 
+    String accessToken = TokenUtils.resolveAccessToken(request);
     Authentication authentication = tokenVerifier.getAuthentication(accessToken);
     TokenResponse tokenResponse = tokenFactory.create(authentication);
 
