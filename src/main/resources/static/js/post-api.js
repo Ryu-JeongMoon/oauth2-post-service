@@ -142,26 +142,34 @@ async function reopenPost(postId) {
   );
 }
 
-function search() {
-  const queryString = setQueryStringParams();
-  console.log('queryString', queryString);
-
+function moveToPage(queryParams) {
+  const queryString = setQueryStringParams(queryParams);
   location.href = `/posts?${queryString}`;
 }
 
-function setQueryStringParams() {
+function moveToPageByPageNumber(pageNumber) {
+  const queryParams = { page: pageNumber };
+
+  moveToPage(queryParams);
+}
+
+function search() {
   const column = $('#column').val().toLowerCase();
   const keyword = $('#keyword').val();
-
   const queryParams = {};
   queryParams[column] = keyword;
 
+  moveToPage(queryParams);
+}
+
+function setQueryStringParams(queryParams) {
   if (!location.search)
     return formToQueryString(queryParams);
 
   new URLSearchParams(location.search)
-    .forEach((key, value) => {
-      queryParams[key] = value;
+    .forEach((param, column) => {
+      if (!queryParams[column])
+        queryParams[column] = param;
     });
   return formToQueryString(queryParams);
 }
@@ -176,6 +184,26 @@ window.onload = function() {
   document.querySelector('#keyword')
     .addEventListener('keydown', (e) => {
       if (e.key === 'Enter')
-        return search();
+        search();
     });
+
+  document.querySelector('#search-button')
+    .addEventListener('click', () => {
+      search();
+    });
+
+  document.querySelector('#write-button')
+    .addEventListener('click', () => {
+      moveToWritePage();
+    });
+
+  const totalPage = parseInt(document.querySelector('#page-list').getAttribute('data-total-page'));
+
+  document.querySelectorAll('[class*=page-link]')
+    .forEach(q => q.addEventListener('click', () => {
+      let pageNumber = q.getAttribute('data-page');
+
+      if (pageNumber > 0 && pageNumber <= totalPage)
+        moveToPageByPageNumber(pageNumber);
+    }));
 };
