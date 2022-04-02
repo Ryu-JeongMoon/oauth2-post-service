@@ -11,6 +11,7 @@ import com.nimbusds.jose.jwk.OctetKeyPair;
 import com.nimbusds.jose.jwk.gen.OctetKeyPairGenerator;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.util.constant.Times;
 import com.support.oauth2postservice.util.constant.TokenConstants;
@@ -18,12 +19,10 @@ import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * The 2021 TLS Telemetry Report 보고서에 따르면 많은 웹사이트가 점점 TLS v1.3으로 옮겨가는 추세이고<br/>
@@ -62,14 +61,16 @@ public class EllipticCurveFactory extends TokenFactory {
     long currentTime = new Date().getTime();
 
     String authorities = authentication.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(""));
+        .map(grantedAuthority -> grantedAuthority.getAuthority().replace(TokenConstants.ROLE_PREFIX, ""))
+        .findAny()
+        .orElseGet(Role.USER::name);
 
     JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-        .subject(getIdFromAuthentication(authentication))
+        .subject(authentication.getName())
         .issuer(TokenConstants.LOCAL_TOKEN_ISSUER)
         .claim(TokenConstants.AUTHORITIES, authorities)
         .claim(TokenConstants.TOKEN_TYPE, TokenConstants.ACCESS_TOKEN)
+        .claim(TokenConstants.USER_ID, getIdFromAuthentication(authentication))
         .expirationTime(new Date(currentTime + Times.ACCESS_TOKEN_EXPIRATION_MILLIS.getValue()))
         .build();
 

@@ -53,8 +53,9 @@ public class EllipticCurveVerifier implements TokenVerifier {
   @SneakyThrows(value = ParseException.class)
   public Authentication getAuthentication(String accessToken) {
     JWTClaimsSet claimsSet = parse(accessToken).getJWTClaimsSet();
-    String id = claimsSet.getStringClaim(TokenConstants.USER_ID);
+
     String email = claimsSet.getSubject();
+    String id = claimsSet.getStringClaim(TokenConstants.USER_ID);
     String authority = claimsSet.getStringClaim(TokenConstants.AUTHORITIES);
     List<Role> authorities = Collections.singletonList(Role.valueOfCaseInsensitively(authority));
 
