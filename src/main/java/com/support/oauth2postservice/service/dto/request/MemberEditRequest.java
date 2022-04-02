@@ -13,10 +13,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEditRequest {
 
+  @Size(max = ColumnConstants.Length.ID)
   @Schema(description = "고유 아이디", example = "d763785c-f33f-4bba-b50e-fed6a9cc41ff", minLength = 36, maxLength = 36, required = true, title = "UUID")
   private String id;
 
-  @Size(max = ColumnConstants.Length.NICKNAME)
+  @Size(max = ColumnConstants.Length.NICKNAME_MAX)
   @Schema(description = "닉네임", example = "panda", minLength = 1, maxLength = 20)
   private String nickname;
 

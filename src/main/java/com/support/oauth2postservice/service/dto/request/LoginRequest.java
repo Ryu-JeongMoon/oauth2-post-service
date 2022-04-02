@@ -16,7 +16,7 @@ public class LoginRequest {
 
   @Email
   @NotBlank
-  @Size(max = ColumnConstants.Length.EMAIL)
+  @Size(max = ColumnConstants.Length.EMAIL_MAX)
   private String email;
 
   @Size(min = ColumnConstants.Length.PASSWORD_MIN, max = ColumnConstants.Length.DEFAULT_MAX)
