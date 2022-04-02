@@ -39,11 +39,11 @@ public class Member extends BaseEntity {
   private String id;
 
   @EqualsAndHashCode.Include
-  @Column(nullable = false, length = ColumnConstants.Length.EMAIL)
+  @Column(nullable = false, length = ColumnConstants.Length.EMAIL_MAX)
   private String email;
 
   @EqualsAndHashCode.Include
-  @Column(name = ColumnConstants.Name.NICKNAME, nullable = false, length = ColumnConstants.Length.NICKNAME)
+  @Column(name = ColumnConstants.Name.NICKNAME, nullable = false, length = ColumnConstants.Length.NICKNAME_MAX)
   private String nickname;
 
   @Size(min = ColumnConstants.Length.PASSWORD_MIN, max = ColumnConstants.Length.DEFAULT_MAX)

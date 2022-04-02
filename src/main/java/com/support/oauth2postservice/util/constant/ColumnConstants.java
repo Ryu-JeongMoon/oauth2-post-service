@@ -12,8 +12,10 @@ public class ColumnConstants {
     public static final int DEFAULT_STRING = 20;
 
     public static final int ID = 36;
-    public static final int EMAIL = 320;
-    public static final int NICKNAME = 20;
+    public static final int EMAIL_MIN = 7;
+    public static final int EMAIL_MAX = 320;
+    public static final int NICKNAME_MIN = 1;
+    public static final int NICKNAME_MAX = 20;
     public static final int PASSWORD_MIN = 4;
     public static final int ENCODED_PASSWORD = 96;
 
