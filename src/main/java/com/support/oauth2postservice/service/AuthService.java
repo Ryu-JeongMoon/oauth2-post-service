@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.service;
 
+import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.jwt.TokenFactory;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +32,23 @@ public class AuthService {
 
   @Transactional(readOnly = true)
   public void login(LoginRequest loginRequest, HttpServletResponse response) {
-    memberRepository.findActiveByEmail(loginRequest.getEmail())
-        .ifPresent(
-            member -> {
-              if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
-                throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
+    Optional<Member> probableMember = memberRepository.findActiveByEmail(loginRequest.getEmail());
+    probableMember
+        .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
-              Authentication authentication = UserPrincipal
-                  .from(member)
-                  .toAuthentication();
+    probableMember.ifPresent(
+        member -> {
+          if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
+            throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
 
-              SecurityUtils.setAuthentication(authentication);
-              TokenResponse tokenResponse = tokenFactory.create(authentication);
-              CookieUtils.addLocalTokenToBrowser(response, tokenResponse);
-            });
+          Authentication authentication = UserPrincipal
+              .from(member)
+              .toAuthentication();
+
+          SecurityUtils.setAuthentication(authentication);
+          TokenResponse tokenResponse = tokenFactory.create(authentication);
+          CookieUtils.addLocalTokenToBrowser(response, tokenResponse);
+        });
   }
 
   public void logout(HttpServletRequest request, HttpServletResponse response) {
