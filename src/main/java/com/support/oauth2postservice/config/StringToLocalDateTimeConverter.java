@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class StringToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
 
-  private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+  private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
 
   @Nullable
   @Override

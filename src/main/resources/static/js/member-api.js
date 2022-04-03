@@ -1,16 +1,47 @@
-function requestLogin() {
+async function requestLogin() {
+  const emailInput = $('#emailInput').val();
+  const passwordInput = $('#passwordInput').val();
+
+  if (emailInput.length < 7 || passwordInput.length < 4) {
+    Swal.fire({
+      icon: 'warning',
+      title: '입력 값에 이상이 있습니다',
+      text: '이메일은 7자 이상, 비밀번호는 4자 이상 입력하세요',
+    });
+    return;
+  }
+
   const data = {
-    email: $('#emailInput').val(),
-    password: $('#passwordInput').val(),
+    email: emailInput,
+    password: passwordInput,
   };
   const post_data = JSON.stringify(data);
 
-  $.post('/members', post_data,
-    () => alert('성공'), () => alert('로그인 실패~~!'),
+  await $.post('/login', post_data,
+    () => Swal.fire({
+      icon: 'success',
+      title: '로그인 되었습니다',
+      text: '홈페이지로 이동합니다',
+    }).then(() => {
+      setTimeout(() => location.href = '/', 100);
+    }),
+    (request, status, error) => {
+      const response = request.responseJSON;
+      console.log(response);
+
+      const errors = response.errors;
+      console.log(errors);
+
+      Swal.fire({
+        icon: 'error',
+        title: '로그인할 수 없습니다',
+        html: `${errors[0].defaultMessage}<br/>입력값 => ${errors[0].code} : ${errors[0].rejectedValue}`,
+      });
+    },
   );
 }
 
-function requestEdit() {
+async function requestEdit() {
   if ($('#password').val().length > 0 && $('#password').val().length < 4) {
     Swal.fire({
       icon: 'warning',
@@ -29,7 +60,7 @@ function requestEdit() {
   };
   const patch_data = JSON.stringify(data);
 
-  $.patch(
+  await $.patch(
     '/members/edit-page', patch_data,
     () => {
       Swal.fire({
