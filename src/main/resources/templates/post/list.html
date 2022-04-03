@@ -36,9 +36,12 @@
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th width='40%' th:text='#{label.post.title}'>title</th>
-              <th width='20%' th:text='#{label.member.nickname}'>nickname</th>
-              <th width='40%' th:text='#{label.post.opened-at}'>opened-at</th>
+              <th width='30%' th:text='#{label.post.title}'>title</th>
+              <th width='10%' th:text='#{label.member.nickname}'>nickname</th>
+              <th width='30%' th:text='#{label.post.opened-at}'>opened-at</th>
+              <th width='30%' th:text='#{label.post.created-at}' sec:authorize='hasAnyRole("MANAGER", "ADMIN")'>
+                created-at
+              </th>
             </tr>
             </thead>
             <tbody>
@@ -46,6 +49,8 @@
               <td th:text='${post.title}' th:onclick='moveToDetailPage([[${post.id}]])'></td>
               <td th:text='${post.nickname}' th:onclick='moveToPostByNicknamePage([[${post.nickname}]])'></td>
               <td th:text='${#temporals.format(post.openedAt, "yyyy-MM-dd HH:mm")}'></td>
+              <td th:text='${#temporals.format(post.createdAt, "yyyy-MM-dd HH:mm")}'
+                  sec:authorize='hasAnyRole("MANAGER", "ADMIN")'></td>
             </tr>
             </tbody>
           </table>
@@ -55,9 +60,8 @@
 
     <!-- Pagination -->
     <nav style='text-align: center;' class='mb-4'>
-      <div class='justify-content-center' style='float:right; margin: auto;'
-           sec:authorize='hasAnyRole("ADMIN", "MANAGER")'>
-        <button id='write-button'
+      <div class='justify-content-center' style='float:right; margin: auto;'>
+        <button id='write-button' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'
                 class='btn btn-outline-primary' style='margin: auto'
                 th:text='#{label.button.write}'>WRITING
         </button>
@@ -68,13 +72,13 @@
                    last=${start + 4 < postReadResponses.totalPages ? start + 4 : postReadResponses.totalPages},
                    currentPage=${postReadResponses.pageable.pageNumber + 1}'
           th:data-total-page='${postReadResponses.totalPages}'>
-        <li class='page-item' th:class='|${postReadResponses.isFirst()} ? disabled : |'>
-          <a class='page-link' aria-label='First' data-page='1'>
+        <li class='page-item' th:class='|${currentPage < 5} ? disabled : |'>
+          <a class='page-link' aria-label='First' th:data-page='1'>
             <span aria-hidden='true'>First</span>
           </a>
         </li>
-        <li class='page-item' th:class='|${postReadResponses.isFirst()} ? disabled : |'>
-          <a class='page-link' aria-label='Previous' th:data-page='${currentPage - 1}'>
+        <li class='page-item' th:class='|${postReadResponses.isFirst() or currentPage < 5} ? disabled : |'>
+          <a class='page-link' aria-label='Previous' th:data-page='${currentPage - 5}'>
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
@@ -82,8 +86,9 @@
             th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
           <a class='page-link' th:text='${page}' th:data-page='${page}'></a>
         </li>
-        <li class='page-item' th:class='|${postReadResponses.isLast()} ? disabled|'>
-          <a class='page-link' aria-label='Next' th:data-page='${currentPage + 1}'>
+        <li class='page-item'
+            th:class='|${postReadResponses.isLast() or currentPage + 5 > postReadResponses.totalPages} ? disabled|'>
+          <a class='page-link' aria-label='Next' th:data-page='${currentPage + 5}'>
             <span aria-hidden='true'>&raquo;</span>
           </a>
         </li>
