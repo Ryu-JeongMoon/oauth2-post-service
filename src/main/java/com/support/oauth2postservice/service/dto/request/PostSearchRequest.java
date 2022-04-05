@@ -31,18 +31,18 @@ public class PostSearchRequest extends PageAttributes {
   private String nickname;
 
   @Size(max = ColumnConstants.Length.SEARCH)
-  @Schema(description = "제목", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
+  @Schema(description = "제목", example = "oauth2-post-service")
   private String title;
 
   @Size(max = ColumnConstants.Length.SEARCH)
-  @Schema(description = "내용", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
+  @Schema(description = "내용", example = "oauth2-post-service")
   private String content;
 
-  @Schema(description = "상태", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL, required = true)
+  @Schema(description = "상태", allowableValues = {"ACTIVE", "INACTIVE"})
   private Status status;
 
   @PastOrPresent
-  @Schema(description = "게시일", example = "2020-03-09 13:13:13")
+  @Schema(description = "게시일", example = "2022-02-12 15:30", pattern = RegexpConstants.DATETIME)
   private LocalDateTime openedAt;
 
   @Builder
