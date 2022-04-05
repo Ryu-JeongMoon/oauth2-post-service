@@ -9,6 +9,8 @@ import com.support.oauth2postservice.util.QueryDslUtils;
 import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
+import com.support.oauth2postservice.util.constant.RegexpConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.data.domain.Sort;
@@ -23,11 +25,14 @@ import java.util.List;
 public class MemberSearchRequest extends PageAttributes {
 
   @Size(max = ColumnConstants.Length.SEARCH)
+  @Schema(description = "이메일", example = "panda@gmail.com", pattern = RegexpConstants.EMAIL)
   private String email;
 
   @Size(max = ColumnConstants.Length.SEARCH)
+  @Schema(description = "닉네임", example = "panda", maxLength = 20)
   private String nickname;
 
+  @Schema(description = "권한", allowableValues = {"USER", "MANAGER", "ADMIN"}, maxLength = 7)
   private Role role;
 
   @Builder
