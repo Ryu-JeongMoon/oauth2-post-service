@@ -6,7 +6,7 @@ import java.util.List;
 public class UriConstants {
 
   public static final List<String> SHOULD_NOT_FILTER_URL_PATTERN = Arrays.asList(
-      "/css/**", "/js/**", "/img/**", "/vendor/**", "/logout/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**"
+      "/css/**", "/js/**", "/img/**", "/vendor/**", "/logout/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/webjars/**"
   );
 
   public static class Full {
