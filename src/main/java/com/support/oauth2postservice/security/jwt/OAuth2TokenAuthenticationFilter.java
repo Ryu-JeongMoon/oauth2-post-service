@@ -8,7 +8,7 @@ import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -24,13 +24,9 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
   private final OAuth2TokenVerifier oAuth2TokenVerifier;
   private final RefreshTokenService refreshTokenService;
 
-  private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
-
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
-    return UriConstants.SHOULD_NOT_FILTER_URL_PATTERN
-        .stream()
-        .anyMatch(pattern -> ANT_PATH_MATCHER.match(pattern, request.getRequestURI()));
+    return PatternMatchUtils.simpleMatch(UriConstants.SHOULD_NOT_FILTER_URL_PATTERNS, request.getRequestURI());
   }
 
   @Override
