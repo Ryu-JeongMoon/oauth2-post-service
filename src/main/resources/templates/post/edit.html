@@ -16,7 +16,7 @@
       <div class='card-body text-success'>
         <form class='row g-3' th:object='${postEditRequest}'>
           <div class='col-12'>
-            <input class='form-control' id='id' th:field='${postReadResponse.id}' hidden>
+            <input class='form-control' hidden id='id' th:field='${postReadResponse.id}'>
           </div>
           <div class='col-12'>
             <label class='form-label' for='title' th:text='#{label.post.title}'></label>

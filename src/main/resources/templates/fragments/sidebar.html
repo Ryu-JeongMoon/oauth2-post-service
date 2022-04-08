@@ -57,12 +57,12 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class='nav-item'>
-      <a class='nav-link collapsed' href='#' data-toggle='collapse' data-target='#collapsePages'
-         aria-expanded='true' aria-controls='collapsePages'>
+      <a aria-controls='collapsePages' aria-expanded='true' class='nav-link collapsed' data-target='#collapsePages'
+         data-toggle='collapse' href='#'>
         <i class='fas fa-fw fa-folder'></i>
         <span th:text='#{page}'>Pages</span>
       </a>
-      <div id='collapsePages' class='collapse' aria-labelledby='headingPages' data-parent='#accordionSidebar'>
+      <div aria-labelledby='headingPages' class='collapse' data-parent='#accordionSidebar' id='collapsePages'>
         <div class='bg-white py-2 collapse-inner rounded'>
           <h6 class='collapse-header' th:text='#{other-pages}'></h6>
           <a class='collapse-item' href='/4xx' th:text='#{client.error-page}'>Client Error Page</a>
@@ -81,7 +81,7 @@
 
     <!-- Sidebar Message -->
     <div class='sidebar-card d-none d-lg-flex'>
-      <img class='sidebar-card-illustration mb-2' th:src='@{/img/github.png}' alt='...'>
+      <img alt='...' class='sidebar-card-illustration mb-2' th:src='@{/img/github.png}'>
       <p class='text-center mb-2'><strong>OAuth2-Post-Service</strong><br />aims for convenient user experience!
       </p>
       <a class='btn btn-success btn-sm' href='https://github.com/Ryu-JeongMoon/oauth2-post-service'>To the Source!</a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
+      layout:decorate='~{layout}'
       xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
-      layout:decorate='~{layout}'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
   <title th:text='#{label.post-detail}'>POST DETAIL</title>
@@ -12,9 +12,9 @@
 <th:block layout:fragment='contentFragment'>
   <div class='container-fluid'>
     <div class='card border-dark container-fluid' style='max-width: 60%;'>
-      <label for='title' class='col-form-label' th:text='#{label.post.title}'></label>
+      <label class='col-form-label' for='title' th:text='#{label.post.title}'></label>
       <div class='card-header bg-transparent border-dark' id='title' th:text='${postReadResponse.title}'>title</div>
-      <label for='content' class='col-form-label' th:text='#{label.post.content}'></label>
+      <label class='col-form-label' for='content' th:text='#{label.post.content}'></label>
       <div class='card-body text-dark'>
         <h5 class='card-title' id='content' th:text='${postReadResponse.content}'>content</h5>
         <p class='card-text' style='float: right' th:text='${postReadResponse.nickname}'>nickname</p>

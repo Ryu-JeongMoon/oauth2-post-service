@@ -21,7 +21,7 @@
             th:value='${eachColumn}'
           ></option>
         </select>
-        <input class='form-control mr-sm-2' id='keyword' type='text' placeholder='Search' aria-label='Search'>
+        <input aria-label='Search' class='form-control mr-sm-2' id='keyword' placeholder='Search' type='text'>
         <button class='btn btn-outline-primary my-2 my-sm-0' id='search-button' style='margin: auto' type='button'>
           Search
         </button>
@@ -36,21 +36,21 @@
           <table cellspacing='0' class='table table-bordered' id='dataTable' width='100%'>
             <thead>
             <tr>
-              <th width='30%' th:text='#{label.post.title}'>title</th>
-              <th width='10%' th:text='#{label.member.nickname}'>nickname</th>
-              <th width='30%' th:text='#{label.post.opened-at}'>opened-at</th>
-              <th width='30%' th:text='#{label.post.created-at}' sec:authorize='hasAnyRole("MANAGER", "ADMIN")'>
+              <th th:text='#{label.post.title}' width='30%'>title</th>
+              <th th:text='#{label.member.nickname}' width='10%'>nickname</th>
+              <th th:text='#{label.post.opened-at}' width='30%'>opened-at</th>
+              <th sec:authorize='hasAnyRole("MANAGER", "ADMIN")' th:text='#{label.post.created-at}' width='30%'>
                 created-at
               </th>
             </tr>
             </thead>
             <tbody>
             <tr style='cursor: pointer' th:each='post : ${postReadResponses}'>
-              <td th:text='${post.title}' th:onclick='moveToDetailPage([[${post.id}]])'></td>
-              <td th:text='${post.nickname}' th:onclick='moveToPostByNicknamePage([[${post.nickname}]])'></td>
+              <td th:onclick='moveToDetailPage([[${post.id}]])' th:text='${post.title}'></td>
+              <td th:onclick='moveToPostByNicknamePage([[${post.nickname}]])' th:text='${post.nickname}'></td>
               <td th:text='${#temporals.format(post.openedAt, "yyyy-MM-dd HH:mm")}'></td>
-              <td th:text='${#temporals.format(post.createdAt, "yyyy-MM-dd HH:mm")}'
-                  sec:authorize='hasAnyRole("MANAGER", "ADMIN")'></td>
+              <td sec:authorize='hasAnyRole("MANAGER", "ADMIN")'
+                  th:text='${#temporals.format(post.createdAt, "yyyy-MM-dd HH:mm")}'></td>
             </tr>
             </tbody>
           </table>
@@ -59,41 +59,41 @@
     </div>
 
     <!-- Pagination -->
-    <nav style='text-align: center;' class='mb-4'>
+    <nav class='mb-4' style='text-align: center;'>
       <div class='justify-content-center' style='float:right; margin: auto;'>
-        <button id='write-button' sec:authorize='hasAnyRole("ADMIN", "MANAGER")'
-                class='btn btn-outline-primary' style='margin: auto'
+        <button class='btn btn-outline-primary' id='write-button'
+                sec:authorize='hasAnyRole("ADMIN", "MANAGER")' style='margin: auto'
                 th:text='#{label.button.write}'>WRITING
         </button>
       </div>
-      <div id='postReadResponses' th:value='${postReadResponses}' hidden></div>
+      <div hidden id='postReadResponses' th:value='${postReadResponses}'></div>
       <ul class='pagination justify-content-center' id='page-list'
+          th:data-total-page='${postReadResponses.totalPages}'
           th:with='start=${T(Math).floor(postReadResponses.number / 5) * 5 + 1},
                    last=${start + 4 < postReadResponses.totalPages ? start + 4 : postReadResponses.totalPages},
-                   currentPage=${postReadResponses.pageable.pageNumber + 1}'
-          th:data-total-page='${postReadResponses.totalPages}'>
+                   currentPage=${postReadResponses.pageable.pageNumber + 1}'>
         <li class='page-item' th:class='|${currentPage < 5} ? disabled : |'>
-          <a class='page-link' aria-label='First' th:data-page='1'>
+          <a aria-label='First' class='page-link' th:data-page='1'>
             <span aria-hidden='true'>First</span>
           </a>
         </li>
         <li class='page-item' th:class='|${postReadResponses.isFirst() or currentPage < 5} ? disabled : |'>
-          <a class='page-link' aria-label='Previous' th:data-page='${currentPage - 5}'>
+          <a aria-label='Previous' class='page-link' th:data-page='${currentPage - 5}'>
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
-        <li th:each='page : ${#numbers.sequence(start, last)}' th:if='${page ne 0}'
-            th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
-          <a class='page-link' th:text='${page}' th:data-page='${page}'></a>
+        <li class='page-item' th:classappend="${page == postReadResponses.pageable.pageNumber + 1} ? 'active'"
+            th:each='page : ${#numbers.sequence(start, last)}' th:if='${page ne 0}'>
+          <a class='page-link' th:data-page='${page}' th:text='${page}'></a>
         </li>
         <li class='page-item'
             th:class='|${postReadResponses.isLast() or currentPage + 5 > postReadResponses.totalPages} ? disabled|'>
-          <a class='page-link' aria-label='Next' th:data-page='${currentPage + 5}'>
+          <a aria-label='Next' class='page-link' th:data-page='${currentPage + 5}'>
             <span aria-hidden='true'>&raquo;</span>
           </a>
         </li>
         <li class='page-item' th:class='|${postReadResponses.isLast()} ? disabled|'>
-          <a class='page-link' aria-label='Last' th:data-page='${postReadResponses.totalPages}'>
+          <a aria-label='Last' class='page-link' th:data-page='${postReadResponses.totalPages}'>
             <span aria-hidden='true'>Last</span>
           </a>
         </li>
