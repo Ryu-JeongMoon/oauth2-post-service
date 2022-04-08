@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang='en'
-      xmlns:th='http://www.thymeleaf.org'
+      layout:decorate='~{layout}'
       xmlns:layout='http://www.ultraq.net.nz/thymeleaf/layout'
       xmlns:sec='http://www.thymeleaf.org/extras/spring-security'
-      layout:decorate='~{layout}'>
+      xmlns:th='http://www.thymeleaf.org'>
 
 <th:block layout:fragment='titleFragment'>
   <title th:text='#{label.member-edit}'>MEMBER EDIT</title>
@@ -11,9 +11,9 @@
 
 <th:block layout:fragment='contentFragment'>
   <div class='container' style='max-width: 30%'>
-    <form class='row g-3' id='form' autocomplete='off' th:object='${memberEditRequest}'>
+    <form autocomplete='off' class='row g-3' id='form' th:object='${memberEditRequest}'>
       <div class='col-12'>
-        <input class='form-control' readonly th:field='${memberReadResponse.id}' th:id='id' hidden>
+        <input class='form-control' hidden readonly th:field='${memberReadResponse.id}' th:id='id'>
       </div>
       <div class='col-12'>
         <label class='form-label' for='email' th:text='#{label.member.email}'>Email</label>
@@ -21,29 +21,29 @@
       </div>
       <div class='col-12'>
         <label class='form-label' for='nickname' th:text='#{label.member.nickname}'>Nickname</label>
-        <input class='form-control' id='nickname' autocomplete='off' th:field='*{nickname}' th:id='nickname'>
+        <input autocomplete='off' class='form-control' id='nickname' th:field='*{nickname}' th:id='nickname'>
       </div>
       <div class='col-12'>
         <label class='form-label' for='password' th:text='#{label.member.password}'>Password</label>
-        <input class='form-control' id='password' type='password' autocomplete='off' th:field='*{password}'
-               th:id='password'>
+        <input autocomplete='off' class='form-control' id='password' th:field='*{password}' th:id='password'
+               type='password'>
       </div>
       <div class='col-12' sec:authorize='hasRole("ADMIN") or hasRole("MANAGER")'>
         <label class='form-label' for='role' th:text='#{label.member.role}'>Role</label>
         <select class='form-control form-select dropdown-toggle' id='role' required th:placeholder='*{role}'>
           <option th:each='eachRole : ${T(com.support.oauth2postservice.domain.enumeration.Role).values()}'
+                  th:selected='${eachRole == memberEditRequest.role}'
                   th:text='#{__${eachRole.name()}__}'
-                  th:value='${eachRole}'
-                  th:selected='${eachRole == memberEditRequest.role}'></option>
+                  th:value='${eachRole}'></option>
         </select>
       </div>
       <div class='col-12' sec:authorize='hasRole("ADMIN")'>
         <label class='form-label' for='status' th:text='#{label.member.status}'>Status</label>
         <select class='form-control form-select' id='status' name='change-status' th:id='status'>
           <option th:each='eachStatus : ${T(com.support.oauth2postservice.domain.enumeration.Status).values()}'
+                  th:selected='${eachStatus == memberEditRequest.status}'
                   th:text='#{__${eachStatus.name()}__}'
-                  th:value='${eachStatus}'
-                  th:selected='${eachStatus == memberEditRequest.status}'></option>
+                  th:value='${eachStatus}'></option>
         </select>
       </div>
     </form>

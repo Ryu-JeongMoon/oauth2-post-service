@@ -30,7 +30,8 @@ async function writePost() {
   let post_data = JSON.stringify(data);
 
   await $.post(
-    '/posts', post_data,
+    '/posts',
+    post_data,
     () => {
       Swal.fire({
         icon: 'success',
@@ -72,7 +73,8 @@ async function editPost() {
 
   const postId = $('#id').val();
   await $.patch(
-    `/posts/edit-page/${postId}`, patch_data,
+    `/posts/edit-page/${postId}`,
+    patch_data,
     () => {
       Swal.fire({
         icon: 'success',
@@ -96,7 +98,8 @@ async function editPost() {
 
 async function closePost(postId) {
   await $.delete(
-    `/posts/${postId}`, null,
+    `/posts/${postId}`,
+    null,
     () => {
       Swal.fire({
         icon: 'success',
@@ -120,7 +123,8 @@ async function closePost(postId) {
 
 async function reopenPost(postId) {
   await $.patch(
-    `/posts/${postId}`, null,
+    `/posts/${postId}`,
+    null,
     () => {
       Swal.fire({
         icon: 'success',
@@ -163,47 +167,40 @@ function search() {
 }
 
 function setQueryStringParams(queryParams) {
-  if (!location.search)
-    return formToQueryString(queryParams);
+  if (!location.search) return formToQueryString(queryParams);
 
-  new URLSearchParams(location.search)
-    .forEach((param, column) => {
-      if (!queryParams[column])
-        queryParams[column] = param;
-    });
+  new URLSearchParams(location.search).forEach((param, column) => {
+    if (!queryParams[column]) queryParams[column] = param;
+  });
   return formToQueryString(queryParams);
 }
 
 function formToQueryString(queryParams) {
   return Object.entries(queryParams)
-    .map(k => `${encodeURIComponent(k[0])}=${encodeURIComponent(k[1])}`)
+    .map((k) => `${encodeURIComponent(k[0])}=${encodeURIComponent(k[1])}`)
     .join('&');
 }
 
-window.onload = function() {
-  document.querySelector('#keyword')
-    .addEventListener('keydown', (e) => {
-      if (e.key === 'Enter')
-        search();
-    });
+window.onload = function () {
+  document.querySelector('#keyword').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') search();
+  });
 
-  document.querySelector('#search-button')
-    .addEventListener('click', () => {
-      search();
-    });
+  document.querySelector('#search-button').addEventListener('click', () => {
+    search();
+  });
 
-  document.querySelector('#write-button')
-    .addEventListener('click', () => {
-      moveToWritePage();
-    });
+  document.querySelector('#write-button').addEventListener('click', () => {
+    moveToWritePage();
+  });
 
   const totalPage = parseInt(document.querySelector('#page-list').getAttribute('data-total-page'));
 
-  document.querySelectorAll('[class*=page-link]')
-    .forEach(q => q.addEventListener('click', () => {
+  document.querySelectorAll('[class*=page-link]').forEach((q) =>
+    q.addEventListener('click', () => {
       let pageNumber = q.getAttribute('data-page');
 
-      if (pageNumber > 0 && pageNumber <= totalPage)
-        moveToPageByPageNumber(pageNumber);
-    }));
+      if (pageNumber > 0 && pageNumber <= totalPage) moveToPageByPageNumber(pageNumber);
+    }),
+  );
 };

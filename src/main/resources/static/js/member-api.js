@@ -17,14 +17,17 @@ async function requestLogin() {
   };
   const post_data = JSON.stringify(data);
 
-  await $.post('/login', post_data,
-    () => Swal.fire({
-      icon: 'success',
-      title: '로그인 되었습니다',
-      text: '홈페이지로 이동합니다',
-    }).then(() => {
-      setTimeout(() => location.href = '/', 100);
-    }),
+  await $.post(
+    '/login',
+    post_data,
+    () =>
+      Swal.fire({
+        icon: 'success',
+        title: '로그인 되었습니다',
+        text: '홈페이지로 이동합니다',
+      }).then(() => {
+        setTimeout(() => (location.href = '/'), 100);
+      }),
     (request, status, error) => {
       const response = request.responseJSON;
       console.log(response);
@@ -61,7 +64,8 @@ async function requestEdit() {
   const patch_data = JSON.stringify(data);
 
   await $.patch(
-    '/members/edit-page', patch_data,
+    '/members/edit-page',
+    patch_data,
     () => {
       Swal.fire({
         icon: 'success',
@@ -85,7 +89,8 @@ async function requestEdit() {
 
 async function deleteMember(delete_data, failText) {
   await $.delete(
-    '/members/edit-page', delete_data,
+    '/members/edit-page',
+    delete_data,
     () => {
       Swal.fire({
         icon: 'success',
@@ -122,16 +127,13 @@ async function deleteByOwner() {
     },
     inputValidator: (value) => {
       return new Promise((resolve) => {
-        if (value.length < 4)
-          resolve('비밀번호는 4자 이상 입력해야 합니다');
-        else
-          resolve();
+        if (value.length < 4) resolve('비밀번호는 4자 이상 입력해야 합니다');
+        else resolve();
       });
     },
   });
 
-  if (!passwordValue)
-    return;
+  if (!passwordValue) return;
 
   const data = {
     id: $('#id').val(),

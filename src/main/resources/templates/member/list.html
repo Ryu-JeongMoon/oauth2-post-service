@@ -45,33 +45,33 @@
     </div>
 
     <!-- Pagination -->
-    <nav style='text-align: center;' class='mb-4'>
+    <nav class='mb-4' style='text-align: center;'>
       <ul class='pagination justify-content-center'
           th:with='start=${T(Math).floor(memberReadResponses.number / 5) * 5 + 1},
                    last=${start + 4 < memberReadResponses.totalPages ? start + 4 : memberReadResponses.totalPages}'>
         <li class='page-item'>
-          <a class='page-link' th:href='@{/members(page=0)}' aria-label='First'>
+          <a aria-label='First' class='page-link' th:href='@{/members(page=0)}'>
             <span aria-hidden='true'>First</span>
           </a>
         </li>
         <li class='page-item' th:class='|${memberReadResponses.isFirst()} ? disabled|'>
-          <a th:href="${memberReadResponses.isFirst()} ? '#' : @{/members(page=${memberReadResponses.number})}"
-             class='page-link' aria-label='Previous'>
+          <a aria-label='Previous'
+             class='page-link' th:href="${memberReadResponses.isFirst()} ? '#' : @{/members(page=${memberReadResponses.number})}">
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
-        <li th:each='page : ${#numbers.sequence(start, last)}'
-            th:classappend="${page == memberReadResponses.pageable.pageNumber + 1} ? 'active'" class='page-item'>
-          <a th:href='@{/members(page=${page})}' class='page-link' th:text='${page}'></a>
+        <li class='page-item'
+            th:classappend="${page == memberReadResponses.pageable.pageNumber + 1} ? 'active'" th:each='page : ${#numbers.sequence(start, last)}'>
+          <a class='page-link' th:href='@{/members(page=${page})}' th:text='${page}'></a>
         </li>
         <li class='page-item' th:class='|${memberReadResponses.isLast()} ? disabled|'>
-          <a th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 2})}"
-             class='page-link' aria-label='Next'>
+          <a aria-label='Next'
+             class='page-link' th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 2})}">
             <span aria-hidden='true'>&raquo;</span>
           </a>
         </li>
         <li class='page-item'>
-          <a class='page-link' th:href='@{/members(page=${memberReadResponses.totalPages})}' aria-label='Last'>
+          <a aria-label='Last' class='page-link' th:href='@{/members(page=${memberReadResponses.totalPages})}'>
             <span aria-hidden='true'>Last</span>
           </a>
         </li>
