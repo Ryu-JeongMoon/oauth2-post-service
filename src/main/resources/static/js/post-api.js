@@ -190,9 +190,12 @@ window.onload = function () {
     search();
   });
 
-  document.querySelector('#write-button').addEventListener('click', () => {
-    moveToWritePage();
-  });
+  const writeButtonElement = document.querySelector('#write-button');
+  if (writeButtonElement) {
+    writeButtonElement.addEventListener('click', () => {
+      moveToWritePage();
+    });
+  }
 
   const totalPage = parseInt(document.querySelector('#page-list').getAttribute('data-total-page'));
 
