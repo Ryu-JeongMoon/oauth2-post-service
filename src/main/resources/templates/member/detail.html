@@ -46,12 +46,12 @@
       <button class='btn btn-outline-danger'
               sec:authorize='hasRole("ADMIN")'
               th:if='${memberReadResponse.email ne #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='deleteByAdmin()'
+              th:onclick='deactivateByAdmin()'
               th:text='#{label.button.inactivate}'>
       </button>
       <button class='btn btn-outline-danger'
               th:if='${memberReadResponse.email eq #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
-              th:onclick='deleteByOwner()'
+              th:onclick='deactivateByOwner()'
               th:text='#{label.button.delete}'>
       </button>
     </div>

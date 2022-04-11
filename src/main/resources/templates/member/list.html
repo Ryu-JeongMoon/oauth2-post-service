@@ -34,8 +34,8 @@
               <td th:text='${member.id}'></td>
               <td th:text='${member.email}'></td>
               <td th:text='${member.nickname}'></td>
-              <td th:text='${member.role}'></td>
-              <td th:text='${member.status}'></td>
+              <td th:text='#{__${member.role}__}'></td>
+              <td th:text='#{__${member.status}__}'></td>
               <td th:text='${member.latestAuthProvider}'></td>
             </tr>
             </tbody>
@@ -56,17 +56,20 @@
         </li>
         <li class='page-item' th:class='|${memberReadResponses.isFirst()} ? disabled|'>
           <a aria-label='Previous'
-             class='page-link' th:href="${memberReadResponses.isFirst()} ? '#' : @{/members(page=${memberReadResponses.number})}">
+             class='page-link'
+             th:href="${memberReadResponses.isFirst()} ? '#' : @{/members(page=${memberReadResponses.number})}">
             <span aria-hidden='true'>&laquo;</span>
           </a>
         </li>
         <li class='page-item'
-            th:classappend="${page == memberReadResponses.pageable.pageNumber + 1} ? 'active'" th:each='page : ${#numbers.sequence(start, last)}'>
+            th:classappend="${page == memberReadResponses.pageable.pageNumber + 1} ? 'active'"
+            th:each='page : ${#numbers.sequence(start, last)}'>
           <a class='page-link' th:href='@{/members(page=${page})}' th:text='${page}'></a>
         </li>
         <li class='page-item' th:class='|${memberReadResponses.isLast()} ? disabled|'>
           <a aria-label='Next'
-             class='page-link' th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 2})}">
+             class='page-link'
+             th:href="${memberReadResponses.isLast()} ? '#' : @{/members(page=${memberReadResponses.number + 2})}">
             <span aria-hidden='true'>&raquo;</span>
           </a>
         </li>

@@ -87,14 +87,14 @@ async function requestEdit() {
   );
 }
 
-async function deleteMember(delete_data, failText) {
+async function deactivateMember(delete_data, failText) {
   await $.delete(
     '/members/edit-page',
     delete_data,
     () => {
       Swal.fire({
         icon: 'success',
-        title: '삭제 되었습니다',
+        title: '비활성 되었습니다',
         text: '목록 페이지로 이동합니다',
       }).then(() => {
         setTimeout(() => history.back(), 100);
@@ -103,7 +103,7 @@ async function deleteMember(delete_data, failText) {
     () => {
       Swal.fire({
         icon: 'error',
-        title: '삭제할 수 없습니다',
+        title: '비활성할 수 없습니다',
         text: failText,
       }).then(() => {
         setTimeout(() => history.back(), 100);
@@ -112,7 +112,7 @@ async function deleteMember(delete_data, failText) {
   );
 }
 
-async function deleteByOwner() {
+async function deactivateByOwner() {
   const { value: passwordValue } = await Swal.fire({
     icon: 'warning',
     title: '비밀번호를 입력해주세요',
@@ -141,17 +141,17 @@ async function deleteByOwner() {
   };
   let delete_data = JSON.stringify(data);
 
-  await deleteMember(delete_data, '비밀번호가 맞지 않습니다');
+  await deactivateMember(delete_data, '비밀번호가 맞지 않습니다');
 }
 
-async function deleteByAdmin() {
+async function deactivateByAdmin() {
   const data = {
     id: $('#id').val(),
     password: null,
   };
   const delete_data = JSON.stringify(data);
 
-  await deleteMember(delete_data, '요청 권한이 없습니다');
+  await deactivateMember(delete_data, '요청 권한이 없습니다');
 }
 
 function moveToHomePage() {
