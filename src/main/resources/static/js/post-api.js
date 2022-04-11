@@ -19,6 +19,24 @@ function moveToPostByNicknamePage(nickname) {
 }
 
 async function writePost() {
+  if (!$('#openedAt').val() || !$('#closedAt').val()) {
+    Swal.fire({
+      icon: 'warning',
+      title: '작성할 수 없습니다',
+      text: '게시일과 종료일은 반드시 선택해야 합니다',
+    });
+    return;
+  }
+
+  if (Date.parse($('#closedAt').val()) < new Date().getTime()) {
+    Swal.fire({
+      icon: 'warning',
+      title: '작성할 수 없습니다',
+      text: '종료일은 현재 시간 이후로 선택해야 합니다',
+    });
+    return;
+  }
+
   const data = {
     memberId: $('#memberId').val(),
     title: $('#title').val(),
@@ -54,11 +72,11 @@ async function writePost() {
 }
 
 async function editPost() {
-  if (!$('#closedAt') && $('#closedAt').val() < new Date()) {
+  if ($('#closedAt') && Date.parse($('#closedAt').val()) < new Date().getTime()) {
     Swal.fire({
       icon: 'warning',
       title: '수정할 수 없습니다',
-      text: '종료일은 현재보다 앞설 수 없습니다',
+      text: '종료일은 현재 시간 이후로 선택해야 합니다',
     });
     return;
   }
@@ -182,22 +200,19 @@ function formToQueryString(queryParams) {
 }
 
 window.onload = function () {
-  document.querySelector('#keyword').addEventListener('keydown', (e) => {
+  document.querySelector('#keyword')?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') search();
   });
 
-  document.querySelector('#search-button').addEventListener('click', () => {
+  document.querySelector('#search-button')?.addEventListener('click', () => {
     search();
   });
 
-  const writeButtonElement = document.querySelector('#write-button');
-  if (writeButtonElement) {
-    writeButtonElement.addEventListener('click', () => {
-      moveToWritePage();
-    });
-  }
+  document.querySelector('#write-button')?.addEventListener('click', () => {
+    moveToWritePage();
+  });
 
-  const totalPage = parseInt(document.querySelector('#page-list').getAttribute('data-total-page'));
+  const totalPage = parseInt(document.querySelector('#page-list')?.getAttribute('data-total-page'));
 
   document.querySelectorAll('[class*=page-link]').forEach((q) =>
     q.addEventListener('click', () => {
