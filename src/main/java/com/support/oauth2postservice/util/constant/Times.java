@@ -19,7 +19,7 @@ public enum Times {
 
   private final int value;
 
-  public static Times valueOfCaseInsensitively(String name) {
+  public static Times caseInsensitiveValueOf(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 }

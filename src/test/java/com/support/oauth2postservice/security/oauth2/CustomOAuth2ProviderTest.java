@@ -32,9 +32,9 @@ class CustomOAuth2ProviderTest {
   }
 
   @Test
-  @DisplayName("valueOfCaseInsensitively 사용")
-  void valueOfCaseInsensitively() {
-    CustomOAuth2Provider customOAuth2Provider = CustomOAuth2Provider.valueOfCaseInsensitively("google");
+  @DisplayName("caseInsensitiveValueOf 사용")
+  void caseInsensitiveValueOf() {
+    CustomOAuth2Provider customOAuth2Provider = CustomOAuth2Provider.caseInsensitiveValueOf("google");
 
     assertThat(customOAuth2Provider).isNotNull();
   }

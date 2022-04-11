@@ -34,7 +34,7 @@ public class OAuth2Config {
     OAuth2Properties.Resource resource = oAuth2Properties.getRegistration().get(client);
     String clientName = resource.getClientName();
 
-    return CustomOAuth2Provider.valueOfCaseInsensitively(clientName)
+    return CustomOAuth2Provider.caseInsensitiveValueOf(clientName)
         .getBuilder(clientName)
         .clientId(resource.getClientId())
         .clientSecret(resource.getClientSecret())

@@ -57,7 +57,7 @@ public class EllipticCurveVerifier implements TokenVerifier {
     String email = claimsSet.getSubject();
     String id = claimsSet.getStringClaim(TokenConstants.USER_ID);
     String authority = claimsSet.getStringClaim(TokenConstants.AUTHORITIES);
-    List<Role> authorities = Collections.singletonList(Role.valueOfCaseInsensitively(authority));
+    List<Role> authorities = Collections.singletonList(Role.caseInsensitiveValueOf(authority));
 
     return UserPrincipal
         .of(id, email, authorities)
