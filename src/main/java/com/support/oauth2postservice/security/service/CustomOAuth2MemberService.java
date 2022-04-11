@@ -24,7 +24,7 @@ public class CustomOAuth2MemberService implements OAuth2MemberService {
     Optional<Member> probableMember = memberRepository.findByEmail(attributes.getEmail());
     probableMember.ifPresent(member -> {
           throwIfInactive(member);
-          member.changeLatestAuthProvider(AuthProvider.valueOfCaseInsensitively(registrationId));
+          member.changeLatestAuthProvider(AuthProvider.caseInsensitiveValueOf(registrationId));
         }
     );
 

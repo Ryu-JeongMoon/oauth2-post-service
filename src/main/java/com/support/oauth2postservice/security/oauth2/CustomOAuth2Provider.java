@@ -41,7 +41,7 @@ public enum CustomOAuth2Provider {
 
   private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/{action}/oauth2/code/{registrationId}";
 
-  public static CustomOAuth2Provider valueOfCaseInsensitively(String name) {
+  public static CustomOAuth2Provider caseInsensitiveValueOf(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 

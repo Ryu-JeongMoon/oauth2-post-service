@@ -15,7 +15,7 @@ public enum Role implements GrantedAuthority {
   private final String key;
   private final int level;
 
-  public static Role valueOfCaseInsensitively(String name) {
+  public static Role caseInsensitiveValueOf(String name) {
     return valueOf(StringUtils.upperCase(name));
   }
 

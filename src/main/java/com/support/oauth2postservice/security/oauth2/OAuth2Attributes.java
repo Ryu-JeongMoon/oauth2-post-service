@@ -52,7 +52,7 @@ public class OAuth2Attributes {
     Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
     String defaultRandomPassword = RandomStringUtils.randomAlphanumeric(10);
     String encodedRandomPassword = passwordEncoder.encode(defaultRandomPassword);
-    AuthProvider initialAuthProvider = AuthProvider.valueOfCaseInsensitively(registrationId);
+    AuthProvider initialAuthProvider = AuthProvider.caseInsensitiveValueOf(registrationId);
 
     member = Member.builder()
         .email(email)
