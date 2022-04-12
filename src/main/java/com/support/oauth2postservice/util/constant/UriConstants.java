@@ -3,7 +3,7 @@ package com.support.oauth2postservice.util.constant;
 public class UriConstants {
 
   public static final String[] SHOULD_NOT_FILTER_URL_PATTERNS = new String[]{
-      "/css/**", "/js/**", "/img/**", "/vendor/**", "/logout/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/webjars/**"
+      "/css/**", "/js/**", "/img/**", "/logout", "/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/webjars/**"
   };
 
   public static class Full {
