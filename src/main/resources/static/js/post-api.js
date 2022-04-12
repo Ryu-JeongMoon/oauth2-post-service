@@ -37,6 +37,15 @@ async function writePost() {
     return;
   }
 
+  if (Date.parse($('#closedAt').val()) < Date.parse($('#openedAt').val())) {
+    Swal.fire({
+      icon: 'warning',
+      title: '작성할 수 없습니다',
+      text: '종료일은 게시일 이후로 선택 가능합니다',
+    });
+    return;
+  }
+
   const data = {
     memberId: $('#memberId').val(),
     title: $('#title').val(),
