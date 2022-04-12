@@ -8,6 +8,7 @@ import com.support.oauth2postservice.service.ServiceTest;
 import com.support.oauth2postservice.service.dto.request.MemberDeleteRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
+import com.support.oauth2postservice.util.exception.AjaxIllegalArgumentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -155,7 +156,7 @@ class MemberServiceTest extends ServiceTest {
           .build();
 
       assertThrows(
-          IllegalArgumentException.class,
+          AjaxIllegalArgumentException.class,
           () -> memberService.leave(Role.USER, deleteRequest));
     }
   }

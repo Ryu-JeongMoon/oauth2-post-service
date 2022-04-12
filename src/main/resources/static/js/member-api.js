@@ -105,8 +105,6 @@ async function deactivateMember(delete_data, failText) {
         icon: 'error',
         title: '비활성할 수 없습니다',
         text: failText,
-      }).then(() => {
-        setTimeout(() => history.back(), 100);
       });
     },
   );

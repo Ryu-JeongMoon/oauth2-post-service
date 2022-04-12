@@ -2,6 +2,7 @@ package com.support.oauth2postservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.support.oauth2postservice.util.exception.AjaxIllegalArgumentException;
 import com.support.oauth2postservice.util.exception.AjaxUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
     return e != null ? e.getClass().getName() : "";
   }
 
-  @ExceptionHandler(value = AjaxUnauthorizedException.class)
+  @ExceptionHandler(value = {AjaxUnauthorizedException.class, AjaxIllegalArgumentException.class})
   public ResponseEntity<ExceptionResponse> forbiddenHandler(AjaxUnauthorizedException e) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }

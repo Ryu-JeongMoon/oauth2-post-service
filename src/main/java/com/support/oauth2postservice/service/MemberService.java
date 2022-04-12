@@ -9,6 +9,7 @@ import com.support.oauth2postservice.service.dto.request.MemberSearchRequest;
 import com.support.oauth2postservice.service.dto.request.MemberSignupRequest;
 import com.support.oauth2postservice.service.dto.response.MemberReadResponse;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
+import com.support.oauth2postservice.util.exception.AjaxIllegalArgumentException;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -87,7 +88,7 @@ public class MemberService {
     probableMember.ifPresent(
         member -> {
           if (!passwordEncoder.matches(memberDeleteRequest.getPassword(), member.getPassword()))
-            throw new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
+            throw new AjaxIllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
           member.leave();
         });
   }
