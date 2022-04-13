@@ -52,7 +52,7 @@
       <button class='btn btn-outline-danger'
               th:if='${memberReadResponse.email eq #authentication.name and memberReadResponse.status.name() eq "ACTIVE"}'
               th:onclick='deactivateByOwner()'
-              th:text='#{label.button.delete}'>
+              th:text='#{label.button.leave}'>
       </button>
     </div>
   </div>
