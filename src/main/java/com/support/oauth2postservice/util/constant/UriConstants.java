@@ -3,7 +3,8 @@ package com.support.oauth2postservice.util.constant;
 public class UriConstants {
 
   public static final String[] SHOULD_NOT_FILTER_URL_PATTERNS = new String[]{
-      "/css/**", "/js/**", "/vendor/**", "/img/**", "/logout", "/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/webjars/**"
+      "/css/**", "/js/**", "/vendor/**", "/webjars/**", "/img/**",
+      "/logout", "/swagger-ui/**", "/swagger-resources/**", "/v2/**"
   };
 
   public static class Full {
@@ -36,6 +37,8 @@ public class UriConstants {
     public static final String RENEW_OAUTH2_TOKEN = "/oauth2/{registrationId}/renewal";
     public static final String RENEW_OAUTH2_TOKEN_AND_REDIRECT = "/oauth2/{registrationId}/renewal/redirect";
     public static final String VALIDATE_OAUTH2_TOKEN = "/oauth2/validation";
+
+    public static final String RENEW_LOCAL_TOKEN_AND_REDIRECT = "/renewal/redirect";
   }
 
   public static class Keyword {

@@ -4,6 +4,7 @@ import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2Authorizati
 import com.support.oauth2postservice.security.service.CustomOAuth2UserService;
 import com.support.oauth2postservice.security.service.CustomOidcUserService;
 import com.support.oauth2postservice.security.service.CustomUserDetailsService;
+import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring()
-        .antMatchers("/css/**", "/js/**", "/vendor/**", "/webjars/**", "/img/**", "/swagger-ui/**", "/swagger-resources/**", "/v2/**", "/logout");
+        .antMatchers(UriConstants.SHOULD_NOT_FILTER_URL_PATTERNS);
   }
 
   @Override
