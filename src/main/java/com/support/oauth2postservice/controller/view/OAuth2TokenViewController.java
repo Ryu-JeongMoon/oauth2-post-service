@@ -2,6 +2,7 @@ package com.support.oauth2postservice.controller.view;
 
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.security.jwt.OAuth2TokenVerifier;
 import com.support.oauth2postservice.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.support.oauth2postservice.security.oauth2.OAuth2TokenResponse;
@@ -48,14 +49,16 @@ public class OAuth2TokenViewController {
 
     SecurityUtils.setAuthentication(authentication);
     CookieUtils.addOAuth2TokenToBrowser(response, oAuth2TokenResponse);
-
-    if (isUser(principal))
-      return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;
-    else
-      return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.MEMBERS;
+    return getUriByRole(principal);
   }
 
-  private boolean isUser(OAuth2UserPrincipal principal) {
+  private String getUriByRole(UserPrincipal principal) {
+    return isUser(principal)
+        ? UriConstants.Keyword.REDIRECT + UriConstants.Mapping.POSTS
+        : UriConstants.Keyword.REDIRECT + UriConstants.Mapping.MEMBERS;
+  }
+
+  private boolean isUser(UserPrincipal principal) {
     return principal.getAuthorities()
         .stream()
         .anyMatch(Role.USER::equals);
