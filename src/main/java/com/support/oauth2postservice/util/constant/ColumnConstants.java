@@ -18,6 +18,7 @@ public class ColumnConstants {
     public static final int NICKNAME_MAX = 20;
     public static final int PASSWORD_MIN = 4;
     public static final int ENCODED_PASSWORD = 96;
+    public static final int REFRESH_TOKEN_MAX = 266;
 
     public static final int SEARCH = 20;
   }

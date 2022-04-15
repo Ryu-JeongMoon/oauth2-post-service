@@ -26,7 +26,7 @@ public class RefreshToken extends BaseEntity {
   @JoinColumn(name = ColumnConstants.Name.MEMBER_ID)
   private Member member;
 
-  @Column(name = ColumnConstants.Name.TOKEN_VALUE, nullable = false)
+  @Column(name = ColumnConstants.Name.TOKEN_VALUE, nullable = false, length = ColumnConstants.Length.REFRESH_TOKEN_MAX)
   private String tokenValue;
 
   @Column(name = ColumnConstants.Name.EXPIRED_AT)
