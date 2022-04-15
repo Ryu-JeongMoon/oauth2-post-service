@@ -1,11 +1,9 @@
 package com.support.oauth2postservice.security.jwt;
 
-import com.support.oauth2postservice.util.CookieUtils;
-import com.support.oauth2postservice.util.SecurityUtils;
+import com.support.oauth2postservice.util.TokenFilterHelper;
 import com.support.oauth2postservice.util.TokenUtils;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,8 +18,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
-  private final TokenFactory tokenFactory;
   private final TokenVerifier tokenVerifier;
+  private final TokenFilterHelper tokenFilterHelper;
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -29,37 +27,24 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain fc) throws ServletException, IOException {
-    String accessToken = TokenUtils.resolveAccessToken(req);
-    if (!tokenVerifier.isLocalToken(accessToken)) {
-      fc.doFilter(req, resp);
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    String idToken = TokenUtils.resolveIdToken(request);
+    if (!tokenVerifier.isLocalToken(idToken)) {
+      chain.doFilter(request, response);
       return;
     }
 
-    if (!setAuthenticationIfValid(accessToken))
-      reissueIfExpired(req, resp);
+    if (!tokenFilterHelper.setAuthenticationIfValid(tokenVerifier, idToken))
+      forwardToRenew(request, response);
 
-    fc.doFilter(req, resp);
+    chain.doFilter(request, response);
   }
 
-  private boolean setAuthenticationIfValid(String accessToken) {
-    boolean isValid = tokenVerifier.isValid(accessToken);
-    if (isValid)
-      SecurityUtils.setAuthentication(tokenVerifier.getAuthentication(accessToken));
-
-    return isValid;
-  }
-
-  private void reissueIfExpired(HttpServletRequest request, HttpServletResponse response) {
-    String refreshToken = TokenUtils.resolveRefreshToken(request);
-    if (!tokenVerifier.isValid(refreshToken))
-      return;
-
-    String accessToken = TokenUtils.resolveAccessToken(request);
-    Authentication authentication = tokenVerifier.getAuthentication(accessToken);
-    TokenResponse tokenResponse = tokenFactory.create(authentication);
-
-    CookieUtils.addLocalTokenToBrowser(response, tokenResponse);
-    SecurityUtils.setAuthentication(authentication);
+  private void forwardToRenew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String idToken = TokenUtils.resolveIdToken(request);
+    String refreshToken = tokenFilterHelper.getRefreshTokenFromIdToken(tokenVerifier, idToken);
+    String targetUri = String.format(
+        "/renewal/redirect?redirect_uri=%s&refresh_token=%s", request.getRequestURI(), refreshToken);
+    request.getRequestDispatcher(targetUri).forward(request, response);
   }
 }
