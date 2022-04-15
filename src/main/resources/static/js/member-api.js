@@ -20,14 +20,15 @@ async function requestLogin() {
   await $.post(
     '/login',
     post_data,
-    () =>
+    (data) => {
       Swal.fire({
         icon: 'success',
         title: '로그인 되었습니다',
         text: '홈페이지로 이동합니다',
       }).then(() => {
-        setTimeout(() => (location.href = '/'), 100);
-      }),
+        setTimeout(() => (location.href = data), 100);
+      });
+    },
     (request, status, error) => {
       const response = request.responseJSON;
       console.log(response);
