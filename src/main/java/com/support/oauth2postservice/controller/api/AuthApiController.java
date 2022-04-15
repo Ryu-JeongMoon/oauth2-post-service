@@ -1,7 +1,12 @@
 package com.support.oauth2postservice.controller.api;
 
+import com.support.oauth2postservice.domain.enumeration.Role;
+import com.support.oauth2postservice.security.jwt.TokenResponse;
 import com.support.oauth2postservice.service.AuthService;
+import com.support.oauth2postservice.service.RefreshTokenService;
 import com.support.oauth2postservice.service.dto.request.LoginRequest;
+import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +24,23 @@ import javax.validation.Valid;
 public class AuthApiController {
 
   private final AuthService authService;
+  private final RefreshTokenService refreshTokenService;
 
   @PostMapping(UriConstants.Mapping.LOGIN)
   @PreAuthorize(SpELConstants.ANONYMOUS_ONLY)
-  public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-    authService.login(loginRequest, response);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    TokenResponse tokenResponse = authService.getTokenAfterLogin(loginRequest);
+    refreshTokenService.saveOrUpdate(SecurityUtils.getPrincipalFromCurrentUser(), tokenResponse.getRefreshToken());
+
+    CookieUtils.addLocalTokenToBrowser(response, tokenResponse);
+    return getUriByRole();
+  }
+
+  private ResponseEntity<String> getUriByRole() {
+    Role currentRole = SecurityUtils.getRoleFromCurrentUser();
+
+    return currentRole.isInferiorThan(Role.MANAGER)
+        ? ResponseEntity.ok(UriConstants.Mapping.POSTS)
+        : ResponseEntity.ok(UriConstants.Mapping.MEMBERS);
   }
 }
