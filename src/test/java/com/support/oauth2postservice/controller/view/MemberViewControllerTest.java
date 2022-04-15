@@ -222,7 +222,7 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("성공")
     void myPage() throws Exception {
-      Mockito.when(memberService.findResponseById(anyString())).thenReturn(readResponse);
+      Mockito.when(memberService.findResponseByEmail(anyString())).thenReturn(readResponse);
 
       EntityExchangeResult<byte[]> result = webTestClient.get()
           .uri(UriConstants.Mapping.MEMBERS_MY_PAGE)
@@ -242,7 +242,7 @@ class MemberViewControllerTest extends AbstractWebMvcTest {
     @Test
     @DisplayName("실패 - 존재하지 않는 회원")
     void myPage_failByNotExistsId() throws Exception {
-      Mockito.when(memberService.findResponseById(anyString())).thenThrow(IllegalArgumentException.class);
+      Mockito.when(memberService.findResponseByEmail(anyString())).thenThrow(IllegalArgumentException.class);
 
       EntityExchangeResult<byte[]> result = webTestClient.get()
           .uri(UriConstants.Mapping.MEMBERS_MY_PAGE)

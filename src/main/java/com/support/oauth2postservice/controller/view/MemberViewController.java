@@ -47,7 +47,7 @@ public class MemberViewController {
   @PreAuthorize(SpELConstants.ANY_ROLE_ALLOWED)
   public String myPage(Model model) {
     UserPrincipal currentUser = SecurityUtils.getPrincipalFromCurrentUser();
-    MemberReadResponse memberReadResponse = memberService.findResponseById(currentUser.getId());
+    MemberReadResponse memberReadResponse = memberService.findResponseByEmail(currentUser.getEmail());
 
     model.addAttribute("memberReadResponse", memberReadResponse);
     return "member/detail";

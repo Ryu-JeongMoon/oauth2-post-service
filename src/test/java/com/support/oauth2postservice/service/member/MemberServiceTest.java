@@ -79,7 +79,7 @@ class MemberServiceTest extends ServiceTest {
     void findActiveMemberByEmail() {
       when(memberRepository.findActiveByEmail(isNotNull())).thenReturn(Optional.of(member));
 
-      MemberReadResponse memberReadResponse = memberService.findActiveMemberByEmail(anyString());
+      MemberReadResponse memberReadResponse = memberService.findResponseByEmail(anyString());
 
       assertThat(memberReadResponse.getEmail()).isEqualTo(member.getEmail());
 

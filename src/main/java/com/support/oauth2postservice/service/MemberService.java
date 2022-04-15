@@ -34,7 +34,7 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public MemberReadResponse findActiveMemberByEmail(String email) {
+  public MemberReadResponse findResponseByEmail(String email) {
     return memberRepository.findActiveByEmail(email)
         .map(MemberReadResponse::from)
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
