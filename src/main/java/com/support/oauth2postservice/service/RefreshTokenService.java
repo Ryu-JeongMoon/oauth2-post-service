@@ -4,7 +4,7 @@ import com.support.oauth2postservice.domain.entity.Member;
 import com.support.oauth2postservice.domain.entity.RefreshToken;
 import com.support.oauth2postservice.domain.repository.MemberRepository;
 import com.support.oauth2postservice.domain.repository.RefreshTokenRepository;
-import com.support.oauth2postservice.security.dto.OAuth2UserPrincipal;
+import com.support.oauth2postservice.security.dto.UserPrincipal;
 import com.support.oauth2postservice.service.dto.response.RefreshTokenResponse;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class RefreshTokenService {
   }
 
   @Transactional
-  public void saveOrUpdate(OAuth2UserPrincipal principal, String tokenValue) {
+  public void saveOrUpdate(UserPrincipal principal, String tokenValue) {
     Member member = memberRepository.findActiveByEmail(principal.getEmail())
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 

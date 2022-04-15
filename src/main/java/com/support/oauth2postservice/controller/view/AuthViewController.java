@@ -1,15 +1,21 @@
 package com.support.oauth2postservice.controller.view;
 
-import com.support.oauth2postservice.service.AuthService;
+import com.support.oauth2postservice.security.jwt.TokenResponse;
+import com.support.oauth2postservice.security.jwt.TokenVerifier;
+import com.support.oauth2postservice.service.LocalTokenService;
 import com.support.oauth2postservice.util.CookieUtils;
+import com.support.oauth2postservice.util.SecurityUtils;
 import com.support.oauth2postservice.util.constant.SpELConstants;
 import com.support.oauth2postservice.util.constant.TokenConstants;
 import com.support.oauth2postservice.util.constant.UriConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class AuthViewController {
 
-  private final AuthService authService;
+  private final TokenVerifier tokenVerifier;
+  private final LocalTokenService localTokenService;
 
   @GetMapping(UriConstants.Mapping.LOGIN)
   @PreAuthorize(SpELConstants.ANONYMOUS_ONLY)
@@ -42,9 +49,26 @@ public class AuthViewController {
         .isPresent();
   }
 
+  @GetMapping(UriConstants.Mapping.RENEW_LOCAL_TOKEN_AND_REDIRECT)
+  public String renewAndRedirect(
+      @RequestParam(value = TokenConstants.REDIRECT_URI, defaultValue = UriConstants.Mapping.ROOT) String redirectUri,
+      @RequestParam(value = TokenConstants.REFRESH_TOKEN) String refreshToken,
+      HttpServletResponse response) {
+
+    TokenResponse renewedTokenResponse = localTokenService.renew(refreshToken);
+
+    String idToken = renewedTokenResponse.getIdToken();
+    Authentication authentication = tokenVerifier.getAuthentication(idToken);
+    SecurityUtils.setAuthentication(authentication);
+
+    CookieUtils.addLocalTokenToBrowser(response, renewedTokenResponse);
+    return UriConstants.Keyword.REDIRECT + redirectUri;
+  }
+
   @GetMapping(UriConstants.Mapping.LOGOUT)
   public String logout(HttpServletRequest request, HttpServletResponse response) {
-    authService.logout(request, response);
+    SecurityContextHolder.clearContext();
+    CookieUtils.deleteCookie(request, response, TokenConstants.ID_TOKEN);
     return UriConstants.Keyword.REDIRECT + UriConstants.Mapping.ROOT;
   }
 }
