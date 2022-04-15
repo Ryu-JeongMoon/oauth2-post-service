@@ -8,11 +8,13 @@ import lombok.ToString;
 @ToString
 public class TokenResponse {
 
+  private final String idToken;
   private final String accessToken;
   private final String refreshToken;
 
   @Builder
-  public TokenResponse(String accessToken, String refreshToken) {
+  public TokenResponse(String idToken, String accessToken, String refreshToken) {
+    this.idToken = idToken;
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
   }

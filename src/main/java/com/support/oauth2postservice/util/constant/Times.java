@@ -10,16 +10,16 @@ public enum Times {
 
   ID_TOKEN_EXPIRATION_SECONDS(60 * 30),
   ACCESS_TOKEN_EXPIRATION_SECONDS(60 * 30),
-  REFRESH_TOKEN_EXPIRATION_SECONDS(60 * 60 * 24 * 7),
-
-  ACCESS_TOKEN_EXPIRATION_MILLIS(1000 * 60 * 30),
-  REFRESH_TOKEN_EXPIRATION_MILLIS(1000 * 60 * 60 * 24 * 7),
-
-  COOKIE_EXPIRATION_SECONDS(60 * 60 * 24 * 365 + 60 * 60 * 9);
+  REFRESH_TOKEN_EXPIRATION_SECONDS(60 * 60 * 24 * 365),
+  COOKIE_EXPIRATION_SECONDS(60 * 60 * 24 * 365);
 
   private final int value;
 
   public static Times caseInsensitiveValueOf(String name) {
     return valueOf(StringUtils.upperCase(name));
+  }
+
+  public static long toMillis(Times times) {
+    return times.getValue() * 1000L;
   }
 }

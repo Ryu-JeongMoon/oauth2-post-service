@@ -9,7 +9,7 @@ class TimesTest {
   @Test
   @DisplayName("Times 최댓값 604_800_000 - int 표현 가능")
   void time() {
-    int value = Times.REFRESH_TOKEN_EXPIRATION_MILLIS.getValue();
+    int value = Times.REFRESH_TOKEN_EXPIRATION_SECONDS.getValue();
 
     Assertions.assertThat(value).isLessThan(Integer.MAX_VALUE);
   }
