@@ -20,21 +20,21 @@ import java.util.Optional;
 public class CookieUtils {
 
   public static void addLocalTokenToBrowser(HttpServletResponse response, TokenResponse tokenResponse) {
+    String idToken = tokenResponse.getIdToken();
+    if (StringUtils.isNotBlank(idToken)) {
+      addCookie(
+          response,
+          TokenConstants.ID_TOKEN,
+          idToken,
+          Times.COOKIE_EXPIRATION_SECONDS.getValue());
+    }
+
     String accessToken = tokenResponse.getAccessToken();
     if (StringUtils.isNotBlank(accessToken)) {
       addCookie(
           response,
           TokenConstants.ACCESS_TOKEN,
           TokenConstants.BEARER_TYPE + accessToken,
-          Times.COOKIE_EXPIRATION_SECONDS.getValue());
-    }
-
-    String refreshToken = tokenResponse.getRefreshToken();
-    if (StringUtils.isNotBlank(refreshToken)) {
-      addCookie(
-          response,
-          TokenConstants.REFRESH_TOKEN,
-          refreshToken,
           Times.COOKIE_EXPIRATION_SECONDS.getValue());
     }
   }
