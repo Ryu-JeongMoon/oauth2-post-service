@@ -1,6 +1,5 @@
 package com.support.oauth2postservice.aop;
 
-import com.support.oauth2postservice.util.constant.SpELConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class LogAspect {
 
-  @After(SpELConstants.EXCEPTION_HANDLER_ONLY)
+  @After("bean(*ExceptionHandler)")
   public void logForException(JoinPoint joinPoint) {
     log.info("[SUPPORT-ERROR] :: method     -> {}", joinPoint.getSignature().toShortString());
     log.info("[SUPPORT-ERROR] :: arguments  -> {}", joinPoint.getArgs());
@@ -30,7 +29,7 @@ public class LogAspect {
     );
   }
 
-  @Around(SpELConstants.CONTROLLER_ONLY)
+  @Around("bean(*Controller)")
   public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start(String.valueOf(joinPoint.getSignature()));
