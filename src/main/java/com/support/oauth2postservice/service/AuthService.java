@@ -45,6 +45,6 @@ public class AuthService {
 
   private void throwIfPasswordNotMatches(LoginRequest loginRequest, Member member) {
     if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
-      throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
+      throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_CORRECT);
   }
 }

@@ -66,7 +66,7 @@ public class SpeedTest {
         .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
 
     if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
-      throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
+      throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_CORRECT);
 
     Authentication authentication = UserPrincipal
         .from(member)
@@ -85,7 +85,7 @@ public class SpeedTest {
     memberRepository.findActiveByEmail(loginRequest.getEmail())
         .map(member -> {
           if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
-            throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
+            throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_CORRECT);
 
           Authentication authentication = UserPrincipal
               .from(member)
@@ -114,7 +114,7 @@ public class SpeedTest {
         .ifPresent(
             member -> {
               if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
-                throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_VALID);
+                throw new BadCredentialsException(ExceptionMessages.Member.PASSWORD_NOT_CORRECT);
 
               Authentication authentication = UserPrincipal
                   .from(member)
