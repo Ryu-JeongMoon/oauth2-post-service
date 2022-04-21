@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -34,6 +36,7 @@ class MemberApiIntegrationTest extends AbstractIntegrationTest {
   MemberRepository memberRepository;
 
   private Member member;
+  private final PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
 
   @BeforeAll
   void setUpEarly() {
@@ -43,6 +46,8 @@ class MemberApiIntegrationTest extends AbstractIntegrationTest {
   @BeforeEach
   void setUp() {
     Member manager = MemberTestHelper.createManger();
+    String encodedPassword = passwordEncoder.encode(manager.getPassword());
+    manager.changeToEncodedPassword(encodedPassword);
     member = memberRepository.save(manager);
   }
 

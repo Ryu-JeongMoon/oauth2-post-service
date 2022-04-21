@@ -80,7 +80,7 @@ public class MemberService {
   public void leave(Role roleFromCurrentUser, MemberDeleteRequest memberDeleteRequest) {
     Optional<Member> probableMember = memberRepository.findActiveById(memberDeleteRequest.getId());
 
-    if (roleFromCurrentUser == Role.ADMIN) {
+    if (roleFromCurrentUser == Role.ADMIN && !isOwner(probableMember, memberDeleteRequest.getId())) {
       probableMember.ifPresent(Member::leave);
       return;
     }
@@ -88,8 +88,15 @@ public class MemberService {
     probableMember.ifPresent(
         member -> {
           if (!passwordEncoder.matches(memberDeleteRequest.getPassword(), member.getPassword()))
-            throw new AjaxIllegalArgumentException(ExceptionMessages.Member.NOT_FOUND);
+            throw new AjaxIllegalArgumentException(ExceptionMessages.Member.PASSWORD_NOT_CORRECT);
+
           member.leave();
         });
+  }
+
+  private boolean isOwner(Optional<Member> probableMember, String idFromDeleteRequest) {
+    return probableMember
+        .filter(member -> StringUtils.equals(member.getId(), idFromDeleteRequest))
+        .isPresent();
   }
 }
