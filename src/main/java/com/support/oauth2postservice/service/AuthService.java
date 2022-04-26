@@ -7,6 +7,7 @@ import com.support.oauth2postservice.security.jwt.TokenFactory;
 import com.support.oauth2postservice.security.jwt.TokenResponse;
 import com.support.oauth2postservice.service.dto.request.LoginRequest;
 import com.support.oauth2postservice.util.SecurityUtils;
+import com.support.oauth2postservice.util.exception.AjaxIllegalArgumentException;
 import com.support.oauth2postservice.util.exception.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,7 +41,7 @@ public class AuthService {
           SecurityUtils.setAuthentication(authentication);
           return tokenFactory.create(authentication);
         })
-        .orElseThrow(() -> new IllegalStateException(ExceptionMessages.Member.NOT_FOUND));
+        .orElseThrow(() -> new AjaxIllegalArgumentException(ExceptionMessages.Member.NOT_FOUND));
   }
 
   private void throwIfPasswordNotMatches(LoginRequest loginRequest, Member member) {
