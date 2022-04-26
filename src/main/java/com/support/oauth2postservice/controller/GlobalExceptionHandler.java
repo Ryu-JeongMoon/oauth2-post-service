@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = {AjaxUnauthorizedException.class, AjaxIllegalArgumentException.class})
-  public ResponseEntity<ExceptionResponse> forbiddenHandler(AjaxUnauthorizedException e) {
+  public ResponseEntity<ExceptionResponse> forbiddenHandler(RuntimeException e) {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionResponse.of(getExceptionClass(e), e.getMessage()));
   }
 

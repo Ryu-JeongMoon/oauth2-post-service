@@ -29,17 +29,13 @@ async function requestLogin() {
         setTimeout(() => (location.href = data), 100);
       });
     },
-    (request, status, error) => {
-      const response = request.responseJSON;
-      console.log(response);
-
-      const errors = response.errors;
-      console.log(errors);
+    (response) => {
+      const result = response.responseJSON;
 
       Swal.fire({
         icon: 'error',
         title: '로그인할 수 없습니다',
-        html: `${errors[0].defaultMessage}<br/>입력값 => ${errors[0].code} : ${errors[0].rejectedValue}`,
+        html: `${result.message}`,
       });
     },
   );
