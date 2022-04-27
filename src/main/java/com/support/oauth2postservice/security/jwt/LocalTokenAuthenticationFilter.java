@@ -42,7 +42,7 @@ public class LocalTokenAuthenticationFilter extends OncePerRequestFilter {
 
   private void forwardToRenew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String idToken = TokenUtils.resolveIdToken(request);
-    String refreshToken = tokenFilterHelper.getRefreshTokenFromIdToken(tokenVerifier, idToken);
+    String refreshToken = tokenFilterHelper.getRefreshTokenByIdToken(tokenVerifier, idToken);
     String targetUri = String.format(
         "/renewal/redirect?redirect_uri=%s&refresh_token=%s", request.getRequestURI(), refreshToken);
     request.getRequestDispatcher(targetUri).forward(request, response);

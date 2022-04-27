@@ -13,7 +13,7 @@ public class TokenFilterHelper {
 
   private final RefreshTokenService refreshTokenService;
 
-  public String getRefreshTokenFromIdToken(TokenVerifier tokenVerifier, String idToken) {
+  public String getRefreshTokenByIdToken(TokenVerifier tokenVerifier, String idToken) {
     UserPrincipal principal = (UserPrincipal) tokenVerifier
         .getAuthentication(idToken)
         .getPrincipal();
