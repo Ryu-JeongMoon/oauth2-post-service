@@ -42,7 +42,7 @@ public class OAuth2TokenAuthenticationFilter extends OncePerRequestFilter {
 
   private void forwardToRenew(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     String idToken = TokenUtils.resolveIdToken(request);
-    String refreshToken = tokenFilterHelper.getRefreshTokenFromIdToken(oAuth2TokenVerifier, idToken);
+    String refreshToken = tokenFilterHelper.getRefreshTokenByIdToken(oAuth2TokenVerifier, idToken);
     String targetUri = String.format(
         "/oauth2/google/renewal/redirect?redirect_uri=%s&refresh_token=%s", request.getRequestURI(), refreshToken);
     request.getRequestDispatcher(targetUri).forward(request, response);
