@@ -1,5 +1,6 @@
 package com.support.oauth2postservice.config;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+@Getter
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(RedisProperties.class)
