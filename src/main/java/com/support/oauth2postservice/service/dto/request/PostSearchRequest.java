@@ -1,25 +1,36 @@
 package com.support.oauth2postservice.service.dto.request;
 
+import static com.support.oauth2postservice.domain.entity.QMember.member;
+import static com.support.oauth2postservice.domain.entity.QPost.post;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
+
+import org.springframework.data.querydsl.QSort;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.querydsl.core.types.Path;
 import com.support.oauth2postservice.domain.PageAttributes;
-import com.support.oauth2postservice.domain.entity.QPost;
 import com.support.oauth2postservice.domain.enumeration.Status;
 import com.support.oauth2postservice.util.QueryDslUtils;
 import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import com.support.oauth2postservice.util.constant.RegexpConstants;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QSort;
 
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
@@ -38,7 +49,7 @@ public class PostSearchRequest extends PageAttributes {
   @Schema(description = "내용", example = "oauth2-post-service")
   private String content;
 
-  @Schema(description = "상태", allowableValues = {"ACTIVE", "INACTIVE"})
+  @Schema(description = "상태", allowableValues = { "ACTIVE", "INACTIVE" })
   private Status status;
 
   @PastOrPresent
@@ -55,6 +66,11 @@ public class PostSearchRequest extends PageAttributes {
     this.openedAt = openedAt;
   }
 
+  public void setDefaultOptionsForUser() {
+    this.status = Status.ACTIVE;
+    this.openedAt = LocalDateTime.now();
+  }
+
   @Override
   protected QSort getQSort() {
     String[] sorts = getSorts();
@@ -63,29 +79,39 @@ public class PostSearchRequest extends PageAttributes {
     if (sorts.length == 0)
       return PageConstants.POST_SEARCH_DEFAULT_SORT;
 
-    List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
+    List<CustomSort> customSorts = SortUtils.getCustomSorts(sorts, orders)
+      .stream()
+      .peek(pair -> pair.setParent(SortingColumn.getParent(pair.getProperty())))
+      .collect(Collectors.toList());
 
-    String[] sortingColumns = Arrays.stream(SortingColumn.values())
-        .map(SortingColumn::getColumnName)
-        .toArray(String[]::new);
-
-    return QueryDslUtils.getQSort(columnsAndDirections, QPost.post, sortingColumns);
-  }
-
-  public void setDefaultOptionsForUser() {
-    this.status = Status.ACTIVE;
-    this.openedAt = LocalDateTime.now();
+    return QueryDslUtils.getQSort(customSorts, SortingColumn.toColumns());
   }
 
   @Getter
   @RequiredArgsConstructor
-  private enum SortingColumn {
-    TITLE("title"),
-    STATUS("status"),
-    CONTENT("content"),
-    NICKNAME("member.nickname"),
-    OPENED_AT("openedAt");
+  public enum SortingColumn {
 
-    private final String columnName;
+    TITLE(post, "title"),
+    STATUS(post, "status"),
+    CONTENT(post, "content"),
+    NICKNAME(member, "nickname"),
+    OPENED_AT(post, "openedAt");
+
+    private final Path<?> parent;
+    private final String property;
+
+    public static Path<?> getParent(String property) {
+      return Arrays.stream(values())
+        .filter(sortingColumn -> sortingColumn.property.equals(property))
+        .findAny()
+        .orElseThrow(() -> new IllegalArgumentException("Invalid property: " + property))
+        .getParent();
+    }
+
+    public static String[] toColumns() {
+      return Arrays.stream(values())
+        .map(SortingColumn::getProperty)
+        .toArray(String[]::new);
+    }
   }
 }
