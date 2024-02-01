@@ -1,8 +1,13 @@
 package com.support.oauth2postservice.service.dto.request;
 
+import java.util.List;
+
+import javax.validation.constraints.Size;
+
+import org.springframework.data.querydsl.QSort;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.support.oauth2postservice.domain.PageAttributes;
-import com.support.oauth2postservice.domain.entity.QMember;
 import com.support.oauth2postservice.domain.enumeration.Role;
 import com.support.oauth2postservice.util.EnumUtils;
 import com.support.oauth2postservice.util.QueryDslUtils;
@@ -10,14 +15,14 @@ import com.support.oauth2postservice.util.SortUtils;
 import com.support.oauth2postservice.util.constant.ColumnConstants;
 import com.support.oauth2postservice.util.constant.PageConstants;
 import com.support.oauth2postservice.util.constant.RegexpConstants;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QSort;
 
-import javax.validation.constraints.Size;
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @ToString
@@ -32,7 +37,7 @@ public class MemberSearchRequest extends PageAttributes {
   @Schema(description = "닉네임", example = "panda", maxLength = 20)
   private String nickname;
 
-  @Schema(description = "권한", allowableValues = {"USER", "MANAGER", "ADMIN"}, maxLength = 7)
+  @Schema(description = "권한", allowableValues = { "USER", "MANAGER", "ADMIN" }, maxLength = 7)
   private Role role;
 
   @Builder
@@ -51,10 +56,10 @@ public class MemberSearchRequest extends PageAttributes {
     if (sorts.length == 0)
       return PageConstants.MEMBER_SEARCH_DEFAULT_SORT;
 
-    List<Pair<String, Sort.Direction>> columnsAndDirections = SortUtils.getPairs(sorts, orders);
+    List<CustomSort> columnsAndDirections = SortUtils.getCustomSorts(sorts, orders);
 
     String[] sortingColumns = EnumUtils.toStringArray(SortingColumn.values());
-    return QueryDslUtils.getQSort(columnsAndDirections, QMember.member, sortingColumns);
+    return QueryDslUtils.getQSort(columnsAndDirections, sortingColumns);
   }
 
   private enum SortingColumn {
